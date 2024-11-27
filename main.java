@@ -7,21 +7,27 @@ public class main
 	
 	    Scanner input = new Scanner(System.in);
 	    String gameChoice = input.nextLine().toLowerCase();
-	    if (gameChoice.equals("hangman") || gameChoice.equals("1")) {
-	        hangman();
-	    }
-	    else if (gameChoice.equals("mastermind") || gameChoice.equals("2")) {
-	        mastermind();
-	    }
-	    else if (gameChoice.equals("numberguesser") || gameChoice.equals("3")) {
-	        numberguesser();
-	    }
-	    else if (gameChoice.equals("2048")||gameChoice.equals("4")) {
-	        game2048();
-	    }
-	    else {
-	        System.out.println("Invalid game name");
-	    }
+            switch (gameChoice) {
+                case "hangman":
+                case "1":
+                    hangman();
+                    break;
+                case "mastermind":
+                case "2":
+                    mastermind();
+                    break;
+                case "numberguesser":
+                case "3":
+                    numberguesser();
+                    break;
+                case "2048":
+                case "4":
+                    game2048();
+                    break;
+                default:
+                    System.out.println("Invalid game name");
+                    break;
+            }
 input.close();
 	}
 
@@ -474,8 +480,60 @@ static Scanner scanner = new Scanner(System.in);
 
         }
         else if (direction.contains("\033")) {
+        
+        while (true) {
+    try {
+        System.out.println("Menu:");
+        System.out.println("(0) Back to game");
+        System.out.println("(1) Exit game");
+        System.out.println("(2) Change win condition");
+        System.out.println("(3) Undo last move");
+        System.out.println("(4) Clear board");
+        System.out.print("Enter your choice: ");
+        
+        menuChoice = Integer.parseInt(scanner.nextLine().trim());
+        
+        if (menuChoice >= 0 && menuChoice <= 4) {
+            break; 
+        } else {
+            System.out.println("\u001b[31mInvalid Input. Please enter a number between 0 and 4.\u001b[0m");
+        }
+    } catch (NumberFormatException e) {
+        System.out.println("\u001b[31mInvalid Input. Please enter a valid number.\u001b[0m");
+    }
+}
+        
+        if (menuChoice==0) {
+            direction=scanner.nextLine();
+        }
+        
+        if (menuChoice == 1){
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
             printBoard(board);
             break;
+        }
+        if (menuChoice == 2){
+            System.out.println("Enter new win condition (Current is " + winCon +"):");
+            winCon = scanner.nextInt();
+            System.out.println("Saved. New win condition is " + winCon);
+        }
+        if (menuChoice == 3){
+            
+                board = undoBoard;
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+            printBoard(board);
+        }
+        if (menuChoice==4) {
+            for (int i=0;i<bSize;i++){
+                for(int j=0;j<bSize;j++){
+                    board[i][j]=0;
+                }
+            }
+        }
+            
+            
         }
       
       
