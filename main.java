@@ -27,8 +27,9 @@ public class main
                 default:
                     System.out.println("Invalid game name");
                     break;
-            }
-input.close();
+
+	}
+	input.close();
 	}
 
 
@@ -37,7 +38,7 @@ public static void hangman() {
     Scanner scanner = new Scanner(System.in);
     
 		String word = "";
-		
+		String livesLogo = "❤ ";
 		do {
 		    
 		    System.out.print("\033[H\033[2J"); //clear console
@@ -71,10 +72,10 @@ public static void hangman() {
 		String wrongGuesses = "";
 		String correctGuesses = "";
 		String multiWrongGuesses = "";
+		String dash = "-";
 		
 		
-		
-		String retWord = "-".repeat(len);
+		String retWord = dash.repeat(len);
 		
 		
 		
@@ -97,7 +98,7 @@ public static void hangman() {
         System.out.print("\033[H\033[2J"); //print info
 
         System.out.println(retWord);
-		System.out.println("lives: " + "❤ ".repeat(lives));
+		System.out.println("lives: " + livesLogo.repeat(lives));
 		System.out.println(returnLetters(wrongGuesses, correctGuesses));
 
 		while (!retWord.equals(word)) {
@@ -190,7 +191,8 @@ do {
 			}
 			letter = "";
 			System.out.println(retWord);
-			System.out.println("lives: " + "❤ ".repeat(lives));
+            
+			System.out.println("lives: " + livesLogo.repeat(lives));
 			System.out.println(returnLetters(wrongGuesses, correctGuesses));
             System.out.println("Incorrect word guesses: " +multiWrongGuesses);
 		}
@@ -400,10 +402,10 @@ public static void numberguesser() {
     scanner.close();
     }
     //store arrow values
-public static final String upArrow = "\033[A";
-public static final String downArrow = "\033[B";
-public static final String rightArrow = "\033[C";
-public static final String leftArrow = "\033[D";
+public static final String upArrow = "\033[a";
+public static final String downArrow = "\033[b";
+public static final String rightArrow = "\033[c";
+public static final String leftArrow = "\033[d";
 private static final Map<Integer, String[]> colorMap = new HashMap<>();
    private static int score = 0;
    private static int gameMode = 0;
@@ -411,25 +413,28 @@ private static final Map<Integer, String[]> colorMap = new HashMap<>();
    public static int winCon = 2048;
     public static int menuChoice = 7;
     public static int gameType;
-    static {
+    public static boolean endGame = false;
+    
         // Initialize colorMap with the number, HEX background color, and text color
-        colorMap.put(2, new String[] {"#eee4daff", "#776e65ff"});
-        colorMap.put(4, new String[] {"#ded3bdff", "#776e65ff"});
-        colorMap.put(8, new String[] {"#f2b179ff", "#ffffffff"});
-        colorMap.put(16, new String[] {"#f59563ff", "#ffffffff"});
-        colorMap.put(32, new String[] {"#f67c5fff", "#ffffffff"});
-        colorMap.put(64, new String[] {"#f65e3bff", "#ffffffff"});
-        colorMap.put(128, new String[] {"#edcf72ff", "#ffffffff"});
-        colorMap.put(256, new String[] {"#edcc61ff", "#ffffffff"});
-        colorMap.put(512, new String[] {"#edc850ff", "#ffffffff"});
-        colorMap.put(1024, new String[] {"#edc53fff", "#ffffffff"});
-        colorMap.put(2048, new String[] {"#edc22eff", "#ffffffff"});
-        colorMap.put(4096, new String[] {"#b586b4ff", "#ffffffff"});
-        colorMap.put(8192, new String[] {"#a861abff", "#ffffffff"});
-        colorMap.put(16384, new String[] {"#a048a3ff", "#ffffffff"});
-        colorMap.put(32768, new String[] {"#800080ff", "#ffffffff"});
-        colorMap.put(65536, new String[] {"#600046ff", "#ffffffff"});
-        colorMap.put(131072, new String[] {"#8b86e3ff", "#ffffffff"});
+        static  {
+        
+        colorMap.put (2, new String[] {"#eee4daff", "#776e65ff"});
+        colorMap.put (4, new String[] {"#ded3bdff", "#776e65ff"});
+        colorMap.put (8, new String[] {"#f2b179ff", "#ffffffff"});
+        colorMap.put (16, new String[] {"#f59563ff", "#ffffffff"});
+        colorMap.put (32, new String[] {"#f67c5fff", "#ffffffff"});
+        colorMap.put (64, new String[] {"#f65e3bff", "#ffffffff"});
+        colorMap.put (128, new String[] {"#edcf72ff", "#ffffffff"});
+        colorMap.put (256, new String[] {"#edcc61ff", "#ffffffff"});
+        colorMap.put (512, new String[] {"#edc850ff", "#ffffffff"});
+        colorMap.put (1024, new String[] {"#edc53fff", "#ffffffff"});
+        colorMap.put (2048, new String[] {"#edc22eff", "#ffffffff"});
+        colorMap.put (4096, new String[] {"#b586b4ff", "#ffffffff"});
+        colorMap.put (8192, new String[] {"#a861abff", "#ffffffff"});
+        colorMap.put (16384, new String[] {"#a048a3ff", "#ffffffff"});
+        colorMap.put (32768, new String[] {"#800080ff", "#ffffffff"});
+        colorMap.put (65536, new String[] {"#600046ff", "#ffffffff"});
+        colorMap.put (131072, new String[] {"#8b86e3ff", "#ffffffff"});
     } 
 
 static Scanner scanner = new Scanner(System.in);
@@ -475,13 +480,11 @@ static Scanner scanner = new Scanner(System.in);
     printBoard(board);
     while (true) {   
          
-        String direction = scanner.nextLine();
-        if (direction.contains("\033[A")||direction.contains("\033[B")||direction.contains("\033[C")||direction.contains("\033[D")) {
-
-        }
-        else if (direction.contains("\033")) {
+        String direction = scanner.nextLine().trim().toLowerCase();
+        System.out.println(direction);
+         if (direction.contains("\033")) {
         
-        while (true) {
+        while (!endGame) {
     try {
         System.out.println("Menu:");
         System.out.println("(0) Back to game");
@@ -502,37 +505,46 @@ static Scanner scanner = new Scanner(System.in);
         System.out.println("\u001b[31mInvalid Input. Please enter a valid number.\u001b[0m");
     }
 }
-        
-        if (menuChoice==0) {
+        switch (menuChoice){
+        case 0: 
             direction=scanner.nextLine();
-        }
+            break;
         
-        if (menuChoice == 1){
+        
+        case 1:
             System.out.print("\033[H\033[2J");
             System.out.flush();
             printBoard(board);
+            endGame = true;
             break;
-        }
-        if (menuChoice == 2){
+        
+        case 2:
             System.out.println("Enter new win condition (Current is " + winCon +"):");
             winCon = scanner.nextInt();
             System.out.println("Saved. New win condition is " + winCon);
-        }
-        if (menuChoice == 3){
+            break;
+        
+        case 3:
             
                 board = undoBoard;
             System.out.print("\033[H\033[2J");
             System.out.flush();
             printBoard(board);
-        }
-        if (menuChoice==4) {
+            break;
+        
+        case 4:
             for (int i=0;i<bSize;i++){
                 for(int j=0;j<bSize;j++){
                     board[i][j]=0;
                 }
             }
+        default:
+            System.out.println("Invalid choice. Please enter a number between 0 and 4.");
+            break;
         }
-            
+          if (endGame) {
+          break;
+      }  
             
         }
       
@@ -585,7 +597,8 @@ public static void merge (int[][]board, String direction) {
     
 switch (direction) {
          
-  case upArrow: 
+  case upArrow:
+  case "w": 
              
       for (int col = 0; col < bSize; col++){
       for (int row = 0; row < bSize - 1 ; row++) {
@@ -601,6 +614,7 @@ switch (direction) {
     break;
      
     case downArrow:
+    case "s":
         
          for (int col = 0; col < bSize; col++){
       for (int row = bSize - 1; row > 0 ; row--) {
@@ -616,6 +630,7 @@ switch (direction) {
     break;
     
     case rightArrow:
+    case "d":
     
      for (int row = 0; row < bSize ; row++){
      for (int col = bSize - 1; col > 0; col--){
@@ -633,6 +648,7 @@ switch (direction) {
     break;
     
     case leftArrow:
+    case "a":
        
      for (int row = 0; row < bSize; row++){
       for (int col = 0; col < bSize - 1 ; col++) {
@@ -727,7 +743,7 @@ public static String centerNumberInCell(int num, int cellWidth) {
     // Create the result with padding and the number centered
     return " ".repeat(leftPadding) + numStr + " ".repeat(rightPadding);
 }
-    public static void printFormat(int number) {
+  public static void printFormat(int number) {
         // Check if the number exists in the color map
         if (colorMap.containsKey(number)) {
             String[] colors = colorMap.get(number);
@@ -770,11 +786,16 @@ public static String centerNumberInCell(int num, int cellWidth) {
     }
 
 
+
+    
+
+
 public static void shiftArray(int[][] board, String direction) {
         int[][] newBoard = new int[bSize][bSize];
        
         switch (direction) {
             case upArrow:
+            case "w":
                 for (int col = 0; col < bSize; col++) {
                     int position = 0;
                     for (int row = 0; row < bSize; row++) {
@@ -786,6 +807,7 @@ public static void shiftArray(int[][] board, String direction) {
                 break;
                
             case downArrow:
+            case "s":
                 for (int col = 0; col < bSize; col++) {
                     int position = bSize - 1;
                     for (int row = bSize - 1; row >= 0; row--) {
@@ -797,6 +819,7 @@ public static void shiftArray(int[][] board, String direction) {
                 break;
 
             case leftArrow:
+            case "a":
                 for (int row = 0; row < bSize; row++) {
                     int position = 0;
                     for (int col = 0; col < bSize; col++) {
@@ -808,6 +831,7 @@ public static void shiftArray(int[][] board, String direction) {
                 break;
 
             case rightArrow:
+            case "d":
                 for (int row = 0; row < bSize; row++) {
                     int position = bSize - 1;
                     for (int col = bSize - 1; col >= 0; col--) {
@@ -892,6 +916,7 @@ public static void addRandomNumber(int[][] board) {
             }
         }
     return true;
-        
     }
 }
+    
+
