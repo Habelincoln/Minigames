@@ -1,7 +1,6 @@
 import java.util.*;
-
 public class main
-{
+                    {
 	public static void main(String[] args) {
 	System.out.println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4)");
 	
