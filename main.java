@@ -482,7 +482,7 @@ static Scanner scanner = new Scanner(System.in);
          
         String direction = scanner.nextLine().trim().toLowerCase();
         System.out.println(direction);
-         if (direction.contains("\033")) {
+         if (direction.contains("\033") || direction.contains("esc")) {
         
         while (!endGame) {
     try {
