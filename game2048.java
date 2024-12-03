@@ -39,7 +39,7 @@ private static final Map<Integer, String[]> colorMap = new HashMap<>();
 static Scanner scanner = new Scanner(System.in);
  
  public static int bSize = 0;
-    public static void game2048 () {
+    public static void main () {
         int[][]board;
         while(true) {
           System.out.print("\033[H\033[2J");
@@ -104,7 +104,8 @@ static Scanner scanner = new Scanner(System.in);
   }
           switch (menuChoice){
           case 0: 
-              direction=scanner.nextLine();
+              printBoard(board);
+          direction=scanner.nextLine();
               break;
           
           

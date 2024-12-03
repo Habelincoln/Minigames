@@ -37,7 +37,7 @@ public static void hangman() {
     Scanner scanner = new Scanner(System.in);
     
 		String word = "";
-		String livesLogo = "❤ ";
+		String livesLogo = "💗 ";
 		do {
 		    
 		    System.out.print("\033[H\033[2J"); //clear console
@@ -221,13 +221,14 @@ scanner.close();
 		for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray())
 			r.append(correctGuesses.toUpperCase().indexOf(c) > -1 ? "\033[1;32m" + c : LTH.toUpperCase().indexOf(c) > -1 ? "\033[1;31m" + c : c).append("\033[0m");
 		return r.toString();
-    
     }
+    
+    
 
 
 
-public static void mastermind() {
-    Scanner scanner = new Scanner(System.in);
+          public static void mastermind() {
+             Scanner scanner = new Scanner(System.in);
         
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -411,7 +412,7 @@ private static final Map<Integer, String[]> colorMap = new HashMap<>();
    public static boolean haveWon = false;
    public static int winCon = 2048;
     public static int menuChoice = 7;
-    public static int gameType;
+    public static int gameType = 0;
     public static boolean endGame = false;
     
         // Initialize colorMap with the number, HEX background color, and text color
@@ -490,7 +491,7 @@ static Scanner scanner = new Scanner(System.in);
         System.out.println("(1) Exit game");
         System.out.println("(2) Change win condition");
         System.out.println("(3) Undo last move");
-        System.out.println("(4) Clear board");
+        System.out.println("(4) Restart game");
         System.out.print("Enter your choice: ");
         
         menuChoice = Integer.parseInt(scanner.nextLine().trim());
@@ -506,7 +507,8 @@ static Scanner scanner = new Scanner(System.in);
 }
         switch (menuChoice){
         case 0: 
-            direction=scanner.nextLine();
+            printBoard(board);
+        direction=scanner.nextLine();
             break;
         
         
@@ -750,7 +752,7 @@ public static String centerNumberInCell(int num, int cellWidth) {
             String textColor = colors[1];
 
             // ANSI escape codes to apply text formatting (bold and color)
-            String reset = "\033[0m";
+           
             String bold = "\033[1m";
             String background = "\033[48;2;" + Integer.parseInt(bgColor.substring(1, 3), 16) + ";"
                     + Integer.parseInt(bgColor.substring(3, 5), 16) + ";"
@@ -770,8 +772,7 @@ public static String centerNumberInCell(int num, int cellWidth) {
             String textColor = colors[1];
 
             // ANSI escape codes to apply text formatting (bold and color)
-            String reset = "\033[0m";
-            String bold = "\033[1m";
+           
             String background = "\033[48;2;" + Integer.parseInt(bgColor.substring(1, 3), 16) + ";"
                     + Integer.parseInt(bgColor.substring(3, 5), 16) + ";"
                     + Integer.parseInt(bgColor.substring(5, 7), 16) + "m";
