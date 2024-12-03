@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "mastermind",
+            "request": "launch",
+            "mainClass": "mastermind",
+            "projectName": "Minigames_438a4102"
+        },
+        {
+            "type": "java",
             "name": "hangman",
             "request": "launch",
             "mainClass": "hangman",
@@ -15,7 +22,7 @@
             "type": "java",
             "request": "launch",
             "name": "Launch Java App",
-            "mainClass": "main"
+            "mainClass": "Main" // Updated class name
         }
     ]
 }

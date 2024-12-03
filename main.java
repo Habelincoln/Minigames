@@ -1,7 +1,9 @@
 import java.util.*;
-public class main
+public class Main
                     {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
+        clearScreen();
+        System.out.println("Welcome to the Game Hub!");
 	System.out.println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4)");
 	
 	    Scanner input = new Scanner(System.in);
@@ -35,9 +37,9 @@ public class main
 
 public static void hangman() {
     Scanner scanner = new Scanner(System.in);
-    
+    Set<String> multiWrongGuesses = new HashSet<>();
 		String word = "";
-		String livesLogo = "💗 ";
+		String livesLogo = " L";
 		do {
 		    
 		    System.out.print("\033[H\033[2J"); //clear console
@@ -49,8 +51,7 @@ public static void hangman() {
 		}
 		while(word.matches(".*\\d.*"));
 		
-		System.out.print("\033[H\033[2J"); //clear console
-		System.out.flush();
+		clearScreen();
 
 		int len = word.length();
 		
@@ -70,7 +71,6 @@ public static void hangman() {
 		String letter = "";
 		String wrongGuesses = "";
 		String correctGuesses = "";
-		String multiWrongGuesses = "";
 		String dash = "-";
 		
 		
@@ -86,12 +86,6 @@ public static void hangman() {
 				}
 
 			}
-		
-		
-		
-
-
-
 
 
         System.out.print("\033[H\033[2J"); //print info
@@ -101,37 +95,29 @@ public static void hangman() {
 		System.out.println(returnLetters(wrongGuesses, correctGuesses));
 
 		while (!retWord.equals(word)) {
-
-
-
 do {
-		    
-		    
+		    		    
 		    if (letter.matches(".*\\d.*")){ System.out.print("\033[H\033[2J"); System.out.println("\u001B[31m"+"INVALID INPUT!!!"+"\u001B[0m");System.out.println(retWord);
-	    	System.out.println("lives: " + "❤ ".repeat(lives));
+	    	System.out.println("lives: " + livesLogo.repeat(lives));
 	    	System.out.println(returnLetters(wrongGuesses, correctGuesses));}
 	   
-	    	
-		    letter = scanner.nextLine().toLowerCase();
-		   
+		    letter = scanner.nextLine().toLowerCase();   
 		    
 		} while(letter.matches(".*\\d.*"));
-
-
-			
-			
-			
 			
 			
 			System.out.print("\033[H\033[2J"); 
 			
-			if (letter.length() == 1){
-			
+			if (letter.length() <= 1){
+                if (letter.isEmpty()) {
+                System.out.println("\u001B[31m" + "You didn't enter anything!" + "\u001B[0m");
+                }
+			else {
 			if (!word.contains(letter) && !wrongGuesses.contains(letter)) {
 				wrongGuesses += letter;
 			    lives --;
 			}
-             else if (!word.contains(letter) && wrongGuesses.contains(letter)) {
+             else if ( !word.contains(letter) && wrongGuesses.contains(letter) ) {
             
             System.out.println("\u001B[31m" + "You've already guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
              }
@@ -142,30 +128,22 @@ do {
 		    else if (correctGuesses.contains(letter)) {
 		        System.out.println("\u001B[32m" + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
 		    }
-		
-
-
+            }
 
 } else if (letter.length() > 1) {
-    lives--;
+    
     if (!multiWrongGuesses.contains(letter)) {
-        
-        if (multiWrongGuesses == ""){
-            multiWrongGuesses += letter;
-        }
-        else {
-        multiWrongGuesses += ", ";
-        multiWrongGuesses += letter;
-        }
+        lives--;
+        multiWrongGuesses.add(letter);
     }
     
-    else  if (multiWrongGuesses.contains(letter)) {
-        lives ++;
+    else {
+        
         System.out.println("\u001B[31m"+"You've already guessed " + "\"" + letter + "\""+"!"+"\u001B[0m");
     }
     
-  if (letter.equals(word)) {
-      lives++;
+         if (letter.equals(word)) {
+        lives++;
 				retWord = word;
 				break;
 			}  
@@ -230,8 +208,7 @@ scanner.close();
           public static void mastermind() {
              Scanner scanner = new Scanner(System.in);
         
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        clearScreen();
 
         System.out.println("\u001B[33m" +"Welcome to Mastermind!" + "\u001B[0m");
 		int lives = 0;
@@ -240,34 +217,28 @@ scanner.close();
 		System.out.println("Peg 1:");
 		String code1 = scanner.nextLine().toLowerCase();
 		
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
+		clearScreen();
 		
 		System.out.println("Peg 2:");
 		String code2 = scanner.nextLine().toLowerCase();
 		
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
+		clearScreen();
 		
 		System.out.println("Peg 3:");
 		String code3 = scanner.nextLine().toLowerCase();
 		
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
+		clearScreen();
 		
 		System.out.println("Peg 4:");
 		String code4 = scanner.nextLine().toLowerCase();
 	    
-	    System.out.print("\033[H\033[2J");
-		System.out.flush();
-	    
+	   clearScreen();
 	    
 	    System.out.println("Enter Lives (Default 10):");
 		int livesInput = scanner.nextInt();
 		scanner.nextLine();
 	
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
+		clearScreen();
 
 		String[] code = {code1, code2, code3, code4}; // store codes
 
@@ -342,12 +313,11 @@ scanner.close();
     scanner.close();
 }
 
-public static void numberguesser() {
+public static void numberguesser() throws InterruptedException {
     Scanner scanner = new Scanner(System.in);
         
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        System.out.println("\u001B[32m" + "Welcome to Number Guesser!" + "\u001B[32m");
+        clearScreen();
+        System.out.println("Welcome to Number Guesser!");
 		System.out.println("Random 1-100 (1) or You choose (2)?");
 
 		int gameType = scanner.nextInt();
@@ -368,8 +338,7 @@ public static void numberguesser() {
 		else if (gameType == 2) {
 			System.out.println("Enter the number to be guessed: ");
 			answer = scanner.nextInt();
-			System.out.print("\033[H\033[2J");
-			System.out.flush();
+			clearScreen();
 
 		}
 
@@ -380,17 +349,29 @@ public static void numberguesser() {
 		do {
 
 			input = scanner.nextInt();
-			if (input < answer) {
+			if (input < answer && input != 2580) {
 				System.out.println("Too low!!! try again");
+                count++;
 			}
-			if (input > answer) {
+			if (input > answer && input != 2580) {
 				System.out.println("Too high! sound familiar?");
+                count++;
 			}
-			count++;
+            if (input == 2580) {
+                System.out.println("Answer is: " + answer);
+                Thread.sleep(1000);
+                System.out.println("2...");
+                Thread.sleep(1000);
+                System.out.println("1...");
+                Thread.sleep(1000);
+                clearScreen();
+                System.out.println("Enter your next guess: ");
+            }
+			
 
 		} while (input != answer);
 
-
+        count++;
 		System.out.println("Correct! finally");
 
 		if (count == 1) {
@@ -401,11 +382,6 @@ public static void numberguesser() {
 
     scanner.close();
     }
-    //store arrow values
-public static final String upArrow = "\033[a";
-public static final String downArrow = "\033[b";
-public static final String rightArrow = "\033[c";
-public static final String leftArrow = "\033[d";
 private static final Map<Integer, String[]> colorMap = new HashMap<>();
    private static int score = 0;
    private static int gameMode = 0;
@@ -445,8 +421,7 @@ static Scanner scanner = new Scanner(System.in);
     public static void game2048 () {
       int[][]board;
       while(true) {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        clearScreen();
         System.out.println("(1) Play");
         System.out.println("(2) Custom");
          gameType = scanner.nextInt();
@@ -513,8 +488,7 @@ static Scanner scanner = new Scanner(System.in);
         
         
         case 1:
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+            clearScreen();
             printBoard(board);
             endGame = true;
             break;
@@ -528,8 +502,7 @@ static Scanner scanner = new Scanner(System.in);
         case 3:
             
                 board = undoBoard;
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+            clearScreen();
             printBoard(board);
             break;
         
@@ -575,15 +548,17 @@ static Scanner scanner = new Scanner(System.in);
                 System.out.print("Do you want to continue playing? (y/n): ");
                 
             String response = scanner.nextLine().toLowerCase();
-            if (response.contains("y")) {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
+            if (response.equals("y")) {
+                clearScreen();
                 haveWon = true;
                 printBoard(board);
             }
-            else if (response.contains("n")) {
+            else if (response.equals("n")) {
                 System.out.println("You Win!");
                 break;
+            }
+            else {
+                System.out.println("Invalid input. Please enter y or n.");
             }
             }
             if (checkLoss(board)){
@@ -598,7 +573,7 @@ public static void merge (int[][]board, String direction) {
     
 switch (direction) {
          
-  case upArrow:
+  
   case "w": 
              
       for (int col = 0; col < bSize; col++){
@@ -614,7 +589,7 @@ switch (direction) {
              }
     break;
      
-    case downArrow:
+    
     case "s":
         
          for (int col = 0; col < bSize; col++){
@@ -630,7 +605,7 @@ switch (direction) {
              }
     break;
     
-    case rightArrow:
+    
     case "d":
     
      for (int row = 0; row < bSize ; row++){
@@ -648,7 +623,7 @@ switch (direction) {
     
     break;
     
-    case leftArrow:
+    
     case "a":
        
      for (int row = 0; row < bSize; row++){
@@ -692,9 +667,8 @@ public static void printBoard(int[][] board) {
     // Define the format for empty cells
     String emptyCell = String.format("%" + cellWidth + "s", " "); // empty cell format
 
-    // Clear the screen
-    System.out.print("\033[H\033[2J");
-    System.out.flush();
+   
+    clearScreen();
 
 System.out.println("Score: "+ score);
 
@@ -723,7 +697,7 @@ System.out.println();
         }
         System.out.println(); // End of the board
     }
-    System.out.println("Use arrow keys to move");
+    System.out.println("Use WASD to move");
     System.out.println("Press esc for menu");
 }
 
@@ -794,7 +768,7 @@ public static void shiftArray(int[][] board, String direction) {
         int[][] newBoard = new int[bSize][bSize];
        
         switch (direction) {
-            case upArrow:
+            
             case "w":
                 for (int col = 0; col < bSize; col++) {
                     int position = 0;
@@ -806,7 +780,7 @@ public static void shiftArray(int[][] board, String direction) {
                 }
                 break;
                
-            case downArrow:
+            
             case "s":
                 for (int col = 0; col < bSize; col++) {
                     int position = bSize - 1;
@@ -818,7 +792,7 @@ public static void shiftArray(int[][] board, String direction) {
                 }
                 break;
 
-            case leftArrow:
+            
             case "a":
                 for (int row = 0; row < bSize; row++) {
                     int position = 0;
@@ -830,7 +804,7 @@ public static void shiftArray(int[][] board, String direction) {
                 }
                 break;
 
-            case rightArrow:
+            
             case "d":
                 for (int row = 0; row < bSize; row++) {
                     int position = bSize - 1;
@@ -916,6 +890,10 @@ public static void addRandomNumber(int[][] board) {
             }
         }
     return true;
+    }
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
     
