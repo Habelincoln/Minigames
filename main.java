@@ -591,9 +591,10 @@ static Scanner scanner = new Scanner(System.in);
     while (true) {   
          
         String direction = scanner.nextLine().trim().toLowerCase();
-        if (direction.contains(secretCode2048)){
+        if (direction.contains(secretCode2048)) {
         if (direction.equals(secretCode2048)) {
             board [0][0] = 2048;
+            score += 2048;
         }
         if (direction.contains(secretCode2048U)) {
             codeAmountString = direction.substring(11);
@@ -603,18 +604,31 @@ static Scanner scanner = new Scanner(System.in);
                     for (int b=0; b<bSize; b++) {
                         if (board[l][b] < codeAmount) {
                             board[l][b] = codeAmount;
+                            score += codeAmount;
                          }  
                        }  
                     }
                 }
+                else if (codeAmount==9999) {
+                    if (gameMode != 0) {
+                    gameMode = 0;
+                    System.out.println("Spawn set to 0");
+                    Thread.sleep(1000);
+                }
+                else {
+                    System.out.print("Enter spawn count: ");
+                    gameMode = scanner.nextInt();
+                }
             }
             else if (!direction.equals(secretCode2048)) {
-                System.out.println("\\u001B[31m" + "Invalid input. Please enter a valid cheat value." + "\\u001B[0m");
+                System.out.println("\u001B[31m" + "Invalid input. Please enter a valid cheat value." + "\u001B[0m");
                 Thread.sleep(1000);
                 clearScreen();
                 printBoard(board);
             }
         }
+    }
+        
          if (direction.contains("m")) {
         
         while (!endGame) {
