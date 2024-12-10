@@ -687,6 +687,7 @@ static Scanner scanner = new Scanner(System.in);
                     board[i][j]=0;
                 }
             }
+            score = 0;
         default:
             System.out.println("Invalid choice. Please enter a number between 0 and 4.");
             break;
