@@ -1,5 +1,5 @@
 import java.util.*;
-public class Main
+public class main
                     {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
@@ -39,7 +39,7 @@ public static void hangman() throws InterruptedException {
     Scanner scanner = new Scanner(System.in);
     Set<String> multiWrongGuesses = new HashSet<>();
 		String word = "";
-		String livesLogo = " L";
+		String livesLogo = " ❤️";
 		do {
 		    
 		    System.out.print("\033[H\033[2J"); //clear console
@@ -61,7 +61,7 @@ public static void hangman() throws InterruptedException {
 		    
 		    System.out.print("\033[H\033[2J"); //clear console
 		    if (livesin.matches(".*[a-zA-Z].*")){System.out.println("\u001B[31m"+"INVALID INPUT!!!");}
-		    System.out.println("Enter lives:");
+		    System.out.print("Enter lives: ");
 		    livesin = scanner.nextLine();
 		    
 		}while(livesin.matches(".*[a-zA-Z].*"));	
@@ -235,7 +235,7 @@ scanner.close();
         }
 		clearScreen();
         System.out.println(msg);
-		System.out.print("Set peg 2:");
+		System.out.print("Set peg 2: ");
 		String code2 = scanner.nextLine().toLowerCase();
 		while (!checkCode2(code2)) {
             clearScreen();
@@ -246,7 +246,7 @@ scanner.close();
         }
 		clearScreen();
         System.out.println(msg);
-		System.out.print("Set peg 3:");
+		System.out.print("Set peg 3: ");
 		String code3 = scanner.nextLine().toLowerCase();
 		while (!checkCode3(code3)) {
             clearScreen();
@@ -258,7 +258,7 @@ scanner.close();
         }
 		clearScreen();
         System.out.println(msg);
-		System.out.print("Set peg 4:");
+		System.out.print("Set peg 4: ");
 		String code4 = scanner.nextLine().toLowerCase();
 	    
 		while (!checkCode4(code4)) {
@@ -271,7 +271,7 @@ scanner.close();
         }
 	   clearScreen();
 	    
-	    System.out.println("Enter Lives (Default 10):");
+	    System.out.print("Enter Lives (Default 10): ");
 		int livesInput = scanner.nextInt();
         
 		scanner.nextLine();
@@ -523,7 +523,8 @@ private static final Map<Integer, String[]> colorMap = new HashMap<>();
     public static int menuChoice = 7;
     public static int gameType = 0;
     public static boolean endGame = false;
-    
+    public static String codeAmountString = "";
+    public static int codeAmount = 0;
         // Initialize colorMap with the number, HEX background color, and text color
         static  {
         
@@ -590,14 +591,28 @@ static Scanner scanner = new Scanner(System.in);
     while (true) {   
          
         String direction = scanner.nextLine().trim().toLowerCase();
+        if (direction.contains(secretCode2048)){
         if (direction.equals(secretCode2048)) {
             board [0][0] = 2048;
         }
-        if (direction.equals(secretCode2048U)) {
-            for (int l=0; l<bSize; l++) {
-                for (int b=0; b<bSize; b++) {
-                    board[l][b] = 2048;
+        if (direction.contains(secretCode2048U)) {
+            codeAmountString = direction.substring(11);
+            codeAmount = Integer.parseInt(codeAmountString); 
+            if (codeAmount == 2 ||codeAmount == 4 ||codeAmount == 8 ||codeAmount ==16 ||codeAmount == 32 || codeAmount == 64 ||codeAmount == 128 || codeAmount == 256 ||codeAmount == 512 ||codeAmount == 1024 || codeAmount == 2048 || codeAmount == 4096 || codeAmount == 8192 ||codeAmount == 16384 ||codeAmount == 32768 ||codeAmount == 65536 ||codeAmount == 131072) {
+                for (int l=0; l<bSize; l++) {
+                    for (int b=0; b<bSize; b++) {
+                        if (board[l][b] < codeAmount) {
+                            board[l][b] = codeAmount;
+                         }  
+                       }  
+                    }
                 }
+            }
+            else if (!direction.equals(secretCode2048)) {
+                System.out.println("\\u001B[31m" + "Invalid input. Please enter a valid cheat value." + "\\u001B[0m");
+                Thread.sleep(1000);
+                clearScreen();
+                printBoard(board);
             }
         }
          if (direction.contains("m")) {
@@ -1042,5 +1057,3 @@ public static void addRandomNumber(int[][] board) {
         System.out.flush();
     }
 }
-    
-
