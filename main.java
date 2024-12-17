@@ -2,8 +2,8 @@ import java.util.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-public class main
-                    {
+
+public class Main {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
         System.out.println("Welcome to the Game Hub!");
@@ -365,7 +365,6 @@ scanner.close();
 			}
 
 			// output results:
-			String[] allGuesses = {guess1, guess2, guess3, guess4};
             System.out.println(guess1 + " " + guess2 + " " + guess3 + " " + guess4);
             System.out.println("Exact Matches: " + exactMatches);
 			System.out.println("Color Matches (wrong spot): " + colorMatches);
@@ -591,7 +590,7 @@ static Scanner scanner = new Scanner(System.in);
         
         int[][] originalBoard = cloneBoard(board);
         int[][] undoBoard = board;
-    
+        int cheatValue;
     printBoard(board);
     while (true) {   
          
@@ -600,9 +599,11 @@ static Scanner scanner = new Scanner(System.in);
             board [0][0] = 2048;
         }
         if (direction.equals(secretCode2048U)) {
+            System.out.print("Enter value: ");
+            cheatValue = scanner.nextInt();
             for (int l=0; l<bSize; l++) {
                 for (int b=0; b<bSize; b++) {
-                    board[l][b] = 2048;
+                    board[l][b] = cheatValue;
                 }
             }
         }
@@ -890,17 +891,6 @@ public static String centerNumberInCell(int num, int cellWidth) {
             System.out.print(background + text + bold);
         } else if(number == 0){
             System.out.print("\033[48;2;205;193;179m");
-        } else if (number > 131072){
-           
-            String[] colors = colorMap.get(131072);
-            String bgColor = colors[0];
-
-            // ANSI escape codes to apply text formatting (bold and color)
-            String background = "\033[48;2;" + Integer.parseInt(bgColor.substring(1, 3), 16) + ";"
-                    + Integer.parseInt(bgColor.substring(3, 5), 16) + ";"
-                    + Integer.parseInt(bgColor.substring(5, 7), 16) + "m";
-            
-           
         } else {
             System.out.print("\033[0m");
         }
@@ -1039,18 +1029,18 @@ public static void addRandomNumber(int[][] board) {
     }
     public static List<String> wordList;
     public static String[][] result = new String[6][5];
+
     public static void wordle() throws InterruptedException {
         String filePath = "C:\\Users\\Avraham\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
         wordList = readWordsFromFile(filePath);
         if (wordList != null && !wordList.isEmpty()) {
             String word = randomWord(wordList);
-                wordleGame(word);
-        }
-        else {
-            System.out.println("\u001B[32m" + "Word list is empty or null" + "\u001B[0m");
+            wordleGame(word);
+        } else {
+            System.out.println("Word list is empty or null");
         }
     }
-   //Create wordList from text file
+
     public static List<String> readWordsFromFile(String filePath) {
         try {
             return Files.readAllLines(Paths.get(filePath));
@@ -1059,18 +1049,21 @@ public static void addRandomNumber(int[][] board) {
             return null;
         }
     }
-        //Select random word from wordlist
-        public static String randomWord (List<String> wordList) {
-            Random r = new Random();
-            int position = r.nextInt(wordList.size());
-            return wordList.get(position);
-        }
-    public static void wordleGame(String word) throws InterruptedException{
+
+    public static String randomWord(List<String> wordList) {
+        Random r = new Random();
+        int position = r.nextInt(wordList.size());
+        return wordList.get(position);
+    }
+
+    public static void wordleGame(String word) throws InterruptedException {
         char[] wordArray = word.toCharArray();
         int attempts = 6;
         Scanner scanner = new Scanner(System.in);
-        clearScreen();
-        System.out.println("Welcome to Wordle!");
+        Set<Character> exactMatches = new HashSet<>();
+        Set<Character> nonExactMatches = new HashSet<>();
+        Set<Character> incorrectGuesses = new HashSet<>();
+
         while (attempts > 0) {
             System.out.println("You have " + attempts + " attempts left.");
             for (int i = 0; i < result.length; i++) {
@@ -1083,6 +1076,10 @@ public static void addRandomNumber(int[][] board) {
                 }
                 System.out.println();
             }
+
+            // Display the alphabet with colors
+            displayAlphabet(exactMatches, nonExactMatches, incorrectGuesses);
+
             System.out.print("Enter your guess: ");
             String guess = scanner.nextLine().toLowerCase();
             if (guess.equals("7187448310")) {
@@ -1097,7 +1094,7 @@ public static void addRandomNumber(int[][] board) {
 
             if (!wordList.contains(guess) && !guess.equals("7187448310")) {
                 clearScreen();
-                System.out.println("\u001B[32m" + "The guessed word is not in the word list." + "\\u001B[0m");
+                System.out.println("\u001B[32m" + "The guessed word is not in the word list." + "\u001B[0m");
                 continue;
             }
 
@@ -1116,22 +1113,35 @@ public static void addRandomNumber(int[][] board) {
                             exactMatchedGuess[i] = true;
                             matchedWord[j] = true;
                             result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m";
+                            exactMatches.add(guessArray[i]);
                         } else {
                             matchedGuess[i] = true;
                             matchedWord[j] = true;
                             result[6 - attempts - 1][i] = "\u001B[33m" + guessArray[i] + "\u001B[0m";
+                            nonExactMatches.add(guessArray[i]);
                         }
                         break;
                     }
                 }
                 if (!exactMatchedGuess[i] && !matchedGuess[i]) {
-                    result[6 - attempts - 1][i] = "\u001B[0m" + guessArray[i] + "\u001B[0m";
+                    result[6 - attempts - 1][i] = "\u001B[37m" + guessArray[i] + "\u001B[0m"; // Lighter gray
+                    incorrectGuesses.add(guessArray[i]);
                 }
             }
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
                 System.out.println("You win! The word was: " + word);
+                for (int i = 0; i < result.length; i++) {
+                    for (int j = 0; j < result[i].length; j++) {
+                        if (result[i][j] != null) {
+                            System.out.print(result[i][j]);
+                        } else {
+                            System.out.print(" ");
+                        }
+                    }
+                    System.out.println();
+                }
                 break;
             }
 
@@ -1140,7 +1150,21 @@ public static void addRandomNumber(int[][] board) {
             }
         }
         scanner.close();
-        }
-}
-    
+    }
 
+    public static void displayAlphabet(Set<Character> exactMatches, Set<Character> nonExactMatches, Set<Character> incorrectGuesses) {
+        StringBuilder alphabet = new StringBuilder();
+        for (char c = 'a'; c <= 'z'; c++) {
+            if (exactMatches.contains(c)) {
+                alphabet.append("\033[1;32m").append(c).append("\033[0m ");
+            } else if (nonExactMatches.contains(c)) {
+                alphabet.append("\033[1;33m").append(c).append("\033[0m ");
+            } else if (incorrectGuesses.contains(c)) {
+                alphabet.append("\033[30m").append(c).append("\033[0m "); // Pure black
+            } else {
+                alphabet.append("\033[1;37m").append(c).append("\033[0m "); // White
+            }
+        }
+        System.out.println(alphabet.toString());
+    }
+}
