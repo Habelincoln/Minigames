@@ -607,7 +607,7 @@ static Scanner scanner = new Scanner(System.in);
                 continue;
             }
             for (int l=0; l<bSize; l++) {
-                for (int b=0; b<bSize; b++) {
+                   for (int b=0; b<bSize; b++) {
                     board[l][b] = cheatValue;
                 }
             }
