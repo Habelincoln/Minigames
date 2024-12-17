@@ -1,7 +1,7 @@
-import java.util.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.*;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
@@ -1037,7 +1037,7 @@ public static void addRandomNumber(int[][] board) {
     public static boolean invalid = false;
 
     public static void wordle() throws InterruptedException {
-        String filePath = "C:\\Users\\Avraham\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
+        String filePath = "C:\\Users\\Avraham\\onedrive\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
         wordList = readWordsFromFile(filePath);
         if (wordList != null && !wordList.isEmpty()) {
             String word = randomWord(wordList);
@@ -1138,26 +1138,27 @@ public static void addRandomNumber(int[][] board) {
                         if (i == j) {
                             exactMatchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m";
+                            result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m"; // Bright green
                             exactMatches.add(guessArray[i]);
                         } else {
                             matchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = "\u001B[33m" + guessArray[i] + "\u001B[0m";
+                            // Changed to a more golden yellow color
+                            result[6 - attempts - 1][i] = "\u001B[38;2;255;191;0m" + guessArray[i] + "\u001B[0m";
                             nonExactMatches.add(guessArray[i]);
                         }
                         break;
                     }
                 }
                 if (!exactMatchedGuess[i] && !matchedGuess[i]) {
-                    result[6 - attempts - 1][i] = "\u001B[37m" + guessArray[i] + "\u001B[0m"; // Lighter gray
+                    result[6 - attempts - 1][i] = "\u001B[90m" + guessArray[i] + "\u001B[0m"; // Dark gray
                     incorrectGuesses.add(guessArray[i]);
                 }
             }
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
-                println("You win! The word was: " + word);
+                println("You won in " + attempts + "The word was: " + word);
                 for (int i = 0; i < result.length; i++) {
                     for (int j = 0; j < result[i].length; j++) {
                         if (result[i][j] != null) {
@@ -1182,13 +1183,13 @@ public static void addRandomNumber(int[][] board) {
         StringBuilder alphabet = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
             if (exactMatches.contains(c)) {
-                alphabet.append("\033[1;32m").append(c).append("\033[0m ");
+                alphabet.append("\033[1;32m").append(c).append("\033[0m "); // Bright green
             } else if (nonExactMatches.contains(c)) {
-                alphabet.append("\033[1;33m").append(c).append("\033[0m ");
+                alphabet.append("\033[1;33m").append(c).append("\033[0m "); // Bright yellow
             } else if (incorrectGuesses.contains(c)) {
-                alphabet.append("\033[30m").append(c).append("\033[0m "); // Pure black
+                alphabet.append("\033[1;30m").append(c).append("\033[0m "); // Darkest possible black
             } else {
-                alphabet.append("\033[1;37m").append(c).append("\033[0m "); // White
+                alphabet.append("\033[1;37m").append(c).append("\033[0m "); // Bright white
             }
         }
         println(alphabet.toString());
