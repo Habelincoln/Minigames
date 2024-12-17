@@ -6,9 +6,9 @@
     "configurations": [
         {
             "type": "java",
-            "name": "main",
+            "name": "Main",
             "request": "launch",
-            "mainClass": "main",
+            "mainClass": "Main",
             "projectName": "Minigames_438a4102"
         },
         {
@@ -24,20 +24,6 @@
             "request": "launch",
             "mainClass": "wordle",
             "projectName": "Minigames_2974f6f3"
-        },
-        {
-            "type": "java",
-            "name": "mastermind",
-            "request": "launch",
-            "mainClass": "mastermind",
-            "projectName": "Minigames_438a4102"
-        },
-        {
-            "type": "java",
-            "name": "hangman",
-            "request": "launch",
-            "mainClass": "hangman",
-            "projectName": "Minigames_438a4102"
         },
         {
             "type": "java",
