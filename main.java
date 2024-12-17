@@ -6,8 +6,8 @@ import java.nio.file.Paths;
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
-        System.out.println("Welcome to the Game Hub!");
-	System.out.println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
+        println("Welcome to the Game Hub!");
+	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
 	
 	    Scanner input = new Scanner(System.in);
 	    String gameChoice = input.nextLine().toLowerCase();
@@ -33,7 +33,7 @@ public class Main {
                     wordle();
                     break;
                 default:
-                    System.out.println("Invalid game name");
+                    println("Invalid game name");
                     break;
 	}
 	input.close();
@@ -46,10 +46,10 @@ public static void hangman() throws InterruptedException {
 		String livesLogo = " L";
 		do {
 		    
-		    System.out.print("\033[H\033[2J"); //clear console
-		    if (word.matches(".*\\d.*")){System.out.println("\u001B[31m"+"INVALID INPUT!!!" +"\u001B[0m" );}
-		    System.out.println("Welcome to hangman!");
-	    	System.out.println("Enter Word:");
+		    print("\033[H\033[2J"); //clear console
+		    if (word.matches(".*\\d.*")){println("\u001B[31m"+"INVALID INPUT!!!" +"\u001B[0m" );}
+		    println("Welcome to hangman!");
+	    	println("Enter Word:");
 		    word = scanner.nextLine().toLowerCase();
 		    
 		}
@@ -63,9 +63,9 @@ public static void hangman() throws InterruptedException {
 		
 	do {
 		    
-		    System.out.print("\033[H\033[2J"); //clear console
-		    if (livesin.matches(".*[a-zA-Z].*")){System.out.println("\u001B[31m"+"INVALID INPUT!!!");}
-		    System.out.println("Enter lives:");
+		    print("\033[H\033[2J"); //clear console
+		    if (livesin.matches(".*[a-zA-Z].*")){println("\u001B[31m"+"INVALID INPUT!!!");}
+		    println("Enter lives:");
 		    livesin = scanner.nextLine();
 		    
 		}while(livesin.matches(".*[a-zA-Z].*"));	
@@ -92,36 +92,36 @@ public static void hangman() throws InterruptedException {
 			}
 
 
-        System.out.print("\033[H\033[2J"); //print info
+        print("\033[H\033[2J"); //print info
 
-        System.out.println(retWord);
-		System.out.println("lives: " + livesLogo.repeat(lives));
-		System.out.println(returnLetters(wrongGuesses, correctGuesses));
+        println(retWord);
+		println("lives: " + livesLogo.repeat(lives));
+		println(returnLetters(wrongGuesses, correctGuesses));
 
 		while (!retWord.equals(word)) {
 do {
 		    		    
-		    if (letter.matches(".*\\d.*")){ System.out.print("\033[H\033[2J"); System.out.println("\u001B[31m"+"INVALID INPUT!!!"+"\u001B[0m");System.out.println(retWord);
-	    	System.out.println("lives: " + livesLogo.repeat(lives));
-	    	System.out.println(returnLetters(wrongGuesses, correctGuesses));}
+		    if (letter.matches(".*\\d.*")){ print("\033[H\033[2J"); println("\u001B[31m"+"INVALID INPUT!!!"+"\u001B[0m");println(retWord);
+	    	println("lives: " + livesLogo.repeat(lives));
+	    	println(returnLetters(wrongGuesses, correctGuesses));}
 	   
 		    letter = scanner.nextLine().toLowerCase();
             if (letter.equals(secretCode2048)) {
-                System.out.println("Word is: " + word);
-                System.out.println("2...");
+                println("Word is: " + word);
+                println("2...");
                 Thread.sleep(1000);
-                System.out.println("1...");
+                println("1...");
                 Thread.sleep(1000);
             } 
 		    
 		} while(letter.matches(".*\\d.*"));
 			
 			
-			System.out.print("\033[H\033[2J"); 
+			print("\033[H\033[2J"); 
 			
 			if (letter.length() <= 1){
                 if (letter.isEmpty()) {
-                System.out.println("\u001B[31m" + "You didn't enter anything!" + "\u001B[0m");
+                println("\u001B[31m" + "You didn't enter anything!" + "\u001B[0m");
                 }
 			else {
 			if (!word.contains(letter) && !wrongGuesses.contains(letter)) {
@@ -130,14 +130,14 @@ do {
 			}
              else if ( !word.contains(letter) && wrongGuesses.contains(letter) ) {
             
-            System.out.println("\u001B[31m" + "You've already guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
+            println("\u001B[31m" + "You've already guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
              }
 
 			if (!correctGuesses.contains(letter) && word.contains(letter)) {
 				correctGuesses += letter;
 			}
 		    else if (correctGuesses.contains(letter)) {
-		        System.out.println("\u001B[32m" + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
+		        println("\u001B[32m" + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
 		    }
             }
 
@@ -150,7 +150,7 @@ do {
     
     else {
         
-        System.out.println("\u001B[31m"+"You've already guessed " + "\"" + letter + "\""+"!"+"\u001B[0m");
+        println("\u001B[31m"+"You've already guessed " + "\"" + letter + "\""+"!"+"\u001B[0m");
     }
     
          if (letter.equals(word)) {
@@ -178,28 +178,28 @@ do {
 
 			}
 			letter = "";
-			System.out.println(retWord);
+			println(retWord);
             
-			System.out.println("lives: " + livesLogo.repeat(lives));
-			System.out.println(returnLetters(wrongGuesses, correctGuesses));
-            System.out.println("Incorrect word guesses: " +multiWrongGuesses);
+			println("lives: " + livesLogo.repeat(lives));
+			println(returnLetters(wrongGuesses, correctGuesses));
+            println("Incorrect word guesses: " +multiWrongGuesses);
 		}
 		
-		System.out.print("\033[H\033[2J"); 
+		print("\033[H\033[2J"); 
 
 		if (retWord.equals(word)) {
-			System.out.println("You Win!!!");
-			System.out.println("The word was: " + word);
+			println("You Win!!!");
+			println("The word was: " + word);
 			if (lives == 1) {
-			    System.out.println("You had " + lives + " life remaining");
+			    println("You had " + lives + " life remaining");
 		}
 		else if (lives > 1) {
-		    System.out.println("You had " + lives + " lives remaining");
+		    println("You had " + lives + " lives remaining");
 		}
 		}	
 		else {
-			System.out.println("Game over. You lose.");
-			System.out.println("The word was: " + word);
+			println("Game over. You lose.");
+			println("The word was: " + word);
 		}
 
 scanner.close();
@@ -221,61 +221,61 @@ scanner.close();
         
         clearScreen();
 
-        System.out.println("\u001B[33m" +"Welcome to Mastermind!" + "\u001B[0m");
+        println("\u001B[33m" +"Welcome to Mastermind!" + "\u001B[0m");
 		String msg = "4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m";
 
         int lives = 0;
-		System.out.println("Choose code");
-        System.out.println("4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m");
-		System.out.print("Set peg 1: ");
+		println("Choose code");
+        println("4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m");
+		print("Set peg 1: ");
 		String code1 = scanner.nextLine().toLowerCase();
 		while (!checkCode1(code1)) {
             clearScreen();
-            System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-            System.out.println(msg);           
-            System.out.print("Set peg 1: ");
+            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(msg);           
+            print("Set peg 1: ");
             code1 = scanner.nextLine().toLowerCase();
 
         }
 		clearScreen();
-        System.out.println(msg);
-		System.out.print("Set peg 2:");
+        println(msg);
+		print("Set peg 2:");
 		String code2 = scanner.nextLine().toLowerCase();
 		while (!checkCode2(code2)) {
             clearScreen();
-            System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-            System.out.println(msg);           
-            System.out.print("Set peg 2: ");
+            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(msg);           
+            print("Set peg 2: ");
             code2 = scanner.nextLine().toLowerCase();
         }
 		clearScreen();
-        System.out.println(msg);
-		System.out.print("Set peg 3:");
+        println(msg);
+		print("Set peg 3:");
 		String code3 = scanner.nextLine().toLowerCase();
 		while (!checkCode3(code3)) {
             clearScreen();
-            System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-            System.out.println(msg);           
-            System.out.print("Set peg 3: ");
+            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(msg);           
+            print("Set peg 3: ");
             code3 = scanner.nextLine().toLowerCase();
             
         }
 		clearScreen();
-        System.out.println(msg);
-		System.out.print("Set peg 4:");
+        println(msg);
+		print("Set peg 4:");
 		String code4 = scanner.nextLine().toLowerCase();
 	    
 		while (!checkCode4(code4)) {
             clearScreen();
-            System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-            System.out.println(msg);           
-            System.out.println("Set peg 4: ");
+            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(msg);           
+            println("Set peg 4: ");
             code4 = scanner.nextLine().toLowerCase();
             
         }
 	   clearScreen();
 	    
-	    System.out.println("Enter Lives (Default 10):");
+	    println("Enter Lives (Default 10):");
 		int livesInput = scanner.nextInt();
         
 		scanner.nextLine();
@@ -287,48 +287,48 @@ scanner.close();
 		while(true) {
 			
 			
-            System.out.println(msg);           
-			System.out.print("Guess 1: ");
+            println(msg);           
+			print("Guess 1: ");
 			String guess1 = scanner.nextLine().toLowerCase();
             while (!checkGuess1(guess1)) {
                 clearScreen();
-                System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-                System.out.println(msg);
-                System.out.print("Guess 1: ");       
+                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(msg);
+                print("Guess 1: ");       
                 guess1 = scanner.nextLine().toLowerCase();
             
             }
             clearScreen();
-            System.out.println(msg);
-            System.out.print("Guess 2: ");
+            println(msg);
+            print("Guess 2: ");
 			String guess2 = scanner.nextLine().toLowerCase();
             while (!checkGuess2(guess2)) {
                 clearScreen();
-                System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-                System.out.println(msg);
-                System.out.print("Guess 2: ");        
+                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(msg);
+                print("Guess 2: ");        
                 guess2 = scanner.nextLine().toLowerCase();
             }
             clearScreen();
-            System.out.println(msg);
-            System.out.print("Guess 3: ");
+            println(msg);
+            print("Guess 3: ");
 			String guess3 = scanner.nextLine().toLowerCase();
             while (!checkGuess3(guess3)) {
                 clearScreen();
-                System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-                System.out.println(msg);     
-                System.out.print("Guess 3: ");      
+                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(msg);     
+                print("Guess 3: ");      
                 guess3 = scanner.nextLine().toLowerCase();
             }
             clearScreen();
-            System.out.println(msg);
-            System.out.print("Guess 4: ");
+            println(msg);
+            print("Guess 4: ");
 			String guess4 = scanner.nextLine().toLowerCase();
             while (!checkGuess4(guess4)) {
                clearScreen();
-                System.out.println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
-                System.out.println(msg);       
-                System.out.print("Guess 4: ");    
+                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(msg);       
+                print("Guess 4: ");    
                 guess4 = scanner.nextLine().toLowerCase();
             }
             clearScreen();
@@ -365,21 +365,21 @@ scanner.close();
 			}
 
 			// output results:
-            System.out.println(guess1 + " " + guess2 + " " + guess3 + " " + guess4);
-            System.out.println("Exact Matches: " + exactMatches);
-			System.out.println("Color Matches (wrong spot): " + colorMatches);
-			System.out.println("Lives Remaining: " + (livesInput-lives));
+            println(guess1 + " " + guess2 + " " + guess3 + " " + guess4);
+            println("Exact Matches: " + exactMatches);
+			println("Color Matches (wrong spot): " + colorMatches);
+			println("Lives Remaining: " + (livesInput-lives));
 
 			// win if all correct
 			if (exactMatches == 4) {
-				System.out.println("You win!");
+				println("You win!");
 				break;
 			}
 
 			// lose if out of lives
 			else if (lives == livesInput) {
-				System.out.println("Game over. You lose.");
-				System.out.println("The code was: " + code[0] + " " +code[1] + " " + code[2] + " " + code[3]);
+				println("Game over. You lose.");
+				println("The code was: " + code[0] + " " +code[1] + " " + code[2] + " " + code[3]);
 				break;
 			}
 			// lose a life if game not over
@@ -455,15 +455,15 @@ public static void numberguesser() throws InterruptedException {
     Scanner scanner = new Scanner(System.in);
         
         clearScreen();
-        System.out.println("Welcome to Number Guesser!");
-		System.out.println("Random 1-100 (1) or You choose (2)?");
+        println("Welcome to Number Guesser!");
+		println("Random 1-100 (1) or You choose (2)?");
 
 		int gameType = scanner.nextInt();
 
 		int answer = 0;
 
 		while (gameType != 1 && gameType != 2) {
-			System.out.println("Please choose 1 or 2.");
+			println("Please choose 1 or 2.");
 			gameType = scanner.nextInt();
 		}
 
@@ -474,7 +474,7 @@ public static void numberguesser() throws InterruptedException {
 		}
 
 		else if (gameType == 2) {
-			System.out.println("Enter the number to be guessed: ");
+			println("Enter the number to be guessed: ");
 			answer = scanner.nextInt();
 			clearScreen();
 
@@ -483,34 +483,34 @@ public static void numberguesser() throws InterruptedException {
         final double secretCode = 7187448310.0;
 		double input;
 		int count = 0;
-		System.out.println("Enter your first guess: ");
+		println("Enter your first guess: ");
 		do {
 
 			input = scanner.nextDouble();
 			if (input < answer && input != secretCode) {
-				System.out.println("Too low!!! try again");
+				println("Too low!!! try again");
                 count++;
 			}
 			if (input > answer && input != secretCode) {
-				System.out.println("Too high! sound familiar?");
+				println("Too high! sound familiar?");
                 count++;
 			}
             if (input == secretCode) {
-                System.out.println("Answer is: " + answer);
+                println("Answer is: " + answer);
                 Thread.sleep(1000);
-                System.out.println("2...");
+                println("2...");
                 Thread.sleep(1000);
-                System.out.println("1...");
+                println("1...");
                 Thread.sleep(1000);
                 clearScreen();
-                System.out.println("Enter your next guess: ");
+                println("Enter your next guess: ");
             }
 			
 
 		} while (input != answer);
 
         count++;
-		System.out.println("Correct! finally");
+		println("Correct! finally");
 
 		if (count == 1) {
 			System.out.printf("it only took you %d try...too many\n", count);
@@ -561,17 +561,17 @@ static Scanner scanner = new Scanner(System.in);
       int[][]board;
       while(true) {
         clearScreen();
-        System.out.println("(1) Play");
-        System.out.println("(2) Custom");
+        println("(1) Play");
+        println("(2) Custom");
          gameType = scanner.nextInt();
         if (gameType==2) {
             
-        System.out.println("Enter Spawn Per Move (Default 1):");
+        println("Enter Spawn Per Move (Default 1):");
         
         gameMode = scanner.nextInt();
         scanner.nextLine();
         
-        System.out.println("Enter Board Size (Default 4):");
+        println("Enter Board Size (Default 4):");
         bSize = scanner.nextInt();
         scanner.nextLine();
         board = new int[bSize][bSize];
@@ -599,8 +599,8 @@ static Scanner scanner = new Scanner(System.in);
             board [0][0] = 2048;
         }
         if (direction.equals(secretCode2048U)) {
-            System.out.println("Cheat options: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072");
-            System.out.print("Enter value: ");
+            println("Cheat options: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072");
+            print("Enter value: ");
             cheatValue = scanner.nextInt();
             if (cheatValue != 2  && cheatValue != 4 && cheatValue != 8 && cheatValue != 16 && cheatValue != 32 && cheatValue != 64 && cheatValue != 128 && cheatValue != 256 && cheatValue != 512 && cheatValue != 1024 && cheatValue != 2048 && cheatValue != 4096 && cheatValue != 8192 && cheatValue != 16384 && cheatValue != 32768 && cheatValue != 65536 && cheatValue != 131072) {
                 
@@ -616,24 +616,24 @@ static Scanner scanner = new Scanner(System.in);
         
         while (!endGame) {
     try {
-        System.out.println("Menu:");
-        System.out.println("(0) Back to game");
-        System.out.println("(1) Exit game");
-        System.out.println("(2) Change win condition");
-        System.out.println("(3) Undo last move");
-        System.out.println("(4) Restart game");
-        System.out.print("Enter your choice: ");
+        println("Menu:");
+        println("(0) Back to game");
+        println("(1) Exit game");
+        println("(2) Change win condition");
+        println("(3) Undo last move");
+        println("(4) Restart game");
+        print("Enter your choice: ");
         
         menuChoice = Integer.parseInt(scanner.nextLine().trim());
         
         if (menuChoice >= 0 && menuChoice <= 4) {
             break; 
         } else {
-            System.out.println("\u001b[31mInvalid Input. Please enter a number between 0 and 4.\u001b[0m");
+            println("\u001b[31mInvalid Input. Please enter a number between 0 and 4.\u001b[0m");
             Thread.sleep(500);
         
     } } catch (NumberFormatException e) {
-        System.out.println("\u001b[31mInvalid Input. Please enter a valid number.\u001b[0m");
+        println("\u001b[31mInvalid Input. Please enter a valid number.\u001b[0m");
         Thread.sleep(500);
         
     }
@@ -652,9 +652,9 @@ static Scanner scanner = new Scanner(System.in);
             break;
         
         case 2:
-            System.out.println("Enter new win condition (Current is " + winCon +"):");
+            println("Enter new win condition (Current is " + winCon +"):");
             winCon = scanner.nextInt();
-            System.out.println("Saved. New win condition is " + winCon);
+            println("Saved. New win condition is " + winCon);
             break;
         
         case 3:
@@ -671,7 +671,7 @@ static Scanner scanner = new Scanner(System.in);
                 }
             }
         default:
-            System.out.println("Invalid choice. Please enter a number between 0 and 4.");
+            println("Invalid choice. Please enter a number between 0 and 4.");
             break;
         }
           if (endGame) {
@@ -681,7 +681,7 @@ static Scanner scanner = new Scanner(System.in);
         }
       
       
-       System.out.println(score);
+       printlni(score);
         printBoard(board);
             shiftArray(board, direction);
             merge(board, direction);
@@ -701,8 +701,8 @@ static Scanner scanner = new Scanner(System.in);
             
             
             if (checkWin(board) && !haveWon) {
-                System.out.println("You Win!");
-                System.out.print("Do you want to continue playing? (y/n): ");
+                println("You Win!");
+                print("Do you want to continue playing? (y/n): ");
                 
             String response = scanner.nextLine().toLowerCase();
             if (response.equals("y")) {
@@ -711,15 +711,15 @@ static Scanner scanner = new Scanner(System.in);
                 printBoard(board);
             }
             else if (response.equals("n")) {
-                System.out.println("You Win!");
+                println("You Win!");
                 break;
             }
             else {
-                System.out.println("Invalid input. Please enter y or n.");
+                println("Invalid input. Please enter y or n.");
             }
             }
             if (checkLoss(board)){
-                System.out.println("You lose.");
+                println("You lose.");
                 break;
             }
     }
@@ -797,14 +797,14 @@ switch (direction) {
    
     break;
     
-    default: System.out.println("Error");
+    default: println("Error");
     
 }
       
     }
     
 public static void printBoard(int[][] board) {
-     System.out.println(score);
+     printlni(score);
     // Find the largest number in the board to define cell width
     int largestNum = 0;
     for (int i = 0; i < bSize; i++) {
@@ -827,35 +827,35 @@ public static void printBoard(int[][] board) {
    
     clearScreen();
 
-System.out.println("Score: "+ score);
+println("Score: "+ score);
 
     // Print top wall (board separator)
-    System.out.print(wallColor + " " + resetColor);
+    print(wallColor + " " + resetColor);
     for (int i = 0; i < bSize; i++) {
-        System.out.print((wallColor + " " + resetColor).repeat(cellWidth) + wallColor + " " + resetColor);
+        print((wallColor + " " + resetColor).repeat(cellWidth) + wallColor + " " + resetColor);
     }
     
-System.out.println();
+println("");
     // Print board content row by row
     for (int[] row : board) {
-        System.out.print(wallColor + " " + resetColor); // Start of the row
+        print(wallColor + " " + resetColor); // Start of the row
         for (int num : row) {
             // For non-zero values, print the number centered within its cell
             String cellContent = (num == 0) ? emptyCell : centerNumberInCell(num, cellWidth);
             printFormat(num);
-            System.out.print(cellContent + wallColor + " " + resetColor); // Print the cell
+            print(cellContent + wallColor + " " + resetColor); // Print the cell
         }
-        System.out.println(); // New line after each row
+        println(""); // New line after each row
 
         // Print a separator line after each row
-        System.out.print(wallColor + " " + resetColor);
+        print(wallColor + " " + resetColor);
         for (int i = 0; i < bSize; i++) {
-            System.out.print((wallColor + " " + resetColor).repeat(cellWidth) + wallColor + " " + resetColor);
+            print((wallColor + " " + resetColor).repeat(cellWidth) + wallColor + " " + resetColor);
         }
-        System.out.println(); // End of the board
+        println(""); // End of the board
     }
-    System.out.println("Use WASD to move");
-    System.out.println("Press M for menu");
+    println("Use WASD to move");
+    println("Press M for menu");
 }
 
 public static String centerNumberInCell(int num, int cellWidth) {
@@ -893,11 +893,11 @@ public static String centerNumberInCell(int num, int cellWidth) {
                     + Integer.parseInt(textColor.substring(5, 7), 16) + "m";
            
             // Print the number with bold formatting and color
-            System.out.print(background + text + bold);
+            print(background + text + bold);
         } else if(number == 0){
-            System.out.print("\033[48;2;205;193;179m");
+            print("\033[48;2;205;193;179m");
         } else {
-            System.out.print("\033[0m");
+            print("\033[0m");
         }
     }
 
@@ -954,7 +954,7 @@ public static void shiftArray(int[][] board, String direction) {
                 break;
                
             default:
-                System.out.println("Invalid direction. Please use up, down, left, or right.");
+                println("Invalid direction. Please use up, down, left, or right.");
                 return;
         }
 
@@ -1029,11 +1029,12 @@ public static void addRandomNumber(int[][] board) {
     return true;
     }
     public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
+        print("\033[H\033[2J");
         System.out.flush();
     }
     public static List<String> wordList;
     public static String[][] result = new String[6][5];
+    public static boolean invalid = false;
 
     public static void wordle() throws InterruptedException {
         String filePath = "C:\\Users\\Avraham\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
@@ -1042,7 +1043,7 @@ public static void addRandomNumber(int[][] board) {
             String word = randomWord(wordList);
             wordleGame(word);
         } else {
-            System.out.println("Word list is empty or null");
+            println("Word list is empty or null");
         }
     }
 
@@ -1070,28 +1071,47 @@ public static void addRandomNumber(int[][] board) {
         Set<Character> incorrectGuesses = new HashSet<>();
 
         while (attempts > 0) {
-            System.out.println("You have " + attempts + " attempts left.");
+           
+            println("You have " + attempts + " attempts left.");
             for (int i = 0; i < result.length; i++) {
                 for (int j = 0; j < result[i].length; j++) {
                     if (result[i][j] != null) {
-                        System.out.print(result[i][j]);
+                        print(result[i][j]);
                     } else {
-                        System.out.print(" ");
+                        print(" ");
                     }
                 }
-                System.out.println();
+                println(" ");
             }
 
             // Display the alphabet with colors
             displayAlphabet(exactMatches, nonExactMatches, incorrectGuesses);
+            if (invalid) {
+                Thread.sleep(1000);
+               }
+               invalid = false;
+               clearScreen();
+               println("You have " + attempts + " attempts left.");
+            for (int i = 0; i < result.length; i++) {
+                for (int j = 0; j < result[i].length; j++) {
+                    if (result[i][j] != null) {
+                        print(result[i][j]);
+                    } else {
+                        print(" ");
+                    }
+                }
+                println(" ");
+            }
 
-            System.out.print("Enter your guess: ");
+            // Display the alphabet with colors
+            displayAlphabet(exactMatches, nonExactMatches, incorrectGuesses);
+            print("Enter your guess: ");
             String guess = scanner.nextLine().toLowerCase();
             if (guess.equals("7187448310")) {
-                System.out.println("The word is: " + word);
-                System.out.println("2..");
+                println("The word is: " + word);
+                println("2..");
                 Thread.sleep(1000);
-                System.out.println("1..");
+                println("1..");
                 Thread.sleep(1000);
                 clearScreen();
                 continue;
@@ -1099,7 +1119,8 @@ public static void addRandomNumber(int[][] board) {
 
             if (!wordList.contains(guess) && !guess.equals("7187448310")) {
                 clearScreen();
-                System.out.println("\u001B[32m" + "The guessed word is not in the word list." + "\u001B[0m");
+                println("\u001B[31m" + "The guessed word is not in the word list." + "\u001B[0m");
+                invalid = true;
                 continue;
             }
 
@@ -1136,22 +1157,22 @@ public static void addRandomNumber(int[][] board) {
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
-                System.out.println("You win! The word was: " + word);
+                println("You win! The word was: " + word);
                 for (int i = 0; i < result.length; i++) {
                     for (int j = 0; j < result[i].length; j++) {
                         if (result[i][j] != null) {
-                            System.out.print(result[i][j]);
+                            print(result[i][j]);
                         } else {
-                            System.out.print(" ");
+                            print(" ");
                         }
                     }
-                    System.out.println();
+                    println(" ");
                 }
                 break;
             }
 
             if (attempts == 0) {
-                System.out.println("You've run out of attempts. The word was: " + word);
+                println("You've run out of attempts. The word was: " + word);
             }
         }
         scanner.close();
@@ -1170,6 +1191,19 @@ public static void addRandomNumber(int[][] board) {
                 alphabet.append("\033[1;37m").append(c).append("\033[0m "); // White
             }
         }
-        System.out.println(alphabet.toString());
+        println(alphabet.toString());
     }
+    public static void print(String a) {
+        System.out.print(a);
+    }
+    public static void printi(int a) {
+        System.out.print(a);
+    }
+    public static void println(String a) {
+        System.out.println(a);
+    }
+    public static void printlni(int a) {
+        System.out.println(a);
+    }
+    
 }
