@@ -599,8 +599,13 @@ static Scanner scanner = new Scanner(System.in);
             board [0][0] = 2048;
         }
         if (direction.equals(secretCode2048U)) {
+            System.out.println("Cheat options: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072");
             System.out.print("Enter value: ");
             cheatValue = scanner.nextInt();
+            if (cheatValue != 2  && cheatValue != 4 && cheatValue != 8 && cheatValue != 16 && cheatValue != 32 && cheatValue != 64 && cheatValue != 128 && cheatValue != 256 && cheatValue != 512 && cheatValue != 1024 && cheatValue != 2048 && cheatValue != 4096 && cheatValue != 8192 && cheatValue != 16384 && cheatValue != 32768 && cheatValue != 65536 && cheatValue != 131072) {
+                
+                continue;
+            }
             for (int l=0; l<bSize; l++) {
                 for (int b=0; b<bSize; b++) {
                     board[l][b] = cheatValue;
