@@ -689,8 +689,7 @@ static Scanner scanner = new Scanner(System.in);
                 
                 
             }
-            menuChoice = 7; //just to set it to an irrelevant input
-            originalBoard = cloneBoard(board);
+            menuChoice = 7; //just to set it to an irrelevant value
             
             printBoard(board);
             
@@ -895,26 +894,17 @@ public static String centerNumberInCell(int num, int cellWidth) {
            
             String[] colors = colorMap.get(131072);
             String bgColor = colors[0];
-            String textColor = colors[1];
 
             // ANSI escape codes to apply text formatting (bold and color)
-           
             String background = "\033[48;2;" + Integer.parseInt(bgColor.substring(1, 3), 16) + ";"
                     + Integer.parseInt(bgColor.substring(3, 5), 16) + ";"
                     + Integer.parseInt(bgColor.substring(5, 7), 16) + "m";
-            String text = "\033[38;2;" + Integer.parseInt(textColor.substring(1, 3), 16) + ";"
-                    + Integer.parseInt(textColor.substring(3, 5), 16) + ";"
-                    + Integer.parseInt(textColor.substring(5, 7), 16) + "m";
+            
            
         } else {
             System.out.print("\033[0m");
         }
     }
-
-
-
-    
-
 
 public static void shiftArray(int[][] board, String direction) {
         int[][] newBoard = new int[bSize][bSize];
