@@ -4,13 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "java",
-            "name": "tempMain",
-            "request": "launch",
-            "mainClass": "tempMain",
-            "projectName": "Minigames_438a4102"
-        },
+        
         {
             "type": "java",
             "name": "Main",
