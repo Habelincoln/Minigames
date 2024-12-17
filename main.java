@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-public class Main
+public class main
                     {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
