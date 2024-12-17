@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "Minigames_2974f6f3"
+        },
+        {
+            "type": "java",
+            "name": "wordle",
+            "request": "launch",
+            "mainClass": "wordle",
+            "projectName": "Minigames_2974f6f3"
+        },
+        {
+            "type": "java",
             "name": "mastermind",
             "request": "launch",
             "mainClass": "mastermind",
@@ -22,7 +36,7 @@
             "type": "java",
             "request": "launch",
             "name": "Launch Java App",
-            "mainClass": "Main" // Updated class name
+            "mainClass": "Main"
         }
     ]
 }

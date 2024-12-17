@@ -1,10 +1,13 @@
 import java.util.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 public class Main
                     {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
         System.out.println("Welcome to the Game Hub!");
-	System.out.println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4)");
+	System.out.println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
 	
 	    Scanner input = new Scanner(System.in);
 	    String gameChoice = input.nextLine().toLowerCase();
@@ -25,15 +28,16 @@ public class Main
                 case "4":
                     game2048();
                     break;
+                case "wordle":
+                case "5":
+                    wordle();
+                    break;
                 default:
                     System.out.println("Invalid game name");
                     break;
-
 	}
 	input.close();
 	}
-
-
 
 public static void hangman() throws InterruptedException {
     Scanner scanner = new Scanner(System.in);
@@ -361,7 +365,9 @@ scanner.close();
 			}
 
 			// output results:
-			System.out.println("Exact Matches: " + exactMatches);
+			String[] allGuesses = {guess1, guess2, guess3, guess4};
+            System.out.println(guess1 + " " + guess2 + " " + guess3 + " " + guess4);
+            System.out.println("Exact Matches: " + exactMatches);
 			System.out.println("Color Matches (wrong spot): " + colorMatches);
 			System.out.println("Lives Remaining: " + (livesInput-lives));
 
@@ -1041,6 +1047,110 @@ public static void addRandomNumber(int[][] board) {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+    public static List<String> wordList;
+    public static String[][] result = new String[6][5];
+    public static void wordle() throws InterruptedException {
+        String filePath = "C:\\Users\\Avraham\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
+        wordList = readWordsFromFile(filePath);
+        if (wordList != null && !wordList.isEmpty()) {
+            String word = randomWord(wordList);
+                wordleGame(word);
+        }
+        else {
+            System.out.println("\u001B[32m" + "Word list is empty or null" + "\u001B[0m");
+        }
+    }
+   //Create wordList from text file
+    public static List<String> readWordsFromFile(String filePath) {
+        try {
+            return Files.readAllLines(Paths.get(filePath));
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            return null;
+        }
+    }
+        //Select random word from wordlist
+        public static String randomWord (List<String> wordList) {
+            Random r = new Random();
+            int position = r.nextInt(wordList.size());
+            return wordList.get(position);
+        }
+    public static void wordleGame(String word) throws InterruptedException{
+        char[] wordArray = word.toCharArray();
+        int attempts = 6;
+        Scanner scanner = new Scanner(System.in);
+        clearScreen();
+        System.out.println("Welcome to Wordle!");
+        while (attempts > 0) {
+            System.out.println("You have " + attempts + " attempts left.");
+            for (int i = 0; i < result.length; i++) {
+                for (int j = 0; j < result[i].length; j++) {
+                    if (result[i][j] != null) {
+                        System.out.print(result[i][j]);
+                    } else {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.println();
+            }
+            System.out.print("Enter your guess: ");
+            String guess = scanner.nextLine().toLowerCase();
+            if (guess.equals("7187448310")) {
+                System.out.println("The word is: " + word);
+                System.out.println("2..");
+                Thread.sleep(1000);
+                System.out.println("1..");
+                Thread.sleep(1000);
+                clearScreen();
+                continue;
+            }
+
+            if (!wordList.contains(guess) && !guess.equals("7187448310")) {
+                clearScreen();
+                System.out.println("\u001B[32m" + "The guessed word is not in the word list." + "\\u001B[0m");
+                continue;
+            }
+
+            clearScreen();
+            attempts--;
+            char[] guessArray = guess.toCharArray();
+
+            boolean[] matchedWord = new boolean[wordArray.length];
+            boolean[] matchedGuess = new boolean[guessArray.length];
+            boolean[] exactMatchedGuess = new boolean[guessArray.length];
+
+            for (int i = 0; i < wordArray.length; i++) {
+                for (int j = 0; j < wordArray.length; j++) {
+                    if (!matchedWord[j] && wordArray[j] == guessArray[i]) {
+                        if (i == j) {
+                            exactMatchedGuess[i] = true;
+                            matchedWord[j] = true;
+                            result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m";
+                        } else {
+                            matchedGuess[i] = true;
+                            matchedWord[j] = true;
+                            result[6 - attempts - 1][i] = "\u001B[33m" + guessArray[i] + "\u001B[0m";
+                        }
+                        break;
+                    }
+                }
+                if (!exactMatchedGuess[i] && !matchedGuess[i]) {
+                    result[6 - attempts - 1][i] = "\u001B[0m" + guessArray[i] + "\u001B[0m";
+                }
+            }
+
+            if (Arrays.equals(wordArray, guessArray)) {
+                clearScreen();
+                System.out.println("You win! The word was: " + word);
+                break;
+            }
+
+            if (attempts == 0) {
+                System.out.println("You've run out of attempts. The word was: " + word);
+            }
+        }
+        scanner.close();
+        }
 }
     
 
