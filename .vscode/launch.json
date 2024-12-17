@@ -6,24 +6,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "maintemp",
+            "name": "tempMain",
             "request": "launch",
-            "mainClass": "maintemp",
-            "projectName": "Minigames_2974f6f3"
-        },
-        {
-            "type": "java",
-            "name": "temp",
-            "request": "launch",
-            "mainClass": "temp",
-            "projectName": "Minigames_2974f6f3"
-        },
-        {
-            "type": "java",
-            "name": "prob",
-            "request": "launch",
-            "mainClass": "prob",
-            "projectName": "Minigames_2974f6f3"
+            "mainClass": "tempMain",
+            "projectName": "Minigames_438a4102"
         },
         {
             "type": "java",
@@ -31,20 +17,6 @@
             "request": "launch",
             "mainClass": "Main",
             "projectName": "Minigames_438a4102"
-        },
-        {
-            "type": "java",
-            "name": "test",
-            "request": "launch",
-            "mainClass": "test",
-            "projectName": "Minigames_2974f6f3"
-        },
-        {
-            "type": "java",
-            "name": "wordle",
-            "request": "launch",
-            "mainClass": "wordle",
-            "projectName": "Minigames_2974f6f3"
         },
         {
             "type": "java",
