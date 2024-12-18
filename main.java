@@ -8,9 +8,17 @@ public class Main {
         clearScreen();
         println("Welcome to the Game Hub!");
 	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
-	
 	    Scanner input = new Scanner(System.in);
 	    String gameChoice = input.nextLine().toLowerCase();
+            while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5")) {
+                clearScreen();
+                println("\033[31m" + "Invalid game name." + "\033[0m");
+                Thread.sleep(1000);
+                clearScreen();
+                println("Welcome to the Game Hub!");
+                println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
+	            gameChoice = input.nextLine().toLowerCase();
+            }
             switch (gameChoice) {
                 case "hangman":
                 case "1":
@@ -212,9 +220,6 @@ scanner.close();
 		return r.toString();
     }
     
-    
-
-
 
           public static void mastermind() {
              Scanner scanner = new Scanner(System.in);
@@ -223,7 +228,8 @@ scanner.close();
 
         println("\u001B[33m" +"Welcome to Mastermind!" + "\u001B[0m");
 		String msg = "4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m";
-
+        List<String> allGuesses = new ArrayList<>();
+        List<String> matchResults = new ArrayList<>();
         int lives = 0;
 		println("Choose code");
         println("4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m");
@@ -273,15 +279,12 @@ scanner.close();
             code4 = scanner.nextLine().toLowerCase();
             
         }
-	   clearScreen();
-	    
-	    println("Enter Lives (Default 10):");
-		int livesInput = scanner.nextInt();
-        
-		scanner.nextLine();
 	
 		clearScreen();
-
+        println("Enter lives: ");
+        int livesInput = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        clearScreen();
 		String[] code = {code1, code2, code3, code4}; // store codes
 
 		while(true) {
@@ -296,8 +299,10 @@ scanner.close();
                 println(msg);
                 print("Guess 1: ");       
                 guess1 = scanner.nextLine().toLowerCase();
-            
+                
+                
             }
+            allGuesses.add(guess1);
             clearScreen();
             println(msg);
             print("Guess 2: ");
@@ -309,6 +314,7 @@ scanner.close();
                 print("Guess 2: ");        
                 guess2 = scanner.nextLine().toLowerCase();
             }
+            allGuesses.add(guess2);
             clearScreen();
             println(msg);
             print("Guess 3: ");
@@ -320,6 +326,7 @@ scanner.close();
                 print("Guess 3: ");      
                 guess3 = scanner.nextLine().toLowerCase();
             }
+            allGuesses.add(guess3);
             clearScreen();
             println(msg);
             print("Guess 4: ");
@@ -331,6 +338,7 @@ scanner.close();
                 print("Guess 4: ");    
                 guess4 = scanner.nextLine().toLowerCase();
             }
+            allGuesses.add(guess4);
             clearScreen();
 			String[] guess = {guess1, guess2, guess3, guess4}; // store guesses
 
@@ -364,32 +372,56 @@ scanner.close();
 				}
 			}
 
-			// output results:
-            println(guess1 + " " + guess2 + " " + guess3 + " " + guess4);
-            println("Exact Matches: " + exactMatches);
-			println("Color Matches (wrong spot): " + colorMatches);
-			println("Lives Remaining: " + (livesInput-lives));
+			 // store match results
+        matchResults.add(exactMatches + ":" + colorMatches);
 
-			// win if all correct
-			if (exactMatches == 4) {
-				println("You win!");
-				break;
-			}
+        // output results:
+        for (int i = 0; i < allGuesses.size(); i += 4) {
+            println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+        }
+        println("");
+        println("Lives Remaining: " + (livesInput - lives));
 
-			// lose if out of lives
-			else if (lives == livesInput) {
-				println("Game over. You lose.");
-				println("The code was: " + code[0] + " " +code[1] + " " + code[2] + " " + code[3]);
-				break;
-			}
-			// lose a life if game not over
-			else {
-				lives++;
-			}
-		}
+        // win if all correct
+        if (exactMatches == 4) {
+            println("You win!");
+            break;
+        }
+
+        // lose if out of lives
+        else if (lives == livesInput) {
+            println("Game over. You lose.");
+            println("The code was: " + code[0] + " " + code[1] + " " + code[2] + " " + code[3]);
+            break;
+        }
+        // lose a life if game not over
+        else {
+            lives++;
+        }
+    }
 
     scanner.close();
 }
+
+public static String colorize(String color) {
+    switch (color) {
+        case "blue":
+            return "\u001B[36m" + color.toUpperCase() + "\u001B[0m";
+        case "green":
+            return "\u001B[32m" + color.toUpperCase() + "\u001B[0m";
+        case "yellow":
+            return "\u001B[33m" + color.toUpperCase() + "\u001B[0m";
+        case "red":
+            return "\u001B[31m" + color.toUpperCase() + "\u001B[0m";
+        case "gray":
+            return "\u001B[90m" + color.toUpperCase() + "\u001B[0m";
+        case "white":
+            return "\u001B[37m" + color.toUpperCase() + "\u001B[0m";
+        default:
+            return color.toUpperCase();
+    }
+}
+
 public static boolean checkCode1 (String code1) {
     if (!code1.equals("red") &&!code1.equals("blue") && !code1.equals ("green") && !code1.equals("yellow") && !code1.equals ("white") && !code1.equals("gray")) {
         return false;
@@ -1037,7 +1069,7 @@ public static void addRandomNumber(int[][] board) {
     public static boolean invalid = false;
 
     public static void wordle() throws InterruptedException {
-        String filePath = "C:\\Users\\Avraham\\onedrive\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
+        String filePath = "C:\\GitHub\\Minigames\\valid-wordle-words.txt";
         wordList = readWordsFromFile(filePath);
         if (wordList != null && !wordList.isEmpty()) {
             String word = randomWord(wordList);
