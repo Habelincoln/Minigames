@@ -4,13 +4,47 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+        {
+            "type": "java",
+            "name": "maintemp",
+            "request": "launch",
+            "mainClass": "maintemp",
+            "projectName": "Minigames_2974f6f3"
+        },
+        {
+            "type": "java",
+            "name": "temp",
+            "request": "launch",
+            "mainClass": "temp",
+            "projectName": "Minigames_2974f6f3"
+        },
+        {
+            "type": "java",
+            "name": "prob",
+            "request": "launch",
+            "mainClass": "prob",
+            "projectName": "Minigames_2974f6f3"
+        },
         {
             "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
             "projectName": "Minigames_438a4102"
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "Minigames_2974f6f3"
+        },
+        {
+            "type": "java",
+            "name": "wordle",
+            "request": "launch",
+            "mainClass": "wordle",
+            "projectName": "Minigames_2974f6f3"
         },
         {
             "type": "java",
