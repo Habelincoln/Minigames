@@ -7,10 +7,18 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
         println("Welcome to the Game Hub!");
-	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
-	
+	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5), Tic Tac Toe (6)");
 	    Scanner input = new Scanner(System.in);
 	    String gameChoice = input.nextLine().toLowerCase();
+            while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6")) {
+                clearScreen();
+                println("\033[31m" + "Invalid game name." + "\033[0m");
+                Thread.sleep(1000);
+                clearScreen();
+                println("Welcome to the Game Hub!");
+                println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
+	            gameChoice = input.nextLine().toLowerCase();
+            }
             switch (gameChoice) {
                 case "hangman":
                 case "1":
@@ -31,6 +39,10 @@ public class Main {
                 case "wordle":
                 case "5":
                     wordle();
+                    break;
+                case "ticactoe":
+                case "6":
+                    ticTacToe();
                     break;
                 default:
                     println("Invalid game name");
@@ -212,9 +224,6 @@ scanner.close();
 		return r.toString();
     }
     
-    
-
-
 
           public static void mastermind() {
              Scanner scanner = new Scanner(System.in);
@@ -223,7 +232,8 @@ scanner.close();
 
         println("\u001B[33m" +"Welcome to Mastermind!" + "\u001B[0m");
 		String msg = "4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m";
-
+        List<String> allGuesses = new ArrayList<>();
+        List<String> matchResults = new ArrayList<>();
         int lives = 0;
 		println("Choose code");
         println("4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m");
@@ -273,15 +283,12 @@ scanner.close();
             code4 = scanner.nextLine().toLowerCase();
             
         }
-	   clearScreen();
-	    
-	    println("Enter Lives (Default 10):");
-		int livesInput = scanner.nextInt();
-        
-		scanner.nextLine();
 	
 		clearScreen();
-
+        println("Enter lives: ");
+        int livesInput = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+        clearScreen();
 		String[] code = {code1, code2, code3, code4}; // store codes
 
 		while(true) {
@@ -296,8 +303,10 @@ scanner.close();
                 println(msg);
                 print("Guess 1: ");       
                 guess1 = scanner.nextLine().toLowerCase();
-            
+                
+                
             }
+            allGuesses.add(guess1);
             clearScreen();
             println(msg);
             print("Guess 2: ");
@@ -309,6 +318,7 @@ scanner.close();
                 print("Guess 2: ");        
                 guess2 = scanner.nextLine().toLowerCase();
             }
+            allGuesses.add(guess2);
             clearScreen();
             println(msg);
             print("Guess 3: ");
@@ -320,6 +330,7 @@ scanner.close();
                 print("Guess 3: ");      
                 guess3 = scanner.nextLine().toLowerCase();
             }
+            allGuesses.add(guess3);
             clearScreen();
             println(msg);
             print("Guess 4: ");
@@ -331,6 +342,7 @@ scanner.close();
                 print("Guess 4: ");    
                 guess4 = scanner.nextLine().toLowerCase();
             }
+            allGuesses.add(guess4);
             clearScreen();
 			String[] guess = {guess1, guess2, guess3, guess4}; // store guesses
 
@@ -364,32 +376,56 @@ scanner.close();
 				}
 			}
 
-			// output results:
-            println(guess1 + " " + guess2 + " " + guess3 + " " + guess4);
-            println("Exact Matches: " + exactMatches);
-			println("Color Matches (wrong spot): " + colorMatches);
-			println("Lives Remaining: " + (livesInput-lives));
+			 // store match results
+        matchResults.add(exactMatches + ":" + colorMatches);
 
-			// win if all correct
-			if (exactMatches == 4) {
-				println("You win!");
-				break;
-			}
+        // output results:
+        for (int i = 0; i < allGuesses.size(); i += 4) {
+            println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+        }
+        println("");
+        println("Lives Remaining: " + (livesInput - lives));
 
-			// lose if out of lives
-			else if (lives == livesInput) {
-				println("Game over. You lose.");
-				println("The code was: " + code[0] + " " +code[1] + " " + code[2] + " " + code[3]);
-				break;
-			}
-			// lose a life if game not over
-			else {
-				lives++;
-			}
-		}
+        // win if all correct
+        if (exactMatches == 4) {
+            println("You win!");
+            break;
+        }
+
+        // lose if out of lives
+        else if (lives == livesInput) {
+            println("Game over. You lose.");
+            println("The code was: " + code[0] + " " + code[1] + " " + code[2] + " " + code[3]);
+            break;
+        }
+        // lose a life if game not over
+        else {
+            lives++;
+        }
+    }
 
     scanner.close();
 }
+
+public static String colorize(String color) {
+    switch (color) {
+        case "blue":
+            return "\u001B[36m" + color.toUpperCase() + "\u001B[0m";
+        case "green":
+            return "\u001B[32m" + color.toUpperCase() + "\u001B[0m";
+        case "yellow":
+            return "\u001B[33m" + color.toUpperCase() + "\u001B[0m";
+        case "red":
+            return "\u001B[31m" + color.toUpperCase() + "\u001B[0m";
+        case "gray":
+            return "\u001B[90m" + color.toUpperCase() + "\u001B[0m";
+        case "white":
+            return "\u001B[37m" + color.toUpperCase() + "\u001B[0m";
+        default:
+            return color.toUpperCase();
+    }
+}
+
 public static boolean checkCode1 (String code1) {
     if (!code1.equals("red") &&!code1.equals("blue") && !code1.equals ("green") && !code1.equals("yellow") && !code1.equals ("white") && !code1.equals("gray")) {
         return false;
@@ -1037,7 +1073,7 @@ public static void addRandomNumber(int[][] board) {
     public static boolean invalid = false;
 
     public static void wordle() throws InterruptedException {
-        String filePath = "C:\\Users\\Avraham\\onedrive\\Documents\\GitHub\\Minigames\\valid-wordle-words.txt";
+        String filePath = "C:\\GitHub\\Minigames\\valid-wordle-words.txt";
         wordList = readWordsFromFile(filePath);
         if (wordList != null && !wordList.isEmpty()) {
             String word = randomWord(wordList);
@@ -1158,7 +1194,7 @@ public static void addRandomNumber(int[][] board) {
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
-                println("You won in " + attempts + " attempts. The word was: " + word);
+                println("You won in " + attempts + "The word was: " + word);
                 for (int i = 0; i < result.length; i++) {
                     for (int j = 0; j < result[i].length; j++) {
                         if (result[i][j] != null) {
@@ -1206,5 +1242,185 @@ public static void addRandomNumber(int[][] board) {
     public static void printlni(int a) {
         System.out.println(a);
     }
+    public static void ticTacToe() throws InterruptedException{
+        Scanner scanner = new Scanner(System.in);
+        String[][] board = new String[3][3];
+        int row, col;
+        String currentPlayer = "\u001B[34m" + "X" + "\u001B[0m";
+        boolean XhasWon = false;
+        boolean OhasWon = false;
+        boolean isValidMove;
+
+        // Initialize the board with numbers 1-9
+        int count = 1;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[i][j] = String.valueOf(count++);
+            }
+        }
+        
+        clearScreen();
+        println("Current player: " + currentPlayer);
+        printBoardTTT(board);
+        
+        while (!OhasWon && !XhasWon) {
+            isValidMove = false;
+            while (!isValidMove) {
+                print("Enter your move: ");
+                
+                String move = scanner.nextLine();
+                row = -1;
+                col = -1;
+                
+                switch (move) {
+                    case "1":
+                        row = 0;
+                        col = 0;
+                        break;
+                    case "2":
+                        row = 0;
+                        col = 1;
+                        break;
+                    case "3":
+                        row = 0;
+                        col = 2;
+                        break;
+                    case "4":
+                        row = 1;
+                        col = 0;
+                        break;
+                    case "5":
+                        row = 1;
+                        col = 1;
+                        break;
+                    case "6":
+                        row = 1;
+                        col = 2;
+                        break;
+                    case "7":
+                        row = 2;
+                        col = 0;
+                        break;
+                    case "8":
+                        row = 2;
+                        col = 1;
+                        break;
+                    case "9":
+                        row = 2;
+                        col = 2;
+                        break;
+                    default:
+                        print("Invalid input");
+                        continue;
+                }
+                
+                if (!board[row][col].equals("X") && !board[row][col].equals("O")) {
+                    board[row][col] = currentPlayer;
+                    isValidMove = true;
+                } else {
+                    print("Invalid move - space already taken");
+                    Thread.sleep(1000);
+                    clearScreen();
+                    println("Current player: " + currentPlayer);
+                    printBoardTTT(board);
+                }
+            }
+            
+            clearScreen();
+            println("Current player: " + currentPlayer);
+            printBoardTTT(board);
+            switch (currentPlayer) {
+                case "\u001B[34m" + "X" + "\u001B[0m": 
+                    // Check rows
+                    if (board[0][0].equals(currentPlayer) && board[0][1].equals(currentPlayer) && board[0][2].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    else if (board[1][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[1][2].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    else if (board[2][0].equals(currentPlayer) && board[2][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    // Check columns
+                    else if (board[0][0].equals(currentPlayer) && board[1][0].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    else if (board[0][1].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][1].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    else if (board[0][2].equals(currentPlayer) && board[1][2].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    // Check diagonals
+                    else if (board[0][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    else if (board[0][2].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
+                        XhasWon = true;
+                    }
+                    break;
+                case "\u001B[31m" + "O" + "\u001B[0m":
+                    // Check rows
+                    if (board[0][0].equals(currentPlayer) && board[0][1].equals(currentPlayer) && board[0][2].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    else if (board[1][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[1][2].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    else if (board[2][0].equals(currentPlayer) && board[2][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    // Check columns
+                    else if (board[0][0].equals(currentPlayer) && board[1][0].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    else if (board[0][1].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][1].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    else if (board[0][2].equals(currentPlayer) && board[1][2].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    // Check diagonals
+                    else if (board[0][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    else if (board[0][2].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
+                        OhasWon = true;
+                    }
+                    break;
+            }
+            
+            // Move player switching here, before the next move
+            if (!XhasWon && !OhasWon) {
+                if (currentPlayer.equals("\u001B[34m" + "X" + "\u001B[0m")) {
+                    currentPlayer = "\u001B[31m" + "O" + "\u001B[0m";
+                }
+                else if (currentPlayer.equals("\u001B[31m" + "O" + "\u001B[0m")) {
+                    currentPlayer = "\u001B[34m" + "X" + "\u001B[0m";
+                }
+                clearScreen();
+                println("Current player: " + currentPlayer);
+                printBoardTTT(board);
+            }
+        }
+
+        if (XhasWon) {
+            clearScreen();
+            println("Game over." + "\u001B[34m X \u001B[0m" + "has won");
+        }
+        else if (OhasWon) {
+            clearScreen();
+            println("Game over." + "\u001B[31m O \u001B[0m" + "has won");
+        }
+        scanner.close();
+    }
     
+    // Add this new method for printing the board
+    public static void printBoardTTT(String[][] board) {
+        println(" " + board[0][0] + " | " + board[0][1] + " | " + board[0][2] + " ");
+        println("---+---+---");
+        println(" " + board[1][0] + " | " + board[1][1] + " | " + board[1][2] + " ");
+        println("---+---+---");
+        println(" " + board[2][0] + " | " + board[2][1] + " | " + board[2][2] + " ");
+    }
 }
