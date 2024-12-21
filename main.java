@@ -8,213 +8,211 @@ public class Main {
         clearScreen();
         println("Welcome to the Game Hub!");
 	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5), Tic Tac Toe (6)");
-	    Scanner input = new Scanner(System.in);
-	    String gameChoice = input.nextLine().toLowerCase();
-            while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6")) {
-                clearScreen();
-                println("\033[31m" + "Invalid game name." + "\033[0m");
-                Thread.sleep(1000);
-                clearScreen();
-                println("Welcome to the Game Hub!");
-                println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
-	            gameChoice = input.nextLine().toLowerCase();
-            }
-            switch (gameChoice) {
-                case "hangman":
-                case "1":
-                    hangman();
-                    break;
-                case "mastermind":
-                case "2":
-                    mastermind();
-                    break;
-                case "numberguesser":
-                case "3":
-                    numberguesser();
-                    break;
-                case "2048":
-                case "4":
-                    game2048();
-                    break;
-                case "wordle":
-                case "5":
-                    wordle();
-                    break;
-                case "ticactoe":
-                case "6":
-                    ticTacToe();
-                    break;
-                default:
-                    println("Invalid game name");
-                    break;
-	}
-	input.close();
+            try (Scanner input = new Scanner(System.in)) {
+                String gameChoice = input.nextLine().toLowerCase();
+                while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6")) {
+                    clearScreen();
+                    println("\033[31m" + "Invalid game name." + "\033[0m");
+                    Thread.sleep(1000);
+                    clearScreen();
+                    println("Welcome to the Game Hub!");
+                    println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5)");
+                    gameChoice = input.nextLine().toLowerCase();
+                }
+                switch (gameChoice) {
+                    case "hangman":
+                    case "1":
+                        hangman();
+                        break;
+                    case "mastermind":
+                    case "2":
+                        mastermind();
+                        break;
+                    case "numberguesser":
+                    case "3":
+                        numberguesser();
+                        break;
+                    case "2048":
+                    case "4":
+                        game2048();
+                        break;
+                    case "wordle":
+                    case "5":
+                        wordle();
+                        break;
+                    case "ticactoe":
+                    case "6":
+                        ticTacToe();
+                        break;
+                    default:
+                        println("Invalid game name");
+                        break;
+                }   }
 	}
 
 public static void hangman() throws InterruptedException {
-    Scanner scanner = new Scanner(System.in);
-    Set<String> multiWrongGuesses = new HashSet<>();
-		String word = "";
-		String livesLogo = " L";
-		do {
-		    
-		    print("\033[H\033[2J"); //clear console
-		    if (word.matches(".*\\d.*")){println("\u001B[31m"+"INVALID INPUT!!!" +"\u001B[0m" );}
-		    println("Welcome to hangman!");
-	    	println("Enter Word:");
-		    word = scanner.nextLine().toLowerCase();
-		    
-		}
-		while(word.matches(".*\\d.*"));
-		
-		clearScreen();
-
-		int len = word.length();
-		
-		String livesin = "";
-		
-	do {
-		    
-		    print("\033[H\033[2J"); //clear console
-		    if (livesin.matches(".*[a-zA-Z].*")){println("\u001B[31m"+"INVALID INPUT!!!");}
-		    println("Enter lives:");
-		    livesin = scanner.nextLine();
-		    
-		}while(livesin.matches(".*[a-zA-Z].*"));	
-		
-		int lives = Integer.parseInt(livesin);
-
-		String letter = "";
-		String wrongGuesses = "";
-		String correctGuesses = "";
-		String dash = "-";
-		
-		
-		String retWord = dash.repeat(len);
-		
-		
-		
-		for (int i = 0; i<len; i++) {
-				if ((String.valueOf(word.charAt(i)).equals(" "))) {
-
-					retWord = retWord.substring(0, i) + " " + retWord.substring(i+1);
-
-				}
-
-			}
-
-
-        print("\033[H\033[2J"); //print info
-
-        println(retWord);
-		println("lives: " + livesLogo.repeat(lives));
-		println(returnLetters(wrongGuesses, correctGuesses));
-
-		while (!retWord.equals(word)) {
-do {
-		    		    
-		    if (letter.matches(".*\\d.*")){ print("\033[H\033[2J"); println("\u001B[31m"+"INVALID INPUT!!!"+"\u001B[0m");println(retWord);
-	    	println("lives: " + livesLogo.repeat(lives));
-	    	println(returnLetters(wrongGuesses, correctGuesses));}
-	   
-		    letter = scanner.nextLine().toLowerCase();
-            if (letter.equals(secretCode2048)) {
-                println("Word is: " + word);
-                println("2...");
-                Thread.sleep(1000);
-                println("1...");
-                Thread.sleep(1000);
-            } 
-		    
-		} while(letter.matches(".*\\d.*"));
-			
-			
-			print("\033[H\033[2J"); 
-			
-			if (letter.length() <= 1){
-                if (letter.isEmpty()) {
-                println("\u001B[31m" + "You didn't enter anything!" + "\u001B[0m");
+            try (Scanner scanner= new Scanner(System.in)) {
+                Set<String> multiWrongGuesses = new HashSet<>();
+                String word = "";
+                String livesLogo = " L";
+                do {
+                    
+                    print("\033[H\033[2J"); //clear console
+                    if (word.matches(".*\\d.*")){println("\u001B[31m"+"INVALID INPUT!!!" +"\u001B[0m" );}
+                    println("Welcome to hangman!");
+                    println("Enter Word:");
+                    word = scanner.nextLine().toLowerCase();
+                    
                 }
-			else {
-			if (!word.contains(letter) && !wrongGuesses.contains(letter)) {
-				wrongGuesses += letter;
-			    lives --;
-			}
-             else if ( !word.contains(letter) && wrongGuesses.contains(letter) ) {
-            
-            println("\u001B[31m" + "You've already guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
-             }
-
-			if (!correctGuesses.contains(letter) && word.contains(letter)) {
-				correctGuesses += letter;
-			}
-		    else if (correctGuesses.contains(letter)) {
-		        println("\u001B[32m" + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
-		    }
+                while(word.matches(".*\\d.*"));
+                
+                clearScreen();
+                
+                int len = word.length();
+                
+                String livesin = "";
+                
+                do {
+                    
+                    print("\033[H\033[2J"); //clear console
+                    if (livesin.matches(".*[a-zA-Z].*")){println("\u001B[31m"+"INVALID INPUT!!!");}
+                    println("Enter lives:");
+                    livesin = scanner.nextLine();
+                    
+                }while(livesin.matches(".*[a-zA-Z].*"));
+                
+                int lives = Integer.parseInt(livesin);
+                
+                String letter = "";
+                String wrongGuesses = "";
+                String correctGuesses = "";
+                String dash = "-";
+                
+                
+                String retWord = dash.repeat(len);
+                
+                
+                
+                for (int i = 0; i<len; i++) {
+                    if ((String.valueOf(word.charAt(i)).equals(" "))) {
+                        
+                        retWord = retWord.substring(0, i) + " " + retWord.substring(i+1);
+                        
+                    }
+                    
+                }
+                
+                
+                print("\033[H\033[2J"); //print info
+                
+                println(retWord);
+                println("lives: " + livesLogo.repeat(lives));
+                println(returnLetters(wrongGuesses, correctGuesses));
+                
+                while (!retWord.equals(word)) {
+                    do {
+                        
+                        if (letter.matches(".*\\d.*")){ print("\033[H\033[2J"); println("\u001B[31m"+"INVALID INPUT!!!"+"\u001B[0m");println(retWord);
+                        println("lives: " + livesLogo.repeat(lives));
+                        println(returnLetters(wrongGuesses, correctGuesses));}
+                        
+                        letter = scanner.nextLine().toLowerCase();
+                        if (letter.equals(secretCode2048)) {
+                            println("Word is: " + word);
+                            println("2...");
+                            Thread.sleep(1000);
+                            println("1...");
+                            Thread.sleep(1000);
+                        }
+                        
+                    } while(letter.matches(".*\\d.*"));
+                    
+                    
+                    print("\033[H\033[2J");
+                    
+                    if (letter.length() <= 1){
+                        if (letter.isEmpty()) {
+                            println("\u001B[31m" + "You didn't enter anything!" + "\u001B[0m");
+                        }
+                        else {
+                            if (!word.contains(letter) && !wrongGuesses.contains(letter)) {
+                                wrongGuesses += letter;
+                                lives --;
+                            }
+                            else if ( !word.contains(letter) && wrongGuesses.contains(letter) ) {
+                                
+                                println("\u001B[31m" + "You've already guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
+                            }
+                            
+                            if (!correctGuesses.contains(letter) && word.contains(letter)) {
+                                correctGuesses += letter;
+                            }
+                            else if (correctGuesses.contains(letter)) {
+                                println("\u001B[32m" + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
+                            }
+                        }
+                        
+                    } else if (letter.length() > 1) {
+                        
+                        if (!multiWrongGuesses.contains(letter)) {
+                            lives--;
+                            multiWrongGuesses.add(letter);
+                        }
+                        
+                        else {
+                            
+                            println("\u001B[31m"+"You've already guessed " + "\"" + letter + "\""+"!"+"\u001B[0m");
+                        }
+                        
+                        if (letter.equals(word)) {
+                            lives++;
+                            retWord = word;
+                            break;
+                        }
+                        
+                    } else {
+                        
+                        lives--;
+                        
+                    }
+                    
+                    if (lives == 0) {
+                        break;
+                    }
+                    
+                    for (int i = 0; i<len; i++) {
+                        if ((String.valueOf(word.charAt(i)).equals(letter))) {
+                            
+                            retWord = retWord.substring(0, i) + letter + retWord.substring(i+1);
+                            
+                        }
+                        
+                    }
+                    letter = "";
+                    println(retWord);
+                    
+                    println("lives: " + livesLogo.repeat(lives));
+                    println(returnLetters(wrongGuesses, correctGuesses));
+                    println("Incorrect word guesses: " +multiWrongGuesses);
+                }
+                
+                print("\033[H\033[2J");
+                
+                if (retWord.equals(word)) {
+                    println("You Win!!!");
+                    println("The word was: " + word);
+                    if (lives == 1) {
+                        println("You had " + lives + " life remaining");
+                    }
+                    else if (lives > 1) {
+                        println("You had " + lives + " lives remaining");
+                    }
+                }
+                else {
+                    println("Game over. You lose.");
+                    println("The word was: " + word);
+                }
             }
-
-} else if (letter.length() > 1) {
-    
-    if (!multiWrongGuesses.contains(letter)) {
-        lives--;
-        multiWrongGuesses.add(letter);
-    }
-    
-    else {
-        
-        println("\u001B[31m"+"You've already guessed " + "\"" + letter + "\""+"!"+"\u001B[0m");
-    }
-    
-         if (letter.equals(word)) {
-        lives++;
-				retWord = word;
-				break;
-			}  
-    
-} else { 
-    
-    lives--;
-    
-}
-			
-			if (lives == 0) {
-				break;
-			}
-
-			for (int i = 0; i<len; i++) {
-				if ((String.valueOf(word.charAt(i)).equals(letter))) {
-
-					retWord = retWord.substring(0, i) + letter + retWord.substring(i+1);
-
-				}
-
-			}
-			letter = "";
-			println(retWord);
-            
-			println("lives: " + livesLogo.repeat(lives));
-			println(returnLetters(wrongGuesses, correctGuesses));
-            println("Incorrect word guesses: " +multiWrongGuesses);
-		}
-		
-		print("\033[H\033[2J"); 
-
-		if (retWord.equals(word)) {
-			println("You Win!!!");
-			println("The word was: " + word);
-			if (lives == 1) {
-			    println("You had " + lives + " life remaining");
-		}
-		else if (lives > 1) {
-		    println("You had " + lives + " lives remaining");
-		}
-		}	
-		else {
-			println("Game over. You lose.");
-			println("The word was: " + word);
-		}
-
-scanner.close();
 
 }	
     public static String returnLetters(String LTH, String correctGuesses) {
@@ -1242,16 +1240,42 @@ public static void addRandomNumber(int[][] board) {
     public static void printlni(int a) {
         System.out.println(a);
     }
-    public static void ticTacToe() throws InterruptedException{
-        Scanner scanner = new Scanner(System.in);
-        String[][] board = new String[3][3];
-        int row, col;
-        String currentPlayer = "\u001B[34m" + "X" + "\u001B[0m";
+    private static final String xMark = "\u001B[34mX\u001B[0m";  // Blue X
+    private static final String oMark = "\u001B[31mO\u001B[0m";  // Red O
+    
+    public static void ticTacToe() throws InterruptedException {
+        try (Scanner scanner = new Scanner(System.in)) {
+            String[][] board = new String[3][3];
+            
+            int gameMode = 0;
+            while (gameMode != 1 && gameMode != 2) {
+                clearScreen();
+                println("Select game mode:");
+                println("1. Two Players");
+                println("2. Play against AI");
+                print("Enter your choice (1-2): ");
+                try {
+                    gameMode = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    gameMode = 0;
+                }
+            }
+            
+            if (gameMode == 1) {
+                playTwoPlayerGame(scanner, board);
+            } else {
+                playAIGame(scanner, board);
+            }
+        }
+    }
+    
+    private static void playTwoPlayerGame(Scanner scanner, String[][] board) throws InterruptedException {
+        String currentPlayer = xMark;
         boolean XhasWon = false;
         boolean OhasWon = false;
         boolean isValidMove;
-
-        // Initialize the board with numbers 1-9
+        int row, col;
+        
         int count = 1;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -1267,6 +1291,183 @@ public static void addRandomNumber(int[][] board) {
             isValidMove = false;
             while (!isValidMove) {
                 print("Enter your move: ");
+                String move = scanner.nextLine();
+                row = -1;
+                col = -1;
+                
+                switch (move) {
+                    case "1":
+                        row = 0;
+                        col = 0;
+                        break;
+                    case "2":
+                        row = 0;
+                        col = 1;
+                        break;
+                    case "3":
+                        row = 0;
+                        col = 2;
+                        break;
+                    case "4":
+                        row = 1;
+                        col = 0;
+                        break;
+                    case "5":
+                        row = 1;
+                        col = 1;
+                        break;
+                    case "6":
+                        row = 1;
+                        col = 2;
+                        break;
+                    case "7":
+                        row = 2;
+                        col = 0;
+                        break;
+                    case "8":
+                        row = 2;
+                        col = 1;
+                        break;
+                    case "9":
+                        row = 2;
+                        col = 2;
+                        break;
+                    default:
+                        print("Invalid input");
+                        continue;
+                }
+                
+                if (!board[row][col].equals(xMark) && !board[row][col].equals(oMark)) {
+                    board[row][col] = currentPlayer;
+                    isValidMove = true;
+                } else {
+                    print("Invalid move - space already taken");
+                    Thread.sleep(1000);
+                    clearScreen();
+                    println("Current player: " + currentPlayer);
+                    printBoardTTT(board);
+                }
+            }
+            
+            clearScreen();
+            println("Current player: " + currentPlayer);
+            printBoardTTT(board);
+            
+            if (currentPlayer.equals(xMark)) {
+                if (evaluateBoard(board) == 10) {
+                    XhasWon = true;
+                }
+                if (!XhasWon) {
+                    currentPlayer = oMark;
+                }
+            } else {
+                if (evaluateBoard(board) == -10) {
+                    OhasWon = true;
+                }
+                if (!OhasWon) {
+                    currentPlayer = xMark;
+                }
+            }
+            
+            clearScreen();
+            println("Current player: " + currentPlayer);
+            printBoardTTT(board);
+        }
+
+        if (XhasWon) {
+            clearScreen();
+            printBoardTTT(board);
+            println("Game over. X has won");
+        } else if (OhasWon) {
+            clearScreen();
+            printBoardTTT(board);
+            println("Game over. O has won");
+        }
+    }
+    
+    private static void playAIGame(Scanner scanner, String[][] board) throws InterruptedException {
+        String playerMark = xMark;
+        String aiMark = oMark;
+        boolean gameOver = false;
+        boolean isValidMove;
+        int row, col;
+        boolean aiFirst = false;
+        
+        int count = 1;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[i][j] = String.valueOf(count++);
+            }
+        }
+        
+        int difficulty = 0;
+        while (difficulty < 1 || difficulty > 4) {  // Changed from 3 to 4
+            clearScreen();
+            if (aiFirst) {
+                println("\u001B[31mSelect difficulty level: (Reverse Mode)\u001B[0m");
+            }
+            else { println("Select difficulty level:");
+        }
+            println("1. Easy");
+            println("2. Normal");
+            println("3. Impossible");
+            println("4. " + (aiFirst ? "Normal Mode" : "Reverse Mode (AI goes first)"));  // New option
+            print("Enter your choice (1-4): ");  // Changed prompt
+            try {
+                difficulty = Integer.parseInt(scanner.nextLine());
+                if (difficulty == 4) {  // Handle reverse mode toggle
+                    aiFirst = !aiFirst;  // Toggle AI first
+                    difficulty = 0;  // Reset to force menu again
+                    continue;
+                }
+            } catch (NumberFormatException e) {
+                difficulty = 0;
+            }
+        }
+        
+        clearScreen();
+        println(aiFirst ? "AI is X (first player), you are O" : "You are X (first player), AI is O");
+        if (aiFirst) {
+            playerMark = oMark;
+            aiMark = xMark;
+        }
+        printBoardTTT(board);
+
+        // Create final copies for lambda
+        final String finalAiMark = aiMark;
+        final boolean finalAiFirst = aiFirst;
+        
+        if (aiFirst) {
+            print("AI is thinking");
+            final int finalDifficulty = difficulty;
+            Thread aiThread = new Thread(() -> {
+                aiMove(board, finalDifficulty, finalAiFirst, finalAiMark);
+            });
+            aiThread.start();
+            
+            int dotCount = 0;
+            while (aiThread.isAlive()) {
+                print(".");
+                dotCount++;
+                if (dotCount >= 3) {
+                    Thread.sleep(500);
+                    clearScreen();
+                    print("AI is thinking");
+                    dotCount = 0;
+                } else {
+                    Thread.sleep(500);
+                }
+            }
+            
+            clearScreen();
+            println("AI made its move:");
+            printBoardTTT(board);
+        }
+
+        while (!gameOver) {
+            isValidMove = false;
+            while (!isValidMove) {
+                print("Enter your move (1-9): ");
                 
                 String move = scanner.nextLine();
                 row = -1;
@@ -1314,113 +1515,587 @@ public static void addRandomNumber(int[][] board) {
                         continue;
                 }
                 
-                if (!board[row][col].equals("X") && !board[row][col].equals("O")) {
-                    board[row][col] = currentPlayer;
+                if (!board[row][col].equals(playerMark) && !board[row][col].equals(aiMark)) {
+                    board[row][col] = playerMark;
                     isValidMove = true;
                 } else {
                     print("Invalid move - space already taken");
                     Thread.sleep(1000);
                     clearScreen();
-                    println("Current player: " + currentPlayer);
                     printBoardTTT(board);
                 }
             }
             
             clearScreen();
-            println("Current player: " + currentPlayer);
             printBoardTTT(board);
-            switch (currentPlayer) {
-                case "\u001B[34m" + "X" + "\u001B[0m": 
-                    // Check rows
-                    if (board[0][0].equals(currentPlayer) && board[0][1].equals(currentPlayer) && board[0][2].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    else if (board[1][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[1][2].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    else if (board[2][0].equals(currentPlayer) && board[2][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    // Check columns
-                    else if (board[0][0].equals(currentPlayer) && board[1][0].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    else if (board[0][1].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][1].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    else if (board[0][2].equals(currentPlayer) && board[1][2].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    // Check diagonals
-                    else if (board[0][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    else if (board[0][2].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
-                        XhasWon = true;
-                    }
-                    break;
-                case "\u001B[31m" + "O" + "\u001B[0m":
-                    // Check rows
-                    if (board[0][0].equals(currentPlayer) && board[0][1].equals(currentPlayer) && board[0][2].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    else if (board[1][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[1][2].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    else if (board[2][0].equals(currentPlayer) && board[2][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    // Check columns
-                    else if (board[0][0].equals(currentPlayer) && board[1][0].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    else if (board[0][1].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][1].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    else if (board[0][2].equals(currentPlayer) && board[1][2].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    // Check diagonals
-                    else if (board[0][0].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][2].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    else if (board[0][2].equals(currentPlayer) && board[1][1].equals(currentPlayer) && board[2][0].equals(currentPlayer)) {
-                        OhasWon = true;
-                    }
-                    break;
+            
+            // Modify win condition checks to account for reverse mode
+            if (aiFirst) {
+                if (evaluateBoard(board) == -10) {
+                    println("Congratulations! You won!");
+                    gameOver = true;
+                    continue;
+                }
+            } else {
+                if (evaluateBoard(board) == 10) {
+                    println("Congratulations! You have won!");
+                    gameOver = true;
+                    continue;
+                }
             }
             
-            // Move player switching here, before the next move
-            if (!XhasWon && !OhasWon) {
-                if (currentPlayer.equals("\u001B[34m" + "X" + "\u001B[0m")) {
-                    currentPlayer = "\u001B[31m" + "O" + "\u001B[0m";
+            boolean isDraw = true;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                        isDraw = false;
+                        break;
+                    }
                 }
-                else if (currentPlayer.equals("\u001B[31m" + "O" + "\u001B[0m")) {
-                    currentPlayer = "\u001B[34m" + "X" + "\u001B[0m";
-                }
+                if (!isDraw) break;
+            }
+            
+            if (isDraw) {
                 clearScreen();
-                println("Current player: " + currentPlayer);
                 printBoardTTT(board);
+                println("Game over. It's a draw!");
+                gameOver = true;
+                continue;
+            }
+
+            print("AI is thinking");
+            final int finalDifficulty = difficulty;
+            Thread aiThread = new Thread(() -> {
+                aiMove(board, finalDifficulty, finalAiFirst, finalAiMark);
+            });
+            aiThread.start();
+            
+            int dotCount = 0;
+            while (aiThread.isAlive()) {
+                print(".");
+                dotCount++;
+                if (dotCount >= 3) {
+                    Thread.sleep(500);
+                    clearScreen();
+                    print("AI is thinking");
+                    dotCount = 0;
+                } else {
+                    Thread.sleep(500);
+                }
+            }
+            
+            clearScreen();
+            println("AI made its move:");
+            printBoardTTT(board);
+            
+            // Modify AI win condition checks
+            if (aiFirst) {
+                if (evaluateBoard(board) == 10) {
+                    println("Game over. AI has won!");
+                    gameOver = true;
+                    continue;
+                }
+            } else {
+                if (evaluateBoard(board) == -10) {
+                    println("Game over. AI has won!");
+                    gameOver = true;
+                    continue;
+                }
+            }
+            
+            isDraw = true;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                        isDraw = false;
+                        break;
+                    }
+                }
+                if (!isDraw) break;
+            }
+            
+            if (isDraw) {
+                clearScreen();
+                printBoardTTT(board);
+                println("Game over. It's a draw!");
+                gameOver = true;
             }
         }
-
-        if (XhasWon) {
-            clearScreen();
-            println("Game over." + "\u001B[34m X \u001B[0m" + "has won");
-        }
-        else if (OhasWon) {
-            clearScreen();
-            println("Game over." + "\u001B[31m O \u001B[0m" + "has won");
-        }
-        scanner.close();
     }
     
-    // Add this new method for printing the board
     public static void printBoardTTT(String[][] board) {
         println(" " + board[0][0] + " | " + board[0][1] + " | " + board[0][2] + " ");
         println("---+---+---");
         println(" " + board[1][0] + " | " + board[1][1] + " | " + board[1][2] + " ");
         println("---+---+---");
         println(" " + board[2][0] + " | " + board[2][1] + " | " + board[2][2] + " ");
+    }
+
+    private static int evaluateBoard(String[][] board) {
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0].equals(board[i][1]) && board[i][1].equals(board[i][2])) {
+                if (board[i][0].contains("X")) return +10;
+                else if (board[i][0].contains("O")) return -10;
+            }
+            if (board[0][i].equals(board[1][i]) && board[1][i].equals(board[2][i])) {
+                if (board[0][i].contains("X")) return +10;
+                else if (board[0][i].contains("O")) return -10;
+            }
+        }
+        if (board[0][0].equals(board[1][1]) && board[1][1].equals(board[2][2])) {
+            if (board[0][0].contains("X")) return +10;
+            else if (board[0][0].contains("O")) return -10;
+        }
+        if (board[0][2].equals(board[1][1]) && board[1][1].equals(board[2][0])) {
+            if (board[0][2].contains("X")) return +10;
+            else if (board[0][2].contains("O")) return -10;
+        }
+        return 0;
+    }
+
+    private static boolean isMovesLeft(String[][] board) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static int minimax(String[][] board, int depth, boolean isMax, int maxDepth) {
+        int score = evaluateBoard(board);
+        
+        if (score == 10) return 10 - depth;
+        if (score == -10) return -10 + depth;
+        if (!isMovesLeft(board) || depth >= maxDepth) return 0;
+
+        if (isMax) {
+            int best = -1000;
+            outer: for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                        String temp = board[i][j];
+                        board[i][j] = xMark;
+                        int val = minimax(board, depth + 1, false, maxDepth);
+                        board[i][j] = temp;
+                        best = Math.max(best, val);
+                        if (best >= 10) break outer;
+                    }
+                }
+            }
+            return best;
+        } else {
+            int best = 1000;
+            outer: for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                        String temp = board[i][j];
+                        board[i][j] = oMark;
+                        int val = minimax(board, depth + 1, true, maxDepth);
+                        board[i][j] = temp;
+                        best = Math.min(best, val);
+                        if (best <= -10) break outer;
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    private static void aiMove(String[][] board, int difficulty, boolean isX, String aiMark) {
+        int bestVal = -1000;
+        int row = -1, col = -1;
+        
+        int movesMade = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j].equals(xMark) || board[i][j].equals(oMark)) {
+                    movesMade++;
+                }
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                    String temp = board[i][j];
+                    board[i][j] = isX ? xMark : oMark;
+                    if (evaluateBoard(board) == (isX ? 10 : -10)) {
+                        return;
+                    }
+                    board[i][j] = temp;
+                }
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                    String temp = board[i][j];
+                    board[i][j] = isX ? oMark : xMark;
+                    if (evaluateBoard(board) == (isX ? -10 : 10)) {
+                        board[i][j] = isX ? xMark : oMark;
+                        return;
+                    }
+                    board[i][j] = temp;
+                }
+            }
+        }
+
+        if (difficulty == 1) {
+            // Increased random move chance when AI goes first in easy mode
+            double randomChance = isX ? 0.5 : 0.35;  // 50% random when first, 35% when second
+            if (Math.random() < randomChance) {
+                while (true) {
+                    row = (int)(Math.random() * 3);
+                    col = (int)(Math.random() * 3);
+                    if (!board[row][col].equals(xMark) && 
+                        !board[row][col].equals(oMark)) {
+                        board[row][col] = isX ? xMark : oMark;
+                        return;
+                    }
+                }
+            }
+        }
+
+        int maxDepth;
+        if (difficulty == 3) {
+            maxDepth = 30;  // Changed from 15 to 30
+        } else if (difficulty == 2) {
+            maxDepth = movesMade <= 3 ? 7 : 6;
+        } else {
+            // Reduced depth for easy mode when going first
+            if (isX) {
+                maxDepth = movesMade <= 2 ? 3 : 2;  // Reduced from 4:3 to 3:2 when first
+            } else {
+                maxDepth = movesMade <= 2 ? 4 : 3;  // Keep original depths when second
+            }
+        }
+
+        if (movesMade <= 2) {
+            if (!board[1][1].equals(xMark) && !board[1][1].equals(oMark)) {
+                board[1][1] = isX ? xMark : oMark;
+                return;
+            }
+            int[][] corners = {{0,0}, {0,2}, {2,0}, {2,2}};
+            for (int[] corner : corners) {
+                if (!board[corner[0]][corner[1]].equals(xMark) && 
+                    !board[corner[0]][corner[1]].equals(oMark)) {
+                    board[corner[0]][corner[1]] = isX ? xMark : oMark;
+                    return;
+                }
+            }
+        }
+
+        if (difficulty == 3 && movesMade == 1) {
+            // First move strategy for impossible mode
+            if (board[2][2].equals(xMark)) {  // If player took bottom right corner (9)
+                board[0][2] = isX ? xMark : oMark;  // Take top right corner (3)
+                return;
+            }
+            if (board[0][0].equals(xMark)) {  // If player took top left corner (1)
+                board[2][0] = isX ? xMark : oMark;  // Take bottom left corner (7)
+                return;
+            }
+            if (board[0][2].equals(xMark)) {  // If player took top right corner (3)
+                board[2][2] = isX ? xMark : oMark;  // Take bottom right corner (9)
+                return;
+            }
+            if (board[2][0].equals(xMark)) {  // If player took bottom left corner (7)
+                board[0][0] = isX ? xMark : oMark;  // Take top left corner (1)
+                return;
+            }
+            
+            // If player took center or an edge, follow original strategy
+            if (board[1][1].equals(xMark)) {  // Center taken
+                board[0][0] = isX ? xMark : oMark;  // Take corner
+                return;
+            }
+            // For edge moves, take center
+            if (board[0][1].equals(xMark) || board[1][0].equals(xMark) || 
+                board[1][2].equals(xMark) || board[2][1].equals(xMark)) {
+                board[1][1] = isX ? xMark : oMark;
+                return;
+            }
+            
+            // Default to center if available
+            if (board[1][1].equals("5")) {
+                board[1][1] = isX ? xMark : oMark;
+                return;
+            }
+        }
+
+        if (difficulty == 3 && movesMade == 3) {
+
+            if (board[0][0].equals(xMark) && board[2][2].equals(xMark)){
+                if (board[2][1].equals("8")) {
+                    board[2][1] = isX ? xMark : oMark;
+                    return;
+                }
+            }
+            if (board[0][2].equals(xMark) && board[2][0].equals(xMark)){
+                if (board[0][1].equals("2")) {
+                    board[0][1] = isX ? xMark : oMark;
+                    return;
+                }
+            }
+            if (board[2][2].equals(xMark) && board[0][1].equals(xMark)){
+                    if (board[0][2].equals("3")){
+                    board[0][2] = isX ? xMark : oMark;
+                    return;
+                 }
+                
+            }
+            if (board[0][2].equals(xMark) && board[1][0].equals(xMark)){
+                if (board[0][0].equals("1")){
+                board[0][0] = isX ? xMark : oMark;
+                return;
+             }
+            
+        }
+        if (board[0][0].equals(xMark) && board[2][1].equals(xMark)){
+            if (board[2][0].equals("7")){
+            board[2][0] = isX ? xMark : oMark;
+            return;
+         }
+        
+    }
+    if (board[2][0].equals(xMark) && board[0][1].equals(xMark)){
+        if (board[0][0].equals("1")){
+        board[0][0] = isX ? xMark : oMark;
+        return;
+     }
+    
+}
+    if (board[2][0].equals(xMark) && board[1][2].equals(xMark)){
+    if (board[2][2].equals("9")){
+    board[2][2] = isX ? xMark : oMark;
+    return;
+ }
+
+}
+if (board[2][2].equals(xMark) && board[1][0].equals(xMark)){
+    if (board[2][0].equals("7")){
+    board[2][0] = isX ? xMark : oMark;
+    return;
+ }
+
+}
+if (board[0][2].equals(xMark) && board[2][1].equals(xMark)){
+    if (board[2][2].equals("9")){
+    board[2][2] = isX ? xMark : oMark;
+    return;
+ }
+
+}
+if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
+    if (board[0][2].equals("3")){
+    board[0][2] = isX ? xMark : oMark;
+    return;
+ }
+
+}
+         }
+
+        if (difficulty == 3 && movesMade >= 1 && movesMade <= 4) {
+            // Handle move 1
+            if (movesMade == 1) {
+            if (board[0][1].equals(xMark) || 
+                board[1][0].equals(xMark) || 
+                board[1][2].equals(xMark) || 
+                board[2][1].equals(xMark)) {
+                if (!board[0][0].equals(xMark)) {
+                board[0][0] = isX ? xMark : oMark;
+                return;
+                }
+                board[2][2] = isX ? xMark : oMark;
+                return;
+            }
+            if (board[0][0].equals(xMark) || 
+                board[0][2].equals(xMark) ||
+                board[2][0].equals(xMark) ||
+                board[2][2].equals(xMark)) {
+                board[1][1] = isX ? xMark : oMark;
+                return;
+            }
+            if (board[1][1].equals(xMark)) {
+                board[0][0] = isX ? xMark : oMark;
+                return;
+            }
+            }
+            
+            // Handle move 2
+            if (movesMade == 2) {
+            // Block potential corner traps
+            if (board[1][1].equals(xMark)) {
+                if (board[0][0].equals(xMark) && !board[2][2].equals(oMark)) {
+                board[2][2] = isX ? xMark : oMark;
+                return;
+                }
+                if (board[2][2].equals(xMark) && !board[0][0].equals(oMark)) {
+                board[0][0] = isX ? xMark : oMark;
+                return;
+                }
+                if (board[0][2].equals(xMark) && !board[2][0].equals(oMark)) {
+                board[2][0] = isX ? xMark : oMark;
+                return;
+                }
+                if (board[2][0].equals(xMark) && !board[0][2].equals(oMark)) {
+                board[0][2] = isX ? xMark : oMark;
+                return;
+                }
+            }
+            }
+
+            // Handle move 3
+            if (movesMade == 3) {
+            // Block triangle traps
+            if (board[0][0].equals(xMark) && board[2][2].equals(xMark)) {
+                if (!board[0][2].equals(oMark)) {
+                board[0][2] = isX ? xMark : oMark;
+                return;
+                }
+            }
+            if (board[0][2].equals(xMark) && board[2][0].equals(xMark)) {
+                if (!board[0][0].equals(oMark)) {
+                board[0][0] = isX ? xMark : oMark;
+                return;
+                }
+            }
+            }
+
+            // Handle move 4
+            if (movesMade == 4) {
+            // Block double corner traps
+            for (int i = 0; i < 3; i += 2) {
+                for (int j = 0; j < 3; j += 2) {
+                if (board[i][j].equals(xMark)) {
+                    if (!board[(i+2)%3][(j+2)%3].equals(oMark)) {
+                    board[(i+2)%3][(j+2)%3] = isX ? xMark : oMark;
+                    return;
+                    }
+                }
+                }
+            }
+            }
+        }
+
+        if (difficulty == 3) {
+            maxDepth = 30;  
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                        String temp = board[i][j];
+                        board[i][j] = isX ? xMark : oMark;
+                        int moveVal = minimax(board, 0, false, maxDepth);
+                        if (movesMade <= 3) {
+                            moveVal -= countPotentialForks(board, true);
+                        }
+                        board[i][j] = temp;
+                        if (moveVal > bestVal) {
+                            row = i;
+                            col = j;
+                            bestVal = moveVal;
+                        }
+                    }
+                }
+            }
+            if (row != -1 && col != -1) {
+                board[row][col] = isX ? xMark : oMark;
+                return;
+            }
+        }
+
+        if (difficulty == 3 && !isX) { // AI is O
+            // Handle early moves to claim center and prevent forced forks
+            if (movesMade == 1) {
+                // If X took a corner, O takes the center
+                if (board[0][0].equals(xMark) || board[0][2].equals(xMark)
+                    || board[2][0].equals(xMark) || board[2][2].equals(xMark)) {
+                    if (board[1][1].matches("\\d+")) {
+                        board[1][1] = oMark;
+                        return;
+                    }
+                }
+            }
+            if (movesMade == 3 && board[1][1].equals(oMark)) {
+                // If X has two opposite corners, O takes an edge
+                if ((board[0][0].equals(xMark) && board[2][2].equals(xMark)) ||
+                    (board[0][2].equals(xMark) && board[2][0].equals(xMark))) {
+                    int[][] edges = {{0,1}, {1,0}, {1,2}, {2,1}};
+                    for (int[] e : edges) {
+                        if (board[e[0]][e[1]].matches("\\d+")) {
+                            board[e[0]][e[1]] = oMark;
+                            return;
+                        }
+                    }
+                }
+            }
+            if (movesMade == 3) {
+                // If X took another corner, O takes an edge to prevent forks
+                if ((board[0][0].equals(xMark) && board[2][2].equals(xMark)) ||
+                    (board[0][2].equals(xMark) && board[2][0].equals(xMark))) {
+                    // Claim any edge if available
+                    int[][] edges = {{0,1}, {1,0}, {1,2}, {2,1}};
+                    for (int[] e : edges) {
+                        if (board[e[0]][e[1]].matches("\\d+")) {
+                            board[e[0]][e[1]] = oMark;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                    String temp = board[i][j];
+                    board[i][j] = isX ? xMark : oMark;
+                    int moveVal = minimax(board, 0, false, maxDepth);
+                    board[i][j] = temp;
+                    if (moveVal > bestVal) {
+                        row = i;
+                        col = j;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+        }
+        
+        if (row != -1 && col != -1) {
+            board[row][col] = isX ? xMark : oMark;
+        }
+    }
+
+    private static int countPotentialForks(String[][] board, boolean forX) {
+        String mark = forX ? xMark : oMark;
+        int forkCount = 0;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!board[i][j].equals(xMark) && !board[i][j].equals(oMark)) {
+                    int winningPaths = 0;
+                    String temp = board[i][j];
+                    board[i][j] = mark;
+                    
+                    for (int x = 0; x < 3; x++) {
+                        for (int y = 0; y < 3; y++) {
+                            if (!board[x][y].equals(xMark) && !board[x][y].equals(oMark)) {
+                                String temp2 = board[x][y];
+                                board[x][y] = mark;
+                                if ((forX && evaluateBoard(board) == 10) || (!forX && evaluateBoard(board) == -10)) {
+                                    winningPaths++;
+                                }
+                                board[x][y] = temp2;
+                            }
+                        }
+                    }
+                    if (winningPaths > 1) forkCount++;
+                    board[i][j] = temp;
+                }
+            }
+        }
+        return forkCount;
     }
 }
