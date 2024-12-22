@@ -490,7 +490,8 @@ public static void numberguesser() throws InterruptedException {
         
         clearScreen();
         println("Welcome to Number Guesser!");
-		println("Random 1-100 (1) or You choose (2)?");
+		println("1 Player (1)");
+        print("2 Player (2)");
 
 		int gameType = scanner.nextInt();
 
@@ -517,7 +518,11 @@ public static void numberguesser() throws InterruptedException {
         final double secretCode = 7187448310.0;
 		double input;
 		int count = 0;
-		println("Enter your first guess: ");
+        clearScreen();
+		if (gameType == 1) {
+            println("Guess a number 1-100");
+        }
+        println("Enter your first guess: ");
 		do {
 
 			input = scanner.nextDouble();
@@ -531,7 +536,6 @@ public static void numberguesser() throws InterruptedException {
 			}
             if (input == secretCode) {
                 println("Answer is: " + answer);
-                Thread.sleep(1000);
                 println("2...");
                 Thread.sleep(1000);
                 println("1...");
@@ -761,85 +765,61 @@ static Scanner scanner = new Scanner(System.in);
     }
 
 public static void merge (int[][]board, String direction) {
-    
-switch (direction) {
-         
-  
-  case "w": 
-             
-      for (int col = 0; col < bSize; col++){
-      for (int row = 0; row < bSize - 1 ; row++) {
-                     
-        if (board[row][col] != 0 && board[row][col] == board[row + 1][col]){
-            board[row + 1][col] *= 2;
-            score += board[row+1][col];
-            board[row][col] = 0;
-        }             
-                     
-                 }
-             }
-    break;
+    switch (direction) {
+        case "w": 
+            for (int col = 0; col < bSize; col++){
+                for (int row = 0; row < bSize - 1 ; row++) {
+                    if (board[row][col] != 0 && board[row][col] == board[row + 1][col]){
+                        board[row + 1][col] *= 2;
+                        score += board[row+1][col];
+                        board[row][col] = 0;
+                    }             
+                }
+            }
+            break;
      
+        case "s":
+            for (int col = 0; col < bSize; col++){
+                for (int row = bSize - 1; row > 0 ; row--) {
+                    if (board[row][col] != 0 && board[row][col] == board[row - 1][col]){
+                        board[row - 1][col] *= 2;
+                        score += board[row-1][col];
+                        board[row][col] = 0;
+                    }             
+                }
+            }
+            break;
     
-    case "s":
-        
-         for (int col = 0; col < bSize; col++){
-      for (int row = bSize - 1; row > 0 ; row--) {
-                     
-        if (board[row][col] != 0 && board[row][col] == board[row - 1][col]){
-            board[row - 1][col] *= 2;
-            score += board[row-1][col];
-            board[row][col] = 0;
-        }             
-                     
-                 }
-             }
-    break;
+        case "d":
+            for (int row = 0; row < bSize ; row++){
+                for (int col = bSize - 1; col > 0; col--){
+                    if (board[row][col] != 0 && board[row][col] == board[row][col - 1]){
+                        board[row][col - 1] *= 2;
+                        score += board [row][col-1];
+                        board[row][col] = 0;
+                    }             
+                }
+            }
+            break;
     
+        case "a":
+            for (int row = 0; row < bSize; row++){
+                for (int col = 0; col < bSize - 1 ; col++) {
+                    if (board[row][col] != 0 && board[row][col] == board[row][col + 1]){
+                        board[row][col+1] *= 2;
+                        score += board[row][col+1];
+                        board[row][col] = 0;
+                    }            
+                }
+            }
+            break;
     
-    case "d":
-    
-     for (int row = 0; row < bSize ; row++){
-     for (int col = bSize - 1; col > 0; col--){
-     
-                     
-        if (board[row][col] != 0 && board[row][col] == board[row][col - 1]){
-            board[row][col - 1] *= 2;
-            score += board [row][col-1];
-            board[row][col] = 0;
-        }             
-                     
-                 }
-             }
-    
-    break;
-    
-    
-    case "a":
-       
-     for (int row = 0; row < bSize; row++){
-      for (int col = 0; col < bSize - 1 ; col++) {
-                     
-        if (board[row][col] != 0 && board[row][col] == board[row][col + 1]){
-            board[row][col+1] *= 2;
-            score += board[row][col+1];
-            board[row][col] = 0;
-        }            
-                     
-                 }
-             }
-   
-    break;
-    
-    default: println("Error");
-    
-}
-      
+        default: println("Error");
     }
-    
+}
+
 public static void printBoard(int[][] board) {
      printlni(score);
-    // Find the largest number in the board to define cell width
     int largestNum = 0;
     for (int i = 0; i < bSize; i++) {
         for (int j = 0; j < bSize; j++) {
@@ -847,46 +827,39 @@ public static void printBoard(int[][] board) {
         }
     }
 
-    // Convert largestNum to a string to calculate its length
     String largestNumStr = Integer.toString(largestNum);
-    final int cellWidth = largestNumStr.length() * 2 + 1; // Add extra space for the largest number
+    final int cellWidth = largestNumStr.length() * 2 + 1; 
 
-    // Define colors for the background and reset ANSI codes
     String wallColor = "\033[48;2;188;174;161m";
     String resetColor = "\033[0m";
 
-    // Define the format for empty cells
-    String emptyCell = String.format("%" + cellWidth + "s", " "); // empty cell format
+    String emptyCell = String.format("%" + cellWidth + "s", " "); 
 
    
     clearScreen();
 
 println("Score: "+ score);
 
-    // Print top wall (board separator)
     print(wallColor + " " + resetColor);
     for (int i = 0; i < bSize; i++) {
         print((wallColor + " " + resetColor).repeat(cellWidth) + wallColor + " " + resetColor);
     }
     
 println("");
-    // Print board content row by row
     for (int[] row : board) {
-        print(wallColor + " " + resetColor); // Start of the row
+        print(wallColor + " " + resetColor); 
         for (int num : row) {
-            // For non-zero values, print the number centered within its cell
             String cellContent = (num == 0) ? emptyCell : centerNumberInCell(num, cellWidth);
             printFormat(num);
-            print(cellContent + wallColor + " " + resetColor); // Print the cell
+            print(cellContent + wallColor + " " + resetColor); 
         }
-        println(""); // New line after each row
+        println(""); 
 
-        // Print a separator line after each row
         print(wallColor + " " + resetColor);
         for (int i = 0; i < bSize; i++) {
             print((wallColor + " " + resetColor).repeat(cellWidth) + wallColor + " " + resetColor);
         }
-        println(""); // End of the board
+        println(""); 
     }
     println("Use WASD to move");
     println("Press M for menu");
@@ -895,29 +868,22 @@ println("");
 public static String centerNumberInCell(int num, int cellWidth) {
     String numStr = Integer.toString(num);
 
-    // Special case: If the number has an even number of digits, add spaces between each digit
     if (numStr.length() % 2 == 0) {
-        // Add spaces between each digit of even-length numbers (e.g., 16 -> "1 6")
         numStr = String.join(" ", numStr.split(""));
     }
 
-    // Calculate the padding required to center the number within the cell width
     int totalPadding = cellWidth - numStr.length();
     int leftPadding = totalPadding / 2;
     int rightPadding = totalPadding - leftPadding;
 
-    // Create the result with padding and the number centered
     return " ".repeat(leftPadding) + numStr + " ".repeat(rightPadding);
 }
   public static void printFormat(int number) {
-        // Check if the number exists in the color map
         if (colorMap.containsKey(number)) {
             String[] colors = colorMap.get(number);
             String bgColor = colors[0];
             String textColor = colors[1];
 
-            // ANSI escape codes to apply text formatting (bold and color)
-           
             String bold = "\033[1m";
             String background = "\033[48;2;" + Integer.parseInt(bgColor.substring(1, 3), 16) + ";"
                     + Integer.parseInt(bgColor.substring(3, 5), 16) + ";"
@@ -926,7 +892,6 @@ public static String centerNumberInCell(int num, int cellWidth) {
                     + Integer.parseInt(textColor.substring(3, 5), 16) + ";"
                     + Integer.parseInt(textColor.substring(5, 7), 16) + "m";
            
-            // Print the number with bold formatting and color
             print(background + text + bold);
         } else if(number == 0){
             print("\033[48;2;205;193;179m");
@@ -992,7 +957,6 @@ public static void shiftArray(int[][] board, String direction) {
                 return;
         }
 
-        // Update the original board
         for (int i = 0; i < bSize; i++) {
             System.arraycopy(newBoard[i], 0, board[i], 0, bSize);
         }
@@ -1045,7 +1009,7 @@ public static void addRandomNumber(int[][] board) {
         for (int i = 0; i < bSize; i++) {
             for (int j = 0; j < bSize; j++) {
                 if (board[i][j] == 0) {
-                    return false; // There's still an empty spot, game is not over
+                    return false; 
                 }
             }
         }
@@ -1053,10 +1017,10 @@ public static void addRandomNumber(int[][] board) {
         for (int i = 0; i < bSize; i++) {
             for (int j = 0; j < bSize; j++) {
                 if (i < bSize - 1 && board[i][j] == board[i + 1][j]) {
-                    return false; // Merge possible vertically
+                    return false; 
                 }
                 if (j < bSize - 1 && board[i][j] == board[i][j + 1]) {
-                    return false; // Merge possible horizontally
+                    return false; 
                 }
             }
         }
@@ -1118,7 +1082,6 @@ public static void addRandomNumber(int[][] board) {
                 println(" ");
             }
 
-            // Display the alphabet with colors
             displayAlphabet(exactMatches, nonExactMatches, incorrectGuesses);
             if (invalid) {
                 Thread.sleep(1000);
@@ -1137,7 +1100,6 @@ public static void addRandomNumber(int[][] board) {
                 println(" ");
             }
 
-            // Display the alphabet with colors
             displayAlphabet(exactMatches, nonExactMatches, incorrectGuesses);
             print("Enter your guess: ");
             String guess = scanner.nextLine().toLowerCase();
@@ -1172,12 +1134,11 @@ public static void addRandomNumber(int[][] board) {
                         if (i == j) {
                             exactMatchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m"; // Bright green
+                            result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m"; 
                             exactMatches.add(guessArray[i]);
                         } else {
                             matchedGuess[i] = true;
                             matchedWord[j] = true;
-                            // Changed to a more golden yellow color
                             result[6 - attempts - 1][i] = "\u001B[38;2;255;191;0m" + guessArray[i] + "\u001B[0m";
                             nonExactMatches.add(guessArray[i]);
                         }
@@ -1185,7 +1146,7 @@ public static void addRandomNumber(int[][] board) {
                     }
                 }
                 if (!exactMatchedGuess[i] && !matchedGuess[i]) {
-                    result[6 - attempts - 1][i] = "\u001B[90m" + guessArray[i] + "\u001B[0m"; // Dark gray
+                    result[6 - attempts - 1][i] = "\u001B[90m" + guessArray[i] + "\u001B[0m"; 
                     incorrectGuesses.add(guessArray[i]);
                 }
             }
@@ -1217,13 +1178,13 @@ public static void addRandomNumber(int[][] board) {
         StringBuilder alphabet = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
             if (exactMatches.contains(c)) {
-                alphabet.append("\033[1;32m").append(c).append("\033[0m "); // Bright green
+                alphabet.append("\033[1;32m").append(c).append("\033[0m "); 
             } else if (nonExactMatches.contains(c)) {
-                alphabet.append("\033[1;33m").append(c).append("\033[0m "); // Bright yellow
+                alphabet.append("\033[1;33m").append(c).append("\033[0m "); 
             } else if (incorrectGuesses.contains(c)) {
-                alphabet.append("\033[1;30m").append(c).append("\033[0m "); // Darkest possible black
+                alphabet.append("\033[1;30m").append(c).append("\033[0m "); 
             } else {
-                alphabet.append("\033[1;37m").append(c).append("\033[0m "); // Bright white
+                alphabet.append("\033[1;37m").append(c).append("\033[0m "); 
             }
         }
         println(alphabet.toString());
@@ -1240,8 +1201,8 @@ public static void addRandomNumber(int[][] board) {
     public static void printlni(int a) {
         System.out.println(a);
     }
-    private static final String xMark = "\u001B[34mX\u001B[0m";  // Blue X
-    private static final String oMark = "\u001B[31mO\u001B[0m";  // Red O
+    private static final String xMark = "\u001B[34mX\u001B[0m";  
+    private static final String oMark = "\u001B[31mO\u001B[0m";  
     
     public static void ticTacToe() throws InterruptedException {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -1401,23 +1362,23 @@ public static void addRandomNumber(int[][] board) {
         }
         
         int difficulty = 0;
-        while (difficulty < 1 || difficulty > 4) {  // Changed from 3 to 4
+        while (difficulty < 1 || difficulty > 4) {  
             clearScreen();
             if (aiFirst) {
                 println("\u001B[31mSelect difficulty level: (Reverse Mode)\u001B[0m");
             }
             else { println("Select difficulty level:");
         }
-            println("1. Easy");
-            println("2. Normal");
+            println("1. Normal");
+            println("2. Hard");
             println("3. Impossible");
-            println("4. " + (aiFirst ? "Normal Mode" : "Reverse Mode (AI goes first)"));  // New option
-            print("Enter your choice (1-4): ");  // Changed prompt
+            println("4. " + (aiFirst ? "Normal Mode" : "Reverse Mode (AI goes first)"));  
+            print("Enter your choice (1-4): ");  
             try {
                 difficulty = Integer.parseInt(scanner.nextLine());
-                if (difficulty == 4) {  // Handle reverse mode toggle
-                    aiFirst = !aiFirst;  // Toggle AI first
-                    difficulty = 0;  // Reset to force menu again
+                if (difficulty == 4) {  
+                    aiFirst = !aiFirst;  
+                    difficulty = 0;  
                     continue;
                 }
             } catch (NumberFormatException e) {
@@ -1433,7 +1394,6 @@ public static void addRandomNumber(int[][] board) {
         }
         printBoardTTT(board);
 
-        // Create final copies for lambda
         final String finalAiMark = aiMark;
         final boolean finalAiFirst = aiFirst;
         
@@ -1515,7 +1475,7 @@ public static void addRandomNumber(int[][] board) {
                         continue;
                 }
                 
-                if (!board[row][col].equals(playerMark) && !board[row][col].equals(aiMark)) {
+                if (!board[row][col].equals(xMark) && !board[row][col].equals(oMark)) {
                     board[row][col] = playerMark;
                     isValidMove = true;
                 } else {
@@ -1529,7 +1489,7 @@ public static void addRandomNumber(int[][] board) {
             clearScreen();
             printBoardTTT(board);
             
-            // Modify win condition checks to account for reverse mode
+            
             if (aiFirst) {
                 if (evaluateBoard(board) == -10) {
                     println("Congratulations! You won!");
@@ -1588,7 +1548,7 @@ public static void addRandomNumber(int[][] board) {
             println("AI made its move:");
             printBoardTTT(board);
             
-            // Modify AI win condition checks
+           
             if (aiFirst) {
                 if (evaluateBoard(board) == 10) {
                     println("Game over. AI has won!");
@@ -1743,8 +1703,7 @@ public static void addRandomNumber(int[][] board) {
         }
 
         if (difficulty == 1) {
-            // Increased random move chance when AI goes first in easy mode
-            double randomChance = isX ? 0.5 : 0.35;  // 50% random when first, 35% when second
+            double randomChance = isX ? 0.5 : 0.35;  
             if (Math.random() < randomChance) {
                 while (true) {
                     row = (int)(Math.random() * 3);
@@ -1760,15 +1719,15 @@ public static void addRandomNumber(int[][] board) {
 
         int maxDepth;
         if (difficulty == 3) {
-            maxDepth = 30;  // Changed from 15 to 30
+            maxDepth = 30;  
         } else if (difficulty == 2) {
             maxDepth = movesMade <= 3 ? 7 : 6;
         } else {
-            // Reduced depth for easy mode when going first
+            
             if (isX) {
-                maxDepth = movesMade <= 2 ? 3 : 2;  // Reduced from 4:3 to 3:2 when first
+                maxDepth = movesMade <= 2 ? 3 : 2;  
             } else {
-                maxDepth = movesMade <= 2 ? 4 : 3;  // Keep original depths when second
+                maxDepth = movesMade <= 2 ? 4 : 3; 
             }
         }
 
@@ -1788,37 +1747,37 @@ public static void addRandomNumber(int[][] board) {
         }
 
         if (difficulty == 3 && movesMade == 1) {
-            // First move strategy for impossible mode
-            if (board[2][2].equals(xMark)) {  // If player took bottom right corner (9)
-                board[0][2] = isX ? xMark : oMark;  // Take top right corner (3)
+            
+            if (board[2][2].equals(xMark)) { 
+                board[0][2] = isX ? xMark : oMark;  
                 return;
             }
-            if (board[0][0].equals(xMark)) {  // If player took top left corner (1)
-                board[2][0] = isX ? xMark : oMark;  // Take bottom left corner (7)
+            if (board[0][0].equals(xMark)) { 
+                board[2][0] = isX ? xMark : oMark;  
                 return;
             }
-            if (board[0][2].equals(xMark)) {  // If player took top right corner (3)
-                board[2][2] = isX ? xMark : oMark;  // Take bottom right corner (9)
+            if (board[0][2].equals(xMark)) {  
+                board[2][2] = isX ? xMark : oMark; 
                 return;
             }
-            if (board[2][0].equals(xMark)) {  // If player took bottom left corner (7)
-                board[0][0] = isX ? xMark : oMark;  // Take top left corner (1)
+            if (board[2][0].equals(xMark)) {  
+                board[0][0] = isX ? xMark : oMark;  
                 return;
             }
             
-            // If player took center or an edge, follow original strategy
-            if (board[1][1].equals(xMark)) {  // Center taken
-                board[0][0] = isX ? xMark : oMark;  // Take corner
+           
+            if (board[1][1].equals(xMark)) { 
+                board[0][0] = isX ? xMark : oMark;
                 return;
             }
-            // For edge moves, take center
+            
             if (board[0][1].equals(xMark) || board[1][0].equals(xMark) || 
                 board[1][2].equals(xMark) || board[2][1].equals(xMark)) {
                 board[1][1] = isX ? xMark : oMark;
                 return;
             }
             
-            // Default to center if available
+           
             if (board[1][1].equals("5")) {
                 board[1][1] = isX ? xMark : oMark;
                 return;
@@ -1898,7 +1857,6 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
          }
 
         if (difficulty == 3 && movesMade >= 1 && movesMade <= 4) {
-            // Handle move 1
             if (movesMade == 1) {
             if (board[0][1].equals(xMark) || 
                 board[1][0].equals(xMark) || 
@@ -1924,9 +1882,9 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
             }
             
-            // Handle move 2
+            
             if (movesMade == 2) {
-            // Block potential corner traps
+            
             if (board[1][1].equals(xMark)) {
                 if (board[0][0].equals(xMark) && !board[2][2].equals(oMark)) {
                 board[2][2] = isX ? xMark : oMark;
@@ -1947,9 +1905,7 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
             }
 
-            // Handle move 3
             if (movesMade == 3) {
-            // Block triangle traps
             if (board[0][0].equals(xMark) && board[2][2].equals(xMark)) {
                 if (!board[0][2].equals(oMark)) {
                 board[0][2] = isX ? xMark : oMark;
@@ -1964,9 +1920,7 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
             }
 
-            // Handle move 4
             if (movesMade == 4) {
-            // Block double corner traps
             for (int i = 0; i < 3; i += 2) {
                 for (int j = 0; j < 3; j += 2) {
                 if (board[i][j].equals(xMark)) {
@@ -2006,10 +1960,8 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
         }
 
-        if (difficulty == 3 && !isX) { // AI is O
-            // Handle early moves to claim center and prevent forced forks
+        if (difficulty == 3 && !isX) { 
             if (movesMade == 1) {
-                // If X took a corner, O takes the center
                 if (board[0][0].equals(xMark) || board[0][2].equals(xMark)
                     || board[2][0].equals(xMark) || board[2][2].equals(xMark)) {
                     if (board[1][1].matches("\\d+")) {
@@ -2019,7 +1971,6 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
                 }
             }
             if (movesMade == 3 && board[1][1].equals(oMark)) {
-                // If X has two opposite corners, O takes an edge
                 if ((board[0][0].equals(xMark) && board[2][2].equals(xMark)) ||
                     (board[0][2].equals(xMark) && board[2][0].equals(xMark))) {
                     int[][] edges = {{0,1}, {1,0}, {1,2}, {2,1}};
@@ -2032,10 +1983,8 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
                 }
             }
             if (movesMade == 3) {
-                // If X took another corner, O takes an edge to prevent forks
                 if ((board[0][0].equals(xMark) && board[2][2].equals(xMark)) ||
                     (board[0][2].equals(xMark) && board[2][0].equals(xMark))) {
-                    // Claim any edge if available
                     int[][] edges = {{0,1}, {1,0}, {1,2}, {2,1}};
                     for (int[] e : edges) {
                         if (board[e[0]][e[1]].matches("\\d+")) {
