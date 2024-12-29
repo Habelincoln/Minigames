@@ -3,18 +3,24 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-@SuppressWarnings("BusyWait")
-
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+
+    static final String redANSI = "\u001B[31m";
+    static final String greenANSI = "\u001B[32m";
+    static final String yellowANSI = "\u001B[33m";
+    static final String blueANSI = "\u001B[34m";
+    static final String whiteANSI = "\u001B[37m";
+    static final String grayANSI = "\u001B[90m";
+    static final String defaultANSI = "\u001B[0m";
+	public static void main(String[] args) throws InterruptedException {
         clearScreen();
         println("Welcome to the Game Hub!");
-	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5), Tic Tac Toe (6)");
+	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5), Tic Tac Toe (6), Connect 4 (7)");
             try (Scanner input = new Scanner(System.in)) {
                 String gameChoice = input.nextLine().toLowerCase();
-                while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6")) {
+                while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6") && !gameChoice.equals("7")) {
                     clearScreen();
-                    println("\033[31m" + "Invalid game name." + "\033[0m");
+                    println(redANSI + "Invalid game name." + defaultANSI);
                     Thread.sleep(1000);
                     clearScreen();
                     println("Welcome to the Game Hub!");
@@ -27,21 +33,21 @@ public class Main {
                     case "numberguesser", "3" -> numberguesser();
                     case "2048", "4" -> game2048();
                     case "wordle", "5" -> wordle();
-                    case "tictactoe", "6" -> ticTacToe();
+                    case "ticactoe", "6" -> ticTacToe();
+                    case "connect 4", "7" -> connect4();
                     default -> println("Invalid game name");
-                }   
-            }
+                }   }
 	}
 
 public static void hangman() throws InterruptedException {
             try (Scanner scanner= new Scanner(System.in)) {
                 Set<String> multiWrongGuesses = new HashSet<>();
                 String word = "";
-                String livesLogo = " L";
+                String livesLogo = " <3";
                 do {
                     
                     print("\033[H\033[2J"); //clear console
-                    if (word.matches(".*\\d.*")){println("\u001B[31m"+"INVALID INPUT!!!" +"\u001B[0m" );}
+                    if (word.matches(".*\\d.*")){println(redANSI + "INVALID INPUT!!!" + defaultANSI );}
                     println("Welcome to hangman!");
                     println("Enter Word:");
                     word = scanner.nextLine().toLowerCase();
@@ -58,7 +64,7 @@ public static void hangman() throws InterruptedException {
                 do {
                     
                     print("\033[H\033[2J"); //clear console
-                    if (livesin.matches(".*[a-zA-Z].*")){println("\u001B[31m"+"INVALID INPUT!!!");}
+                    if (livesin.matches(".*[a-zA-Z].*")){println(redANSI+"INVALID INPUT!!!" + defaultANSI);}
                     println("Enter lives:");
                     livesin = scanner.nextLine();
                     
@@ -95,7 +101,7 @@ public static void hangman() throws InterruptedException {
                 while (!retWord.equals(word)) {
                     do {
                         
-                        if (letter.matches(".*\\d.*")){ print("\033[H\033[2J"); println("\u001B[31m"+"INVALID INPUT!!!"+"\u001B[0m");println(retWord);
+                        if (letter.matches(".*\\d.*")){ print("\033[H\033[2J"); println(redANSI+"INVALID INPUT!!!"+defaultANSI);println(retWord);
                         println("lives: " + livesLogo.repeat(lives));
                         println(returnLetters(wrongGuesses, correctGuesses));}
                         
@@ -115,23 +121,20 @@ public static void hangman() throws InterruptedException {
                     
                     if (letter.length() <= 1){
                         if (letter.isEmpty()) {
-                            println("\u001B[31m" + "You didn't enter anything!" + "\u001B[0m");
-                        }
-                        else {
+                            println(redANSI + "You didn't enter anything!" + defaultANSI);
+                        } else {
                             if (!word.contains(letter) && !wrongGuesses.contains(letter)) {
                                 wrongGuesses += letter;
                                 lives --;
-                            }
-                            else if ( !word.contains(letter) && wrongGuesses.contains(letter) ) {
+                            } else if ( !word.contains(letter) && wrongGuesses.contains(letter) ) {
                                 
-                                println("\u001B[31m" + "You've already guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
+                                println(redANSI + "You've already guessed "  + "\"" + letter + "\""+"!" + defaultANSI);
                             }
                             
                             if (!correctGuesses.contains(letter) && word.contains(letter)) {
                                 correctGuesses += letter;
-                            }
-                            else if (correctGuesses.contains(letter)) {
-                                println("\u001B[32m" + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + "\u001B[0m");
+                            } else if (correctGuesses.contains(letter)) {
+                                println(greenANSI + "You've already correctly guessed "  + "\"" + letter + "\""+"!" + defaultANSI);
                             }
                         }
                         
@@ -140,11 +143,9 @@ public static void hangman() throws InterruptedException {
                         if (!multiWrongGuesses.contains(letter)) {
                             lives--;
                             multiWrongGuesses.add(letter);
-                        }
-                        
-                        else {
+                        } else {
                             
-                            println("\u001B[31m"+"You've already guessed " + "\"" + letter + "\""+"!"+"\u001B[0m");
+                            println(redANSI+"You've already guessed " + "\"" + letter + "\""+"!"+defaultANSI);
                         }
                         
                         if (letter.equals(word)) {
@@ -186,66 +187,61 @@ public static void hangman() throws InterruptedException {
                     println("The word was: " + word);
                     if (lives == 1) {
                         println("You had " + lives + " life remaining");
-                    }
-                    else if (lives > 1) {
+                    } else if (lives > 1) {
                         println("You had " + lives + " lives remaining");
                     }
-                }
-                else {
+                } else {
                     println("Game over. You lose.");
                     println("The word was: " + word);
                 }
             }
 
 }	
-    public static String returnLetters(String LTH, String correctGuesses) {
+    public static String returnLetters(String a, String correctGuesses) {
 		StringBuilder r = new StringBuilder();
 		for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray())
-			r.append(correctGuesses.toUpperCase().indexOf(c) > -1 ? "\033[1;32m" + c : LTH.toUpperCase().indexOf(c) > -1 ? "\033[1;31m" + c : c).append("\033[0m");
+			r.append(correctGuesses.toUpperCase().indexOf(c) > -1 ? greenANSI + c : a.toUpperCase().indexOf(c) > -1 ? redANSI + c : c).append(defaultANSI);
 		return r.toString();
     }
-    
 
-          public static void mastermind() {
+          public static void mastermind() throws InterruptedException {
              Scanner scanner = new Scanner(System.in);
         
         clearScreen();
-
-        println("\u001B[33m" +"Welcome to Mastermind!" + "\u001B[0m");
-		String msg = "4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m";
+        println(yellowANSI +"Welcome to Mastermind!" + defaultANSI);
+		String msg = "4 pegs. 6 possible colors: " + blueANSI + "Blue" + defaultANSI + "," + greenANSI + "Green" + defaultANSI + "," +  yellowANSI + "Yellow" + defaultANSI + "," + redANSI + "Red" + defaultANSI + "," +  grayANSI + "Gray" + defaultANSI + ", and " +  whiteANSI + "White" + defaultANSI;
         List<String> allGuesses = new ArrayList<>();
         List<String> matchResults = new ArrayList<>();
         int lives = 0;
 		println("Choose code");
-        println("4 pegs. 6 possible colors: \u001B[36mBlue\u001B[0m, \u001B[32mGreen\u001B[0m, \u001B[33mYellow\u001B[0m, \u001B[31mRed\u001B[0m, \u001B[90mGray\u001B[0m, and \u001B[37mWhite\u001B[0m");
+        println(msg);
 		print("Set peg 1: ");
 		String code1 = scanner.nextLine().toLowerCase();
 		while (!checkCode1(code1)) {
             clearScreen();
-            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
             println(msg);           
             print("Set peg 1: ");
             code1 = scanner.nextLine().toLowerCase();
-
         }
 		clearScreen();
         println(msg);
-		print("Set peg 2:");
+		print("Set peg 2: ");
 		String code2 = scanner.nextLine().toLowerCase();
 		while (!checkCode2(code2)) {
             clearScreen();
-            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
             println(msg);           
             print("Set peg 2: ");
             code2 = scanner.nextLine().toLowerCase();
         }
 		clearScreen();
         println(msg);
-		print("Set peg 3:");
+		print("Set peg 3: ");
 		String code3 = scanner.nextLine().toLowerCase();
 		while (!checkCode3(code3)) {
             clearScreen();
-            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
             println(msg);           
             print("Set peg 3: ");
             code3 = scanner.nextLine().toLowerCase();
@@ -253,12 +249,12 @@ public static void hangman() throws InterruptedException {
         }
 		clearScreen();
         println(msg);
-		print("Set peg 4:");
+		print("Set peg 4: ");
 		String code4 = scanner.nextLine().toLowerCase();
 	    
 		while (!checkCode4(code4)) {
             clearScreen();
-            println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
             println(msg);           
             println("Set peg 4: ");
             code4 = scanner.nextLine().toLowerCase();
@@ -267,20 +263,29 @@ public static void hangman() throws InterruptedException {
 	
 		clearScreen();
         println("Enter lives: ");
-        int livesInput = scanner.nextInt();
-        scanner.nextLine();
+        int livesInput = scanner.nextInt() - 1;
+        scanner.nextLine(); // consume newline
         clearScreen();
 		String[] code = {code1, code2, code3, code4}; // store codes
 
 		while(true) {
 			
-			
+            for (int i = 0; i < allGuesses.size(); i += 4) {
+                println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+            }
+            println("");
             println(msg);           
 			print("Guess 1: ");
 			String guess1 = scanner.nextLine().toLowerCase();
             while (!checkGuess1(guess1)) {
                 clearScreen();
-                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                Thread.sleep(1000);
+                clearScreen();
+                for (int i = 0; i < allGuesses.size(); i += 4) {
+                    println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                }
+                println("");
                 println(msg);
                 print("Guess 1: ");       
                 guess1 = scanner.nextLine().toLowerCase();
@@ -289,36 +294,78 @@ public static void hangman() throws InterruptedException {
             }
             allGuesses.add(guess1);
             clearScreen();
+            for (int i = 0; i < allGuesses.size(); i += 4) {
+                if (i+3 < allGuesses.size()) {
+                println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                }
+            }
+            println("");
             println(msg);
             print("Guess 2: ");
 			String guess2 = scanner.nextLine().toLowerCase();
             while (!checkGuess2(guess2)) {
                 clearScreen();
-                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                Thread.sleep(1000);
+                clearScreen();
+                for (int i = 0; i < allGuesses.size(); i += 4) {
+                    if (i+3 < allGuesses.size()) {
+                    println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                    }
+                }
+                println("");
                 println(msg);
                 print("Guess 2: ");        
                 guess2 = scanner.nextLine().toLowerCase();
             }
             allGuesses.add(guess2);
             clearScreen();
+            for (int i = 0; i < allGuesses.size(); i += 4) {
+                if (i+3 < allGuesses.size()) {
+                println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                }
+            }
+            println("");
             println(msg);
             print("Guess 3: ");
 			String guess3 = scanner.nextLine().toLowerCase();
             while (!checkGuess3(guess3)) {
                 clearScreen();
-                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                Thread.sleep(1000);
+                clearScreen();
+                for (int i = 0; i < allGuesses.size(); i += 4) {
+                    if (i+3 < allGuesses.size()) {
+                    println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                    }
+                }
+                println("");
                 println(msg);     
                 print("Guess 3: ");      
                 guess3 = scanner.nextLine().toLowerCase();
             }
             allGuesses.add(guess3);
             clearScreen();
+            for (int i = 0; i < allGuesses.size(); i += 4) {
+                if (i+3 < allGuesses.size()) {
+                println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                }
+            }
+            println("");
             println(msg);
             print("Guess 4: ");
 			String guess4 = scanner.nextLine().toLowerCase();
             while (!checkGuess4(guess4)) {
                clearScreen();
-                println("\u001B[31m" + "Invalid input! Check for typos." + "\u001B[0m");
+                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                Thread.sleep(1000);
+                clearScreen();
+                for (int i = 0; i < allGuesses.size(); i += 4) {
+                    if (i+3 < allGuesses.size()) {
+                    println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
+                    }
+                }
+                println("");
                 println(msg);       
                 print("Guess 4: ");    
                 guess4 = scanner.nextLine().toLowerCase();
@@ -360,28 +407,18 @@ public static void hangman() throws InterruptedException {
 			 // store match results
         matchResults.add(exactMatches + ":" + colorMatches);
 
-        // output results:
-        for (int i = 0; i < allGuesses.size(); i += 4) {
-            println(colorize(allGuesses.get(i)) + " " + colorize(allGuesses.get(i + 1)) + " " + colorize(allGuesses.get(i + 2)) + " " + colorize(allGuesses.get(i + 3)) + " -> " + matchResults.get(i / 4));
-        }
-        println("");
         println("Lives Remaining: " + (livesInput - lives));
 
         // win if all correct
         if (exactMatches == 4) {
             println("You win!");
             break;
-        }
-
-        // lose if out of lives
-        else if (lives == livesInput) {
+        } else if (lives == livesInput) {
             println("Game over. You lose.");
             println("The code was: " + code[0] + " " + code[1] + " " + code[2] + " " + code[3]);
             break;
-        }
-        // lose a life if game not over
-        else {
-            lives++;
+        } else {
+            lives++; 
         }
     }
 
@@ -389,59 +426,102 @@ public static void hangman() throws InterruptedException {
 }
 
 public static String colorize(String color) {
-            return switch (color) {
-                case "blue" -> "\u001B[36m" + color.toUpperCase() + "\u001B[0m";
-                case "green" -> "\u001B[32m" + color.toUpperCase() + "\u001B[0m";
-                case "yellow" -> "\u001B[33m" + color.toUpperCase() + "\u001B[0m";
-                case "red" -> "\u001B[31m" + color.toUpperCase() + "\u001B[0m";
-                case "gray" -> "\u001B[90m" + color.toUpperCase() + "\u001B[0m";
-                case "white" -> "\u001B[37m" + color.toUpperCase() + "\u001B[0m";
-                default -> color.toUpperCase();
-            };
+    switch (color) {
+        case "blue":
+            return blueANSI + color.toUpperCase() + defaultANSI;
+        case "green":
+            return greenANSI + color.toUpperCase() + defaultANSI;
+        case "yellow":
+            return yellowANSI + color.toUpperCase() + defaultANSI;
+        case "red":
+            return redANSI + color.toUpperCase() + defaultANSI;
+        case "gray":
+            return grayANSI + color.toUpperCase() + defaultANSI;
+        case "white":
+            return whiteANSI + color.toUpperCase() + defaultANSI;
+        default:
+            return color.toUpperCase();
+    }
 }
 
 public static boolean checkCode1 (String code1) {
-    return  !(!code1.equals("red") &&!code1.equals("blue") && !code1.equals ("green") && !code1.equals("yellow") && !code1.equals ("white") && !code1.equals("gray"));
-    
+    if (!code1.equals("red") &&!code1.equals("blue") && !code1.equals ("green") && !code1.equals("yellow") && !code1.equals ("white") && !code1.equals("gray")) {
+        return false;
+
+    }
+    return true;
 }
 public static boolean checkCode2 (String code2) {
-    return !(!code2.equals ("red") &&!code2.equals ("blue") && !code2.equals ("green") && !code2.equals ("yellow") && !code2.equals ("white") && !code2.equals ("gray"));
+    if (!code2.equals ("red") &&!code2.equals ("blue") && !code2.equals ("green") && !code2.equals ("yellow") && !code2.equals ("white") && !code2.equals ("gray")){
+        return false;
+
+    }
+    return true;
 }
 public static boolean checkCode3 (String code3) {
-    return !(!code3.equals ("red") &&!code3.equals ("blue") && !code3.equals ("green") && !code3.equals ("yellow") && !code3.equals ("white") && !code3.equals ("gray"));
+    if (!code3.equals ("red") &&!code3.equals ("blue") && !code3.equals ("green") && !code3.equals ("yellow") && !code3.equals ("white") && !code3.equals ("gray")){
+        return false;
+
+    }
+    return true;
 }
 public static boolean checkCode4 (String code4) {
-    return !(!code4.equals ("red") &&!code4.equals ("blue") && !code4.equals ("green") && !code4.equals ("yellow") && !code4.equals ("white") && !code4.equals ("gray"));
+    if (!code4.equals ("red") &&!code4.equals ("blue") && !code4.equals ("green") && !code4.equals ("yellow") && !code4.equals ("white") && !code4.equals ("gray")){
+        return false;
+
+    }
+    return true;
 }
+
 
 
 
 public static boolean checkGuess1 (String guess1) {
-    return  !(!guess1.equals("red") &&!guess1.equals("blue") && !guess1.equals ("green") && !guess1.equals("yellow") && !guess1.equals ("white") && !guess1.equals("gray"));
+    if (!guess1.equals("red") &&!guess1.equals("blue") && !guess1.equals ("green") && !guess1.equals("yellow") && !guess1.equals ("white") && !guess1.equals("gray")) {
+        return false;
+
+    }
+    return true;
 }
 public static boolean checkGuess2 (String guess2) {
-    return  !(!guess2.equals ("red") &&!guess2.equals ("blue") && !guess2.equals ("green") && !guess2.equals ("yellow") && !guess2.equals ("white") && !guess2.equals ("gray"));
+    if (!guess2.equals ("red") &&!guess2.equals ("blue") && !guess2.equals ("green") && !guess2.equals ("yellow") && !guess2.equals ("white") && !guess2.equals ("gray")){
+        return false;
+
+    }
+    return true;
 }
 public static boolean checkGuess3 (String guess3) {
-    return  !(!guess3.equals ("red") &&!guess3.equals ("blue") && !guess3.equals ("green") && !guess3.equals ("yellow") && !guess3.equals ("white") && !guess3.equals ("gray"));
+    if (!guess3.equals ("red") &&!guess3.equals ("blue") && !guess3.equals ("green") && !guess3.equals ("yellow") && !guess3.equals ("white") && !guess3.equals ("gray")){
+        return false;
+
+    }
+    return true;
 }
 public static boolean checkGuess4 (String guess4) {
-    return  !(!guess4.equals ("red") &&!guess4.equals ("blue") && !guess4.equals ("green") && !guess4.equals ("yellow") && !guess4.equals ("white") && !guess4.equals ("gray"));
+    if (!guess4.equals ("red") &&!guess4.equals ("blue") && !guess4.equals ("green") && !guess4.equals ("yellow") && !guess4.equals ("white") && !guess4.equals ("gray")){
+        return false;
+
+    }
+    return true;
 }
 
 public static void numberguesser() throws InterruptedException {
-    try (Scanner scanner = new Scanner(System.in)) {
+    Scanner scanner = new Scanner(System.in);
+    Integer lowerBound = Integer.MIN_VALUE;
+    Integer upperBound = Integer.MAX_VALUE;
+    List<Integer> guesses = new ArrayList<>();
+        
         clearScreen();
         println("Welcome to Number Guesser!");
 		println("1 Player (1)");
-        print("2 Player (2)");
+        println("2 Player (2)");
 
 		int gameType = scanner.nextInt();
 
 		int answer = 0;
 
 		while (gameType != 1 && gameType != 2) {
-			println("Please choose 1 or 2.");
+			print("Please choose 1 or 2.");
 			gameType = scanner.nextInt();
 		}
 
@@ -449,10 +529,8 @@ public static void numberguesser() throws InterruptedException {
 		if (gameType == 1) {
 			answer = (int) (Math.random() *100) + 1;
 
-		}
-
-		else if (gameType == 2) {
-			println("Enter the number to be guessed: ");
+		} else if (gameType == 2) {
+			print("Enter the number to be guessed: ");
 			answer = scanner.nextInt();
 			clearScreen();
 
@@ -465,27 +543,47 @@ public static void numberguesser() throws InterruptedException {
 		if (gameType == 1) {
             println("Guess a number 1-100");
         }
-        println("Enter your first guess: ");
+        
 		do {
-
+            clearScreen();
+            println(redANSI + lowerBound + defaultANSI + " - " + greenANSI + upperBound + defaultANSI);
+            print("Enter your guess: ");
 			input = scanner.nextDouble();
+            if (guesses.contains((int)input)) {
+                clearScreen();
+                println(redANSI + "You've already guessed that number!" + defaultANSI);
+                Thread.sleep(1000);
+                continue;
+            }
 			if (input < answer && input != secretCode) {
+                clearScreen();
 				println("Too low!!! try again");
+                Thread.sleep(1000);
                 count++;
+                if (input > lowerBound) {
+                lowerBound = (int)input;
+                }
+                guesses.add((int)input);
 			}
 			if (input > answer && input != secretCode) {
+                clearScreen();
 				println("Too high! sound familiar?");
+                Thread.sleep(1000);
                 count++;
+                if (input < upperBound) {
+                    upperBound = (int)input;
+                    }
+                    guesses.add((int)input);
 			}
             if (input == secretCode) {
                 println("Answer is: " + answer);
                 println("2...");
                 Thread.sleep(1000);
-                clearScreen();
                 println("1...");
                 Thread.sleep(1000);
                 clearScreen();
-                println("Enter your next guess: ");
+                println(redANSI + lowerBound + defaultANSI + " - " + greenANSI + upperBound + defaultANSI);
+                print("Enter your guess: ");
             }
 			
 
@@ -501,7 +599,6 @@ public static void numberguesser() throws InterruptedException {
 		}
 
     scanner.close();
-    }
     }
 private static final Map<Integer, String[]> colorMap = new HashMap<>();
    private static int score = 0;
@@ -560,8 +657,7 @@ static Scanner scanner = new Scanner(System.in);
         board = new int[bSize][bSize];
         addRandomNumber(board);
         break;
-        }
-       else if (gameType==1) {
+        } else if (gameType==1) {
             gameMode = 1;
             bSize = 4;
             board = new int[bSize][bSize];
@@ -575,131 +671,141 @@ static Scanner scanner = new Scanner(System.in);
         int[][] undoBoard = board;
         int cheatValue;
     printBoard(board);
-            OUTER:
-            while (true) {
-                String direction = scanner.nextLine().trim().toLowerCase();
-                if (direction.equals(secretCode2048)) {
-                    board [0][0] = 2048;
-                }       if (direction.equals(secretCode2048U)) {
-                    println("Cheat options: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072");
-                    print("Enter value: ");
-                    cheatValue = scanner.nextInt();
-                    if (cheatValue != 2  && cheatValue != 4 && cheatValue != 8 && cheatValue != 16 && cheatValue != 32 && cheatValue != 64 && cheatValue != 128 && cheatValue != 256 && cheatValue != 512 && cheatValue != 1024 && cheatValue != 2048 && cheatValue != 4096 && cheatValue != 8192 && cheatValue != 16384 && cheatValue != 32768 && cheatValue != 65536 && cheatValue != 131072) {
-                        
-                        continue;
-                    }
-                    for (int l=0; l<bSize; l++) {
-                        for (int b=0; b<bSize; b++) {
-                            board[l][b] = cheatValue;
-                        }
-                    }
-                }       if (direction.contains("m")) {
-                    
-                    while (!endGame) {
-                        try {
-                            println("Menu:");
-                            println("(0) Back to game");
-                            println("(1) Exit game");
-                            println("(2) Change win condition");
-                            println("(3) Undo last move");
-                            println("(4) Restart game");
-                            print("Enter your choice: ");
-                            
-                            menuChoice = Integer.parseInt(scanner.nextLine().trim());
-                            
-                            if (menuChoice >= 0 && menuChoice <= 4) {
-                                break;
-                            } else {
-                                println("\u001b[31mInvalid Input. Please enter a number between 0 and 4.\u001b[0m");
-                                Thread.sleep(500);
-                                
-                            } } catch (NumberFormatException e) {
-                                println("\u001b[31mInvalid Input. Please enter a valid number.\u001b[0m");
-                                Thread.sleep(500);
-                                
-                            }
-                    }
-                    switch (menuChoice){
-                        case 0:
-                            printBoard(board);
-                            direction = scanner.nextLine();
-                            break;
-                            
-                            
-                        case 1:
-                            clearScreen();
-                            printBoard(board);
-                            endGame = true;
-                            break;
-                            
-                        case 2:
-                            println("Enter new win condition (Current is " + winCon +"):");
-                            winCon = scanner.nextInt();
-                            println("Saved. New win condition is " + winCon);
-                            break;
-                            
-                        case 3:
-                            
-                            board = undoBoard;
-                            clearScreen();
-                            printBoard(board);
-                            break;
-                            
-                        case 4:
-                            for (int i=0;i<bSize;i++){
-                                for(int j=0;j<bSize;j++){
-                                    board[i][j]=0;
-                                }
-                            }
-                        default:
-                            println("Invalid choice. Please enter a number between 0 and 4.");
-                            break;
-                    }
-                    if (endGame) {
-                        break;
-                    }
-                    
-                }       printlni(score);
-                printBoard(board);
-                shiftArray(board, direction);
-                merge(board, direction);
-                shiftArray(board, direction);
-                boolean boardChanged = !Arrays.deepEquals(originalBoard, board);
-                if (boardChanged && menuChoice != 0 && menuChoice != 1 && menuChoice != 2 && menuChoice != 3) {
-                    addRandomNumber(board);
-                    undoBoard = originalBoard;
-                    
-                    
-                }   menuChoice = 7;
-                printBoard(board);
-                if (checkWin(board) && !haveWon) {
-                    println("You Win!");
-                    print("Do you want to continue playing? (y/n): ");
-                    String response = scanner.nextLine().toLowerCase();
-                    switch (response) {
-                        case "y" -> {
-                            clearScreen();
-                            haveWon = true;
-                            printBoard(board);
-                        }
-                        case "n" -> {
-                            println("You Win!");
-                            break OUTER;
-                        }
-                        default -> println("Invalid input. Please enter y or n.");
-                    }
-                }
-                if (checkLoss(board)){
-                    println("You lose.");
-                    break;
+    while (true) {   
+         
+        String direction = scanner.nextLine().trim().toLowerCase();
+        if (direction.equals(secretCode2048)) {
+            board [0][0] = 2048;
+        }
+        if (direction.equals(secretCode2048U)) {
+            println("Cheat options: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072");
+            print("Enter value: ");
+            cheatValue = scanner.nextInt();
+            if (cheatValue != 2  && cheatValue != 4 && cheatValue != 8 && cheatValue != 16 && cheatValue != 32 && cheatValue != 64 && cheatValue != 128 && cheatValue != 256 && cheatValue != 512 && cheatValue != 1024 && cheatValue != 2048 && cheatValue != 4096 && cheatValue != 8192 && cheatValue != 16384 && cheatValue != 32768 && cheatValue != 65536 && cheatValue != 131072) {
+                
+                continue;
+            }
+            for (int l=0; l<bSize; l++) {
+                   for (int b=0; b<bSize; b++) {
+                    board[l][b] = cheatValue;
                 }
             }
+        }
+         if (direction.contains("m")) {
+        
+        while (!endGame) {
+    try {
+        println("Menu:");
+        println("(0) Back to game");
+        println("(1) Exit game");
+        println("(2) Change win condition");
+        println("(3) Undo last move");
+        println("(4) Restart game");
+        print("Enter your choice: ");
+        
+        menuChoice = Integer.parseInt(scanner.nextLine().trim());
+        
+        if (menuChoice >= 0 && menuChoice <= 4) {
+            break; 
+        } else {
+            println(redANSI + "Invalid Input. Please enter a number between 0 and 4." + defaultANSI);
+            Thread.sleep(500);
+        
+    } } catch (NumberFormatException e) {
+        println(redANSI + "Invalid Input. Please enter a valid number." + defaultANSI);
+        Thread.sleep(500);
+        
+    }
+}
+        switch (menuChoice){
+        case 0: 
+            printBoard(board);
+        direction = scanner.nextLine();
+            break;
+        
+        
+        case 1:
+            clearScreen();
+            printBoard(board);
+            endGame = true;
+            break;
+        
+        case 2:
+            println("Enter new win condition (Current is " + winCon +"):");
+            winCon = scanner.nextInt();
+            println("Saved. New win condition is " + winCon);
+            break;
+        
+        case 3:
+            
+                board = undoBoard;
+            clearScreen();
+            printBoard(board);
+            break;
+        
+        case 4:
+            for (int i=0;i<bSize;i++){
+                for(int j=0;j<bSize;j++){
+                    board[i][j]=0;
+                }
+            }
+        default:
+            println("Invalid choice. Please enter a number between 0 and 4.");
+            break;
+        }
+          if (endGame) {
+          break;
+      }  
+            
+        }
+      
+      
+       printlni(score);
+        printBoard(board);
+            shiftArray(board, direction);
+            merge(board, direction);
+            shiftArray(board, direction);
+            
+             boolean boardChanged = !Arrays.deepEquals(originalBoard, board);
+            
+            if (boardChanged && menuChoice != 0 && menuChoice != 1 && menuChoice != 2 && menuChoice != 3) {
+                addRandomNumber(board);
+                undoBoard = originalBoard;
+                
+                
+            }
+            menuChoice = 7; //just to set it to an irrelevant value
+            
+            printBoard(board);
+            
+            
+            if (checkWin(board) && !haveWon) {
+                println("You Win!");
+                print("Do you want to continue playing? (y/n): ");
+                
+            String response = scanner.nextLine().toLowerCase();
+            if (response.equals("y")) {
+                clearScreen();
+                haveWon = true;
+                printBoard(board);
+            } else if (response.equals("n")) {
+                println("You Win!");
+                break;
+            } else {
+                println("Invalid input. Please enter y or n.");
+            }
+            }
+            if (checkLoss(board)){
+                println("You lose.");
+                break;
+            }
+    }
         
     }
 
 public static void merge (int[][]board, String direction) {
     switch (direction) {
-        case "w" -> { 
+        case "w": 
             for (int col = 0; col < bSize; col++){
                 for (int row = 0; row < bSize - 1 ; row++) {
                     if (board[row][col] != 0 && board[row][col] == board[row + 1][col]){
@@ -708,9 +814,10 @@ public static void merge (int[][]board, String direction) {
                         board[row][col] = 0;
                     }             
                 }
-            }   }
+            }
+            break;
      
-        case "s" -> {
+        case "s":
             for (int col = 0; col < bSize; col++){
                 for (int row = bSize - 1; row > 0 ; row--) {
                     if (board[row][col] != 0 && board[row][col] == board[row - 1][col]){
@@ -719,9 +826,10 @@ public static void merge (int[][]board, String direction) {
                         board[row][col] = 0;
                     }             
                 }
-            }   }
+            }
+            break;
     
-        case "d" -> {
+        case "d":
             for (int row = 0; row < bSize ; row++){
                 for (int col = bSize - 1; col > 0; col--){
                     if (board[row][col] != 0 && board[row][col] == board[row][col - 1]){
@@ -730,9 +838,10 @@ public static void merge (int[][]board, String direction) {
                         board[row][col] = 0;
                     }             
                 }
-            }   }
+            }
+            break;
     
-        case "a" -> {
+        case "a":
             for (int row = 0; row < bSize; row++){
                 for (int col = 0; col < bSize - 1 ; col++) {
                     if (board[row][col] != 0 && board[row][col] == board[row][col + 1]){
@@ -741,9 +850,10 @@ public static void merge (int[][]board, String direction) {
                         board[row][col] = 0;
                     }            
                 }
-            }   }
+            }
+            break;
     
-        default -> println("Error");
+        default: println("Error");
     }
 }
 
@@ -760,7 +870,7 @@ public static void printBoard(int[][] board) {
     final int cellWidth = largestNumStr.length() * 2 + 1; 
 
     String wallColor = "\033[48;2;188;174;161m";
-    String resetColor = "\033[0m";
+    String resetColor = defaultANSI;
 
     String emptyCell = String.format("%" + cellWidth + "s", " "); 
 
@@ -825,7 +935,7 @@ public static String centerNumberInCell(int num, int cellWidth) {
         } else if(number == 0){
             print("\033[48;2;205;193;179m");
         } else {
-            print("\033[0m");
+            print(defaultANSI);
         }
     }
 
@@ -834,7 +944,7 @@ public static void shiftArray(int[][] board, String direction) {
        
         switch (direction) {
             
-            case "w" -> {
+            case "w":
                 for (int col = 0; col < bSize; col++) {
                     int position = 0;
                     for (int row = 0; row < bSize; row++) {
@@ -843,10 +953,10 @@ public static void shiftArray(int[][] board, String direction) {
                         }
                     }
                 }
-                }
+                break;
                
             
-            case "s" -> {
+            case "s":
                 for (int col = 0; col < bSize; col++) {
                     int position = bSize - 1;
                     for (int row = bSize - 1; row >= 0; row--) {
@@ -855,10 +965,10 @@ public static void shiftArray(int[][] board, String direction) {
                         }
                     }
                 }
-                }
+                break;
 
             
-            case "a" -> {
+            case "a":
                 for (int row = 0; row < bSize; row++) {
                     int position = 0;
                     for (int col = 0; col < bSize; col++) {
@@ -867,10 +977,10 @@ public static void shiftArray(int[][] board, String direction) {
                         }
                     }
                 }
-                }
+                break;
 
             
-            case "d" -> {
+            case "d":
                 for (int row = 0; row < bSize; row++) {
                     int position = bSize - 1;
                     for (int col = bSize - 1; col >= 0; col--) {
@@ -879,12 +989,11 @@ public static void shiftArray(int[][] board, String direction) {
                         }
                     }
                 }
-                }
+                break;
                
-            default -> {
+            default:
                 println("Invalid direction. Please use up, down, left, or right.");
                 return;
-                }
         }
 
         for (int i = 0; i < bSize; i++) {
@@ -1045,7 +1154,7 @@ public static void addRandomNumber(int[][] board) {
 
             if (!wordList.contains(guess) && !guess.equals("7187448310")) {
                 clearScreen();
-                println("\u001B[31m" + "The guessed word is not in the word list." + "\u001B[0m");
+                println(redANSI + "The guessed word is not in the word list." + defaultANSI);
                 invalid = true;
                 continue;
             }
@@ -1064,26 +1173,26 @@ public static void addRandomNumber(int[][] board) {
                         if (i == j) {
                             exactMatchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = "\u001B[32m" + guessArray[i] + "\u001B[0m"; 
+                            result[6 - attempts - 1][i] = greenANSI + guessArray[i] + defaultANSI; 
                             exactMatches.add(guessArray[i]);
                         } else {
                             matchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = "\u001B[38;2;255;191;0m" + guessArray[i] + "\u001B[0m";
+                            result[6 - attempts - 1][i] = "\u001B[38;2;255;191;0m" + guessArray[i] + defaultANSI;
                             nonExactMatches.add(guessArray[i]);
                         }
                         break;
                     }
                 }
                 if (!exactMatchedGuess[i] && !matchedGuess[i]) {
-                    result[6 - attempts - 1][i] = "\u001B[90m" + guessArray[i] + "\u001B[0m"; 
+                    result[6 - attempts - 1][i] = grayANSI + guessArray[i] + defaultANSI; 
                     incorrectGuesses.add(guessArray[i]);
                 }
             }
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
-                println("You won in " + (6 - attempts) + " guesses. The word was: " + word);
+                println("You won in " + attempts + "guesses. The word was: " + word);
                 for (int i = 0; i < result.length; i++) {
                     for (int j = 0; j < result[i].length; j++) {
                         if (result[i][j] != null) {
@@ -1108,13 +1217,13 @@ public static void addRandomNumber(int[][] board) {
         StringBuilder alphabet = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
             if (exactMatches.contains(c)) {
-                alphabet.append("\033[1;32m").append(c).append("\033[0m "); 
+                alphabet.append(greenANSI).append(c).append(defaultANSI ); 
             } else if (nonExactMatches.contains(c)) {
-                alphabet.append("\033[1;33m").append(c).append("\033[0m "); 
+                alphabet.append(yellowANSI).append(c).append(defaultANSI ); 
             } else if (incorrectGuesses.contains(c)) {
-                alphabet.append("\033[1;30m").append(c).append("\033[0m "); 
+                alphabet.append("\033[1;30m").append(c).append(defaultANSI ); 
             } else {
-                alphabet.append("\033[1;37m").append(c).append("\033[0m "); 
+                alphabet.append("\033[1;37m").append(c).append(defaultANSI ); 
             }
         }
         println(alphabet.toString());
@@ -1131,8 +1240,8 @@ public static void addRandomNumber(int[][] board) {
     public static void printlni(int a) {
         System.out.println(a);
     }
-    private static final String xMark = "\u001B[34mX\u001B[0m";  
-    private static final String oMark = "\u001B[31mO\u001B[0m";  
+    private static final String xMark = blueANSI + "X" + defaultANSI;  
+    private static final String oMark = redANSI + "O" + defaultANSI;  
     
     public static void ticTacToe() throws InterruptedException {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -1153,14 +1262,14 @@ public static void addRandomNumber(int[][] board) {
             }
             
             if (gameMode == 1) {
-                twoPlayerGame(scanner, board);
+                playTwoPlayerGame(scanner, board);
             } else {
-                aiGame(scanner, board);
+                playAIGame(scanner, board);
             }
         }
     }
     
-    private static void twoPlayerGame(Scanner scanner, String[][] board) throws InterruptedException {
+    private static void playTwoPlayerGame(Scanner scanner, String[][] board) throws InterruptedException {
         String currentPlayer = xMark;
         boolean XhasWon = false;
         boolean OhasWon = false;
@@ -1187,46 +1296,45 @@ public static void addRandomNumber(int[][] board) {
                 col = -1;
                 
                 switch (move) {
-                    case "1" -> {
+                    case "1":
                         row = 0;
                         col = 0;
-                    }
-                    case "2" -> {
+                        break;
+                    case "2":
                         row = 0;
                         col = 1;
-                    }
-                    case "3" -> {
+                        break;
+                    case "3":
                         row = 0;
                         col = 2;
-                    }
-                    case "4" -> {
+                        break;
+                    case "4":
                         row = 1;
                         col = 0;
-                    }
-                    case "5" -> {
+                        break;
+                    case "5":
                         row = 1;
                         col = 1;
-                    }
-                    case "6" -> {
+                        break;
+                    case "6":
                         row = 1;
                         col = 2;
-                    }
-                    case "7" -> {
+                        break;
+                    case "7":
                         row = 2;
                         col = 0;
-                    }
-                    case "8" -> {
+                        break;
+                    case "8":
                         row = 2;
                         col = 1;
-                    }
-                    case "9" -> {
+                        break;
+                    case "9":
                         row = 2;
                         col = 2;
-                    }
-                    default -> {
+                        break;
+                    default:
                         print("Invalid input");
                         continue;
-                    }
                 }
                 
                 if (!board[row][col].equals(xMark) && !board[row][col].equals(oMark)) {
@@ -1277,7 +1385,7 @@ public static void addRandomNumber(int[][] board) {
         }
     }
     
-    private static void aiGame(Scanner scanner, String[][] board) throws InterruptedException {
+    private static void playAIGame(Scanner scanner, String[][] board) throws InterruptedException {
         String playerMark = xMark;
         String aiMark = oMark;
         boolean gameOver = false;
@@ -1296,9 +1404,8 @@ public static void addRandomNumber(int[][] board) {
         while (difficulty < 1 || difficulty > 4) {  
             clearScreen();
             if (aiFirst) {
-                println("\u001B[31mSelect difficulty level: (Reverse Mode)\u001B[0m");
-            }
-            else { println("Select difficulty level:");
+                println("redANSISelect difficulty level: (Reverse Mode)defaultANSI");
+            } else { println("Select difficulty level:");
         }
             println("1. Normal");
             println("2. Hard");
@@ -1310,6 +1417,7 @@ public static void addRandomNumber(int[][] board) {
                 if (difficulty == 4) {  
                     aiFirst = !aiFirst;  
                     difficulty = 0;  
+                    continue;
                 }
             } catch (NumberFormatException e) {
                 difficulty = 0;
@@ -1364,46 +1472,45 @@ public static void addRandomNumber(int[][] board) {
                 col = -1;
                 
                 switch (move) {
-                    case "1" -> {
+                    case "1":
                         row = 0;
                         col = 0;
-                    }
-                    case "2" -> {
+                        break;
+                    case "2":
                         row = 0;
                         col = 1;
-                    }
-                    case "3" -> {
+                        break;
+                    case "3":
                         row = 0;
                         col = 2;
-                    }
-                    case "4" -> {
+                        break;
+                    case "4":
                         row = 1;
                         col = 0;
-                    }
-                    case "5" -> {
+                        break;
+                    case "5":
                         row = 1;
                         col = 1;
-                    }
-                    case "6" -> {
+                        break;
+                    case "6":
                         row = 1;
                         col = 2;
-                    }
-                    case "7" -> {
+                        break;
+                    case "7":
                         row = 2;
                         col = 0;
-                    }
-                    case "8" -> {
+                        break;
+                    case "8":
                         row = 2;
                         col = 1;
-                    }
-                    case "9" -> {
+                        break;
+                    case "9":
                         row = 2;
                         col = 2;
-                    }
-                    default -> {
+                        break;
+                    default:
                         print("Invalid input");
                         continue;
-                    }
                 }
                 
                 if (!board[row][col].equals(xMark) && !board[row][col].equals(oMark)) {
@@ -1649,17 +1756,18 @@ public static void addRandomNumber(int[][] board) {
         }
 
         int maxDepth;
-            switch (difficulty) {
-                case 3 -> maxDepth = 30;
-                case 2 -> maxDepth = movesMade <= 3 ? 7 : 6;
-                default -> {
-                    if (isX) {
-                        maxDepth = movesMade <= 2 ? 3 : 2; 
-                    } else {
-                        maxDepth = movesMade <= 2 ? 4 : 3;
-                    }
-                }
+        if (difficulty == 3) {
+            maxDepth = 30;  
+        } else if (difficulty == 2) {
+            maxDepth = movesMade <= 3 ? 7 : 6;
+        } else {
+            
+            if (isX) {
+                maxDepth = movesMade <= 2 ? 3 : 2;  
+            } else {
+                maxDepth = movesMade <= 2 ? 4 : 3; 
             }
+        }
 
         if (movesMade <= 2) {
             if (!board[1][1].equals(xMark) && !board[1][1].equals(oMark)) {
@@ -1873,7 +1981,7 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
                         board[i][j] = isX ? xMark : oMark;
                         int moveVal = minimax(board, 0, false, maxDepth);
                         if (movesMade <= 3) {
-                            moveVal -= countForks(board, true);
+                            moveVal -= countPotentialForks(board, true);
                         }
                         board[i][j] = temp;
                         if (moveVal > bestVal) {
@@ -1947,7 +2055,7 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
         }
     }
 
-    private static int countForks(String[][] board, boolean forX) {
+    private static int countPotentialForks(String[][] board, boolean forX) {
         String mark = forX ? xMark : oMark;
         int forkCount = 0;
 
@@ -1976,5 +2084,318 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
         }
         return forkCount;
+    }
+    static String[][] board = new String[6][7];
+    
+    static boolean[] wins = new boolean[4];
+    static int input = 0;
+    static double codeInput;
+    static String turn = "Red";
+    static int[] move = new int[2]; //for the checkwin functions to check the move that was just made
+    static String connect4Cheat;
+    public static void connect4() throws InterruptedException {
+        clearScreen();
+        initializeBoard();
+        printBoard();
+        gamePlay();
+
+    }
+
+    public static void initializeBoard() {
+        for (String boardSpace[] : board) { Arrays.fill(boardSpace, " "); }
+        for (boolean win : wins) { win = false;}
+    }
+    
+    
+    public static void printBoard() {
+        println("  1  2   3   4   5   6   7");
+        println(" -----------------------------");
+        for (int i = board.length - 1; i >= 0; i--) {
+            String[] boardSpace = board[i];
+            for (int j = 0; j < boardSpace.length; j++) {
+                print(" " + boardSpace[j] + " ");
+                if (j < boardSpace.length - 1) {
+                    print("|");
+                }
+            }
+            println("|");
+            println(" -----------------------------");
+        }
+    }
+
+    public static void gamePlay() throws InterruptedException {
+        boolean redWon = false;
+        boolean yellowWon = false;
+        boolean turnValid = true;
+        boolean turnComplete = false;
+        
+        while (!redWon && !yellowWon) {
+            try {
+            
+                clearScreen();
+                printBoard();
+                println("Enter 10 for secret menu.");
+                print("Enter " + turn + "'s Move: ");
+                input = scanner.nextInt() - 1;
+                
+                while ( input < 0 || input != 9 && input > 7) {
+                    clearScreen();
+                    printBoard();
+                    println(redANSI + "Invalid move! That column doesn't exist." + defaultANSI);
+                    Thread.sleep(1000);
+                    clearScreen();
+                    printBoard();
+                    println("Enter 10 for secret menu.");
+                    print("Enter " + turn + "'s Move: ");
+                    input = scanner.nextInt() - 1;
+                }
+        while (input == 9) {
+            clearScreen();
+            printBoard();
+            print("Enter code: ");
+            codeInput = scanner.nextDouble();
+            if (codeInput == 7187448310.0) {
+                scanner.nextLine(); // consume the leftover newline
+                print("Red or Yellow? ");
+                connect4Cheat = scanner.nextLine().toLowerCase();
+                while (!connect4Cheat.equals("red") && !connect4Cheat.equals("yellow")) {
+                    connect4Cheat = scanner.nextLine().toLowerCase();
+                
+                    clearScreen();
+                    printBoard();
+                    println(redANSI + "Please Enter \"Red\" or \"Yellow\"." + defaultANSI);
+                    Thread.sleep(1000);
+                    clearScreen();
+                    printBoard();
+                    print(" Red or Yellow? ");
+                    connect4Cheat = scanner.nextLine().toLowerCase();
+                }
+                
+                 
+                if (connect4Cheat.equals("red")) {
+                    turn = "Red";
+                } else {
+                    turn = "Yellow";
+                }
+            } else {
+                clearScreen();
+                printBoard();
+                println(redANSI + "Invalid code." + defaultANSI);
+                Thread.sleep(1000);
+                clearScreen();
+                printBoard();
+                print("Enter " + turn + "'s Move: ");
+                input = scanner.nextInt() - 1;
+                codeInput = 0;
+                continue;
+            }
+            
+            
+            if (codeInput == 7187448310.0) {
+                codeInput = 0;
+                clearScreen();
+                printBoard();
+                print("Enter " + turn + "'s Move: ");
+                input = scanner.nextInt() - 1;
+            }
+        }
+            while (input < 0 || input != 9 && input > 7) {
+                clearScreen();
+                printBoard();
+                println(redANSI+ "Invalid move! That column doesn't exist." + defaultANSI);
+                Thread.sleep(1000);
+                clearScreen();
+                printBoard();
+                println("Enter 10 for secret menu.");
+                print("Enter " + turn + "'s Move: ");
+                input = scanner.nextInt() - 1;
+            }
+            
+        for (int i = 0; i < 6; i++) {
+            if (!turnComplete && board[i][input].equals(" ")) {
+                board[i][input] = turn.substring(0,1);
+                turnComplete = true;
+                move[0] = i;
+                move[1] = input;
+            }
+        }
+        while (!turnComplete) {
+            clearScreen();
+            printBoard();
+            println(redANSI + "Invalid move! That column is full." + defaultANSI);
+            Thread.sleep(1000);
+            clearScreen();
+            printBoard();
+            print("Enter " + turn + "'s Move: ");
+            input = scanner.nextInt() - 1;
+        }
+        turnComplete = false;
+
+        
+        checkRows();
+        if (checkWin()) {
+            clearScreen();
+            printBoard();
+            print(greenANSI + turn + " wins!" + defaultANSI);
+            break;
+        }
+        checkColumns();
+        if (checkWin()) {
+            clearScreen();
+            printBoard();
+            print(greenANSI + turn + " wins!" + defaultANSI);
+            break;
+        }
+        checkDiagonals();
+        if (checkWin()) {
+            clearScreen();
+            printBoard();
+            print(greenANSI + turn + " wins!" + defaultANSI);
+            break;
+        }
+
+
+            clearScreen();
+            printBoard();
+            switch (turn) {
+                
+            case "Red" -> turn = "Yellow";
+            case "Yellow" -> turn = "Red";
+            }
+        } catch (InputMismatchException e) {
+            clearScreen();
+            printBoard();
+            println(redANSI + "Invalid input! Please enter a number 1 - 7." + defaultANSI);
+            Thread.sleep(1000);
+            scanner.nextLine();
+        }
+    }
+
+}
+
+    public static void checkRows() {
+        for (boolean win : wins) { win = false;}
+        wins[0] = true;
+        if (move[1] + 1 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 1])) {
+            wins[1] = true;
+            if (move[1] + 2 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 2])) {
+                wins[2] = true;
+                if (move[1] + 3 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 3])) {
+                    wins[3] = true;
+                } else if (move[1] - 1 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 1])) {
+                    wins[3] = true;
+                }
+            } else if (move[1] - 1 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 1])) {
+                wins[2] = true;
+                if (move[1] - 2 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 2])) {
+                    wins[3] = true;
+                }
+            }
+        }
+        if (move[1] - 1 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 1])) {
+            wins[1] = true;
+            if (move[1] - 2 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 2])) {
+                wins[2] = true;
+                if (move[1] - 3 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 3])) {
+                    wins[3] = true;
+                } else if (move[1] + 1 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 1])) {
+                    wins[3] = true;
+                }
+            }
+        }
+    }
+
+    public static void checkColumns() {
+        for (boolean win : wins) { win = false;}
+        wins[0] = true;
+        if (move[0] + 1 < 6 && board[move[0] + 1][move[1]].equals(board[move[0]][move[1]])) {
+            wins[1] = true;
+            if (move[0] + 2 < 6 && board[move[0] + 2][move[1]].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] + 3 < 6 && board[move[0] + 3][move[1]].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                } else if (move[0] - 1 >= 0 && board[move[0] - 1][move[1]].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            } else if (move[0] - 1 >= 0 && board[move[0] - 1][move[1]].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] - 2 >= 0 && board[move[0] - 2][move[1]].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            }
+        } else if (move[0] - 1 >= 0 && board[move[0] - 1][move[1]].equals(board[move[0]][move[1]])) {
+            wins[1] = true;
+            if (move[0] - 2 >= 0 && board[move[0] - 2][move[1]].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] - 3 >= 0 && board[move[0] - 3][move[1]].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            }
+        }
+    }
+
+    public static void checkDiagonals() {
+        for (boolean win : wins) { win = false;}
+        wins[0] = true;
+        // Up-right diagonal
+        if (move[0] + 1 < 6 && move[1] + 1 < 7 && board[move[0] + 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+            wins[1] = true;
+            if (move[0] + 2 < 6 && move[1] + 2 < 7 && board[move[0] + 2][move[1] + 2].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] + 3 < 6 && move[1] + 3 < 7 && board[move[0] + 3][move[1] + 3].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && board[move[0] - 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && board[move[0] - 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] - 2 >= 0 && move[1] - 2 >= 0 && board[move[0] - 2][move[1] - 2].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            }
+        } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && board[move[0] - 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+            wins[1] = true;
+            if (move[0] - 2 >= 0 && move[1] - 2 >= 0 && board[move[0] - 2][move[1] - 2].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] - 3 >= 0 && move[1] - 3 >= 0 && board[move[0] - 3][move[1] - 3].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            }
+        }
+
+        // Down-right diagonal
+        if (move[0] + 1 < 6 && move[1] - 1 >= 0 && board[move[0] + 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+            wins[1] = true;
+            if (move[0] + 2 < 6 && move[1] - 2 >= 0 && board[move[0] + 2][move[1] - 2].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] + 3 < 6 && move[1] - 3 >= 0 && board[move[0] + 3][move[1] - 3].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && board[move[0] - 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && board[move[0] - 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] - 2 >= 0 && move[1] + 2 < 7 && board[move[0] - 2][move[1] + 2].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            }
+        } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && board[move[0] - 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+            wins[1] = true;
+            if (move[0] - 2 >= 0 && move[1] + 2 < 7 && board[move[0] - 2][move[1] + 2].equals(board[move[0]][move[1]])) {
+                wins[2] = true;
+                if (move[0] - 3 >= 0 && move[1] + 3 < 7 && board[move[0] - 3][move[1] + 3].equals(board[move[0]][move[1]])) {
+                    wins[3] = true;
+                }
+            }
+        }
+    }
+
+    public static boolean checkWin() {
+        for (boolean win : wins) {
+            if (!win) {
+                return false;
+            }
+        }
+                return true;
     }
 }

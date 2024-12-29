@@ -6,6 +6,12 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch temp file",
+            "request": "launch",
+            "mainClass": "connect4"
+        },
+        {
+            "type": "java",
             "request": "launch",
             "name": "Launch Java App",
             "mainClass": "Main"
