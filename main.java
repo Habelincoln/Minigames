@@ -2057,6 +2057,7 @@ public class Main {
     static int[] move = new int[2]; // for the checkwin functions to check the move that was just made
     static String connect4Cheat;
     static String[][] boardC4Backup = new String[6][7];
+    static boolean justUndone = false;
 
     public static void connect4() throws InterruptedException {
         clearScreen();
@@ -2299,20 +2300,23 @@ public class Main {
     }
 
     public static void undoLastMoveC4() {
+        if (!Arrays.deepEquals(boardC4, boardC4Backup)) {
+            justUndone = false;
+            
         
-       if (Arrays.deepEquals(boardC4, boardC4Backup)) {
-            switch (turn) {
-                case redANSI + "Red" + defaultANSI: turn = yellowANSI + "Yellow" + defaultANSI;
-                case yellowANSI + "Yellow" + defaultANSI: turn = redANSI + "Red" + defaultANSI;
-            }
-       }
-       else {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
                 boardC4[i][j] = boardC4Backup[i][j];
+                }
             }
-        }
-      }
+        justUndone = true;
+        } else { 
+            switch (turn) {
+            case redANSI + "Red" + defaultANSI -> turn = yellowANSI + "Yellow" + defaultANSI;
+            case yellowANSI + "Yellow" + defaultANSI -> turn = redANSI + "Red" + defaultANSI;
+            }
+        
+          }
     }
 
     public static void checkRows() {
@@ -2670,7 +2674,7 @@ public class Main {
                 }
             }
         } catch (InputMismatchException e) {
-            println("Invalid input. Please enter a number.");
+            println(redANSI + "Invalid input. Please enter a number." + defaultANSI);
             Thread.sleep(1000);
             scanner.nextLine();
             playGameMega();
