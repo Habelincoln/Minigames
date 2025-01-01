@@ -15,10 +15,10 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
         clearScreen();
         println("Welcome to the Game Hub!");
-	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5), Tic Tac Toe (6), Connect 4 (7)");
+	println("Game select: Hangman (1), MasterMind (2), NumberGuesser (3), 2048 (4), Wordle (5), Tic Tac Toe (6), Connect 4 (7), Mega Tic Tac Toe (8)");
             try (Scanner input = new Scanner(System.in)) {
                 String gameChoice = input.nextLine().toLowerCase();
-                while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6") && !gameChoice.equals("7")) {
+                while (!gameChoice.equals("hangman") && !gameChoice.equals("1") && !gameChoice.equals("mastermind") && !gameChoice.equals("2") && !gameChoice.equals("numberguesser") && !gameChoice.equals("3") && !gameChoice.equals("2048") && !gameChoice.equals("4") && !gameChoice.equals("wordle") && !gameChoice.equals("5") && !gameChoice.equals("tictactoe") && !gameChoice.equals("6") && !gameChoice.equals("7") && !gameChoice.equals("connect 4") && !gameChoice.equals("megattt") && !gameChoice.equals("8")) {
                     clearScreen();
                     println(redANSI + "Invalid game name." + defaultANSI);
                     Thread.sleep(1000);
@@ -35,6 +35,7 @@ public class Main {
                     case "wordle", "5" -> wordle();
                     case "ticactoe", "6" -> ticTacToe();
                     case "connect 4", "7" -> connect4();
+                    case "megattt", "8" -> megaTTT();
                     default -> println("Invalid game name");
                 }   }
 	}
@@ -1622,11 +1623,13 @@ public static void addRandomNumber(int[][] board) {
     }
     
     public static void printBoardTTT(String[][] board) {
-        println(" " + board[0][0] + " | " + board[0][1] + " | " + board[0][2] + " ");
-        println("---+---+---");
-        println(" " + board[1][0] + " | " + board[1][1] + " | " + board[1][2] + " ");
-        println("---+---+---");
-        println(" " + board[2][0] + " | " + board[2][1] + " | " + board[2][2] + " ");
+        println("┌───┬───┬───┐");
+        println("│ " + board[0][0] + " │ " + board[0][1] + " │ " + board[0][2] + " │");
+        println("├───┼───┼───┤");
+        println("│ " + board[1][0] + " │ " + board[1][1] + " │ " + board[1][2] + " │");
+        println("├───┼───┼───┤");
+        println("│ " + board[2][0] + " │ " + board[2][1] + " │ " + board[2][2] + " │");
+        println("└───┴───┴───┘");
     }
 
     private static int evaluateBoard(String[][] board) {
@@ -2085,7 +2088,7 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
         }
         return forkCount;
     }
-    static String[][] board = new String[6][7];
+    static String[][] boardC4 = new String[6][7];
     
     static boolean[] wins = new boolean[4];
     static int input = 0;
@@ -2095,26 +2098,26 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
     static String connect4Cheat;
     public static void connect4() throws InterruptedException {
         clearScreen();
-        initializeBoard();
-        printBoard();
+        initializeboardC4();
+        printboardC4();
         gamePlay();
 
     }
 
-    public static void initializeBoard() {
-        for (String boardSpace[] : board) { Arrays.fill(boardSpace, " "); }
+    public static void initializeboardC4() {
+        for (String boardC4Space[] : boardC4) { Arrays.fill(boardC4Space, " "); }
         for (boolean win : wins) { win = false;}
     }
     
     
-    public static void printBoard() {
+    public static void printboardC4() {
         println("  1  2   3   4   5   6   7");
         println(" -----------------------------");
-        for (int i = board.length - 1; i >= 0; i--) {
-            String[] boardSpace = board[i];
-            for (int j = 0; j < boardSpace.length; j++) {
-                print(" " + boardSpace[j] + " ");
-                if (j < boardSpace.length - 1) {
+        for (int i = boardC4.length - 1; i >= 0; i--) {
+            String[] boardC4Space = boardC4[i];
+            for (int j = 0; j < boardC4Space.length; j++) {
+                print(" " + boardC4Space[j] + " ");
+                if (j < boardC4Space.length - 1) {
                     print("|");
                 }
             }
@@ -2133,25 +2136,25 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             try {
             
                 clearScreen();
-                printBoard();
+                printboardC4();
                 println("Enter 10 for secret menu.");
                 print("Enter " + turn + "'s Move: ");
                 input = scanner.nextInt() - 1;
                 
                 while ( input < 0 || input != 9 && input > 7) {
                     clearScreen();
-                    printBoard();
+                    printboardC4();
                     println(redANSI + "Invalid move! That column doesn't exist." + defaultANSI);
                     Thread.sleep(1000);
                     clearScreen();
-                    printBoard();
+                    printboardC4();
                     println("Enter 10 for secret menu.");
                     print("Enter " + turn + "'s Move: ");
                     input = scanner.nextInt() - 1;
                 }
         while (input == 9) {
             clearScreen();
-            printBoard();
+            printboardC4();
             print("Enter code: ");
             codeInput = scanner.nextDouble();
             if (codeInput == 7187448310.0) {
@@ -2162,11 +2165,11 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
                     connect4Cheat = scanner.nextLine().toLowerCase();
                 
                     clearScreen();
-                    printBoard();
+                    printboardC4();
                     println(redANSI + "Please Enter \"Red\" or \"Yellow\"." + defaultANSI);
                     Thread.sleep(1000);
                     clearScreen();
-                    printBoard();
+                    printboardC4();
                     print(" Red or Yellow? ");
                     connect4Cheat = scanner.nextLine().toLowerCase();
                 }
@@ -2179,11 +2182,11 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
                 }
             } else {
                 clearScreen();
-                printBoard();
+                printboardC4();
                 println(redANSI + "Invalid code." + defaultANSI);
                 Thread.sleep(1000);
                 clearScreen();
-                printBoard();
+                printboardC4();
                 print("Enter " + turn + "'s Move: ");
                 input = scanner.nextInt() - 1;
                 codeInput = 0;
@@ -2194,26 +2197,26 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             if (codeInput == 7187448310.0) {
                 codeInput = 0;
                 clearScreen();
-                printBoard();
+                printboardC4();
                 print("Enter " + turn + "'s Move: ");
                 input = scanner.nextInt() - 1;
             }
         }
             while (input < 0 || input != 9 && input > 7) {
                 clearScreen();
-                printBoard();
+                printboardC4();
                 println(redANSI+ "Invalid move! That column doesn't exist." + defaultANSI);
                 Thread.sleep(1000);
                 clearScreen();
-                printBoard();
+                printboardC4();
                 println("Enter 10 for secret menu.");
                 print("Enter " + turn + "'s Move: ");
                 input = scanner.nextInt() - 1;
             }
             
         for (int i = 0; i < 6; i++) {
-            if (!turnComplete && board[i][input].equals(" ")) {
-                board[i][input] = turn.substring(0,1);
+            if (!turnComplete && boardC4[i][input].equals(" ")) {
+                boardC4[i][input] = turn.substring(0,1);
                 turnComplete = true;
                 move[0] = i;
                 move[1] = input;
@@ -2221,11 +2224,11 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
         }
         while (!turnComplete) {
             clearScreen();
-            printBoard();
+            printboardC4();
             println(redANSI + "Invalid move! That column is full." + defaultANSI);
             Thread.sleep(1000);
             clearScreen();
-            printBoard();
+            printboardC4();
             print("Enter " + turn + "'s Move: ");
             input = scanner.nextInt() - 1;
         }
@@ -2235,28 +2238,28 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
         checkRows();
         if (checkWin()) {
             clearScreen();
-            printBoard();
+            printboardC4();
             print(greenANSI + turn + " wins!" + defaultANSI);
             break;
         }
         checkColumns();
         if (checkWin()) {
             clearScreen();
-            printBoard();
+            printboardC4();
             print(greenANSI + turn + " wins!" + defaultANSI);
             break;
         }
         checkDiagonals();
         if (checkWin()) {
             clearScreen();
-            printBoard();
+            printboardC4();
             print(greenANSI + turn + " wins!" + defaultANSI);
             break;
         }
 
 
             clearScreen();
-            printBoard();
+            printboardC4();
             switch (turn) {
                 
             case "Red" -> turn = "Yellow";
@@ -2264,7 +2267,7 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
         } catch (InputMismatchException e) {
             clearScreen();
-            printBoard();
+            printboardC4();
             println(redANSI + "Invalid input! Please enter a number 1 - 7." + defaultANSI);
             Thread.sleep(1000);
             scanner.nextLine();
@@ -2276,29 +2279,29 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
     public static void checkRows() {
         for (boolean win : wins) { win = false;}
         wins[0] = true;
-        if (move[1] + 1 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 1])) {
+        if (move[1] + 1 < 7 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] + 1])) {
             wins[1] = true;
-            if (move[1] + 2 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 2])) {
+            if (move[1] + 2 < 7 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] + 2])) {
                 wins[2] = true;
-                if (move[1] + 3 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 3])) {
+                if (move[1] + 3 < 7 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] + 3])) {
                     wins[3] = true;
-                } else if (move[1] - 1 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 1])) {
+                } else if (move[1] - 1 >= 0 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] - 1])) {
                     wins[3] = true;
                 }
-            } else if (move[1] - 1 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 1])) {
+            } else if (move[1] - 1 >= 0 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] - 1])) {
                 wins[2] = true;
-                if (move[1] - 2 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 2])) {
+                if (move[1] - 2 >= 0 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] - 2])) {
                     wins[3] = true;
                 }
             }
         }
-        if (move[1] - 1 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 1])) {
+        if (move[1] - 1 >= 0 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] - 1])) {
             wins[1] = true;
-            if (move[1] - 2 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 2])) {
+            if (move[1] - 2 >= 0 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] - 2])) {
                 wins[2] = true;
-                if (move[1] - 3 >= 0 && board[move[0]][move[1]].equals(board[move[0]][move[1] - 3])) {
+                if (move[1] - 3 >= 0 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] - 3])) {
                     wins[3] = true;
-                } else if (move[1] + 1 < 7 && board[move[0]][move[1]].equals(board[move[0]][move[1] + 1])) {
+                } else if (move[1] + 1 < 7 && boardC4[move[0]][move[1]].equals(boardC4[move[0]][move[1] + 1])) {
                     wins[3] = true;
                 }
             }
@@ -2308,26 +2311,26 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
     public static void checkColumns() {
         for (boolean win : wins) { win = false;}
         wins[0] = true;
-        if (move[0] + 1 < 6 && board[move[0] + 1][move[1]].equals(board[move[0]][move[1]])) {
+        if (move[0] + 1 < 6 && boardC4[move[0] + 1][move[1]].equals(boardC4[move[0]][move[1]])) {
             wins[1] = true;
-            if (move[0] + 2 < 6 && board[move[0] + 2][move[1]].equals(board[move[0]][move[1]])) {
+            if (move[0] + 2 < 6 && boardC4[move[0] + 2][move[1]].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] + 3 < 6 && board[move[0] + 3][move[1]].equals(board[move[0]][move[1]])) {
+                if (move[0] + 3 < 6 && boardC4[move[0] + 3][move[1]].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
-                } else if (move[0] - 1 >= 0 && board[move[0] - 1][move[1]].equals(board[move[0]][move[1]])) {
+                } else if (move[0] - 1 >= 0 && boardC4[move[0] - 1][move[1]].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
-            } else if (move[0] - 1 >= 0 && board[move[0] - 1][move[1]].equals(board[move[0]][move[1]])) {
+            } else if (move[0] - 1 >= 0 && boardC4[move[0] - 1][move[1]].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] - 2 >= 0 && board[move[0] - 2][move[1]].equals(board[move[0]][move[1]])) {
+                if (move[0] - 2 >= 0 && boardC4[move[0] - 2][move[1]].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
             }
-        } else if (move[0] - 1 >= 0 && board[move[0] - 1][move[1]].equals(board[move[0]][move[1]])) {
+        } else if (move[0] - 1 >= 0 && boardC4[move[0] - 1][move[1]].equals(boardC4[move[0]][move[1]])) {
             wins[1] = true;
-            if (move[0] - 2 >= 0 && board[move[0] - 2][move[1]].equals(board[move[0]][move[1]])) {
+            if (move[0] - 2 >= 0 && boardC4[move[0] - 2][move[1]].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] - 3 >= 0 && board[move[0] - 3][move[1]].equals(board[move[0]][move[1]])) {
+                if (move[0] - 3 >= 0 && boardC4[move[0] - 3][move[1]].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
             }
@@ -2338,52 +2341,52 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
         for (boolean win : wins) { win = false;}
         wins[0] = true;
         // Up-right diagonal
-        if (move[0] + 1 < 6 && move[1] + 1 < 7 && board[move[0] + 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+        if (move[0] + 1 < 6 && move[1] + 1 < 7 && boardC4[move[0] + 1][move[1] + 1].equals(boardC4[move[0]][move[1]])) {
             wins[1] = true;
-            if (move[0] + 2 < 6 && move[1] + 2 < 7 && board[move[0] + 2][move[1] + 2].equals(board[move[0]][move[1]])) {
+            if (move[0] + 2 < 6 && move[1] + 2 < 7 && boardC4[move[0] + 2][move[1] + 2].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] + 3 < 6 && move[1] + 3 < 7 && board[move[0] + 3][move[1] + 3].equals(board[move[0]][move[1]])) {
+                if (move[0] + 3 < 6 && move[1] + 3 < 7 && boardC4[move[0] + 3][move[1] + 3].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
-                } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && board[move[0] - 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+                } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && boardC4[move[0] - 1][move[1] - 1].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
-            } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && board[move[0] - 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+            } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && boardC4[move[0] - 1][move[1] - 1].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] - 2 >= 0 && move[1] - 2 >= 0 && board[move[0] - 2][move[1] - 2].equals(board[move[0]][move[1]])) {
+                if (move[0] - 2 >= 0 && move[1] - 2 >= 0 && boardC4[move[0] - 2][move[1] - 2].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
             }
-        } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && board[move[0] - 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+        } else if (move[0] - 1 >= 0 && move[1] - 1 >= 0 && boardC4[move[0] - 1][move[1] - 1].equals(boardC4[move[0]][move[1]])) {
             wins[1] = true;
-            if (move[0] - 2 >= 0 && move[1] - 2 >= 0 && board[move[0] - 2][move[1] - 2].equals(board[move[0]][move[1]])) {
+            if (move[0] - 2 >= 0 && move[1] - 2 >= 0 && boardC4[move[0] - 2][move[1] - 2].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] - 3 >= 0 && move[1] - 3 >= 0 && board[move[0] - 3][move[1] - 3].equals(board[move[0]][move[1]])) {
+                if (move[0] - 3 >= 0 && move[1] - 3 >= 0 && boardC4[move[0] - 3][move[1] - 3].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
             }
         }
 
         // Down-right diagonal
-        if (move[0] + 1 < 6 && move[1] - 1 >= 0 && board[move[0] + 1][move[1] - 1].equals(board[move[0]][move[1]])) {
+        if (move[0] + 1 < 6 && move[1] - 1 >= 0 && boardC4[move[0] + 1][move[1] - 1].equals(boardC4[move[0]][move[1]])) {
             wins[1] = true;
-            if (move[0] + 2 < 6 && move[1] - 2 >= 0 && board[move[0] + 2][move[1] - 2].equals(board[move[0]][move[1]])) {
+            if (move[0] + 2 < 6 && move[1] - 2 >= 0 && boardC4[move[0] + 2][move[1] - 2].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] + 3 < 6 && move[1] - 3 >= 0 && board[move[0] + 3][move[1] - 3].equals(board[move[0]][move[1]])) {
+                if (move[0] + 3 < 6 && move[1] - 3 >= 0 && boardC4[move[0] + 3][move[1] - 3].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
-                } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && board[move[0] - 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+                } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && boardC4[move[0] - 1][move[1] + 1].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
-            } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && board[move[0] - 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+            } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && boardC4[move[0] - 1][move[1] + 1].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] - 2 >= 0 && move[1] + 2 < 7 && board[move[0] - 2][move[1] + 2].equals(board[move[0]][move[1]])) {
+                if (move[0] - 2 >= 0 && move[1] + 2 < 7 && boardC4[move[0] - 2][move[1] + 2].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
             }
-        } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && board[move[0] - 1][move[1] + 1].equals(board[move[0]][move[1]])) {
+        } else if (move[0] - 1 >= 0 && move[1] + 1 < 7 && boardC4[move[0] - 1][move[1] + 1].equals(boardC4[move[0]][move[1]])) {
             wins[1] = true;
-            if (move[0] - 2 >= 0 && move[1] + 2 < 7 && board[move[0] - 2][move[1] + 2].equals(board[move[0]][move[1]])) {
+            if (move[0] - 2 >= 0 && move[1] + 2 < 7 && boardC4[move[0] - 2][move[1] + 2].equals(boardC4[move[0]][move[1]])) {
                 wins[2] = true;
-                if (move[0] - 3 >= 0 && move[1] + 3 < 7 && board[move[0] - 3][move[1] + 3].equals(board[move[0]][move[1]])) {
+                if (move[0] - 3 >= 0 && move[1] + 3 < 7 && boardC4[move[0] - 3][move[1] + 3].equals(boardC4[move[0]][move[1]])) {
                     wins[3] = true;
                 }
             }
@@ -2397,5 +2400,272 @@ if (board[0][0].equals(xMark) && board[1][2].equals(xMark)){
             }
         }
                 return true;
+    }
+    static String[][]board = new String[3][3];
+    static String[][][][]megaBoard=new String[3][3][3][3];
+    static boolean[][] completedBoards = new boolean[3][3];
+    static int counter = 1;
+    static int xBoardsWon = 0;
+    static int oBoardsWon = 0;
+    
+
+    public static void megaTTT() throws InterruptedException {
+        clearScreen();
+        initializeMegaBoard();
+        printBoardMega();
+        playGameMega();
+    }
+
+    public static void initializeMegaBoard() {
+        // First create the template board
+        for (int y=0;y<3;y++) {
+            for (int p=0;p<3;p++){
+                board[y][p] = Integer.toString(counter++);
+            }
+        }
+
+        // For each position in megaBoard, create a new independent board copy
+        for (int i=0;i<3;i++){
+            for (int j=0;j<3;j++){
+                String[][] newBoard = new String[3][3];
+                for (int m=0;m<3;m++) {
+                    for (int n=0;n<3;n++) {
+                        newBoard[m][n] = board[m][n];
+                    }
+                }
+                megaBoard[i][j] = newBoard;
+                completedBoards[i][j] = false;
+            }
+        }
+    }
+
+    public static void printBoardMega() {
+        println("╔════════════╦════════════╦════════════╗");
+        for (int bigRow = 0; bigRow < 3; bigRow++) {
+            for (int smallRow = 0; smallRow < 3; smallRow++) {
+                print("║");
+                for (int bigCol = 0; bigCol < 3; bigCol++) {
+                    print(" " + megaBoard[bigRow][bigCol][smallRow][0] + " │ " + 
+                          megaBoard[bigRow][bigCol][smallRow][1] + " │ " + 
+                          megaBoard[bigRow][bigCol][smallRow][2] + "  ");
+                    if (bigCol < 2) print("║");
+                }
+                println("║");
+                if (smallRow < 2) {
+                    print("║");
+                    for (int bigCol = 0; bigCol < 3; bigCol++) {
+                        print("───┼───┼────");
+                        if (bigCol < 2) print("║");
+                    }
+                    println("║");
+                }
+            }
+            if (bigRow < 2) {
+                println("╠════════════╬════════════╬════════════╣");
+            }
+        }
+        println("╚════════════╩════════════╩════════════╝");
+    }
+
+    public static void updateBoard(int boardChoice, int position, String turn) {
+        //init working board
+        String[][] currentBoard = new String[3][3];
+        int row = (boardChoice - 1) / 3;
+        int col = (boardChoice - 1) % 3;
+
+        if (completedBoards[row][col]) {
+            println("This board is already completed. Choose another board.");
+            return;
+        }
+
+        currentBoard = megaBoard[row][col];
+
+        switch (position) { //select spot in the selected board
+            case 1 -> currentBoard[0][0] = turn;
+            case 2 -> currentBoard[0][1] = turn;
+            case 3 -> currentBoard[0][2] = turn;
+            case 4 -> currentBoard[1][0] = turn;
+            case 5 -> currentBoard[1][1] = turn;
+            case 6 -> currentBoard[1][2] = turn;
+            case 7 -> currentBoard[2][0] = turn;
+            case 8 -> currentBoard[2][1] = turn;
+            case 9 -> currentBoard[2][2] = turn;
+        }
+
+        // Update the chosen spot board in megaBoard
+        megaBoard[row][col] = currentBoard;
+    }
+
+    public static void playGameMega() throws InterruptedException {
+        int boardChoice = 5; // Start with the center board
+        int position;
+        String turn = blueANSI + "X" + defaultANSI;
+        try {
+            while (true) {
+                clearScreen();
+                printBoardMega();
+                println("Current board: " + boardChoice);
+                print("Enter " + turn + "'s move: ");
+                position = scanner.nextInt();
+                while (position < 1 || position > 9 || !isValidMove(boardChoice, position)) {
+                    println(redANSI + "Invalid move. Choose another position." + defaultANSI);
+                    Thread.sleep(1000);
+                    clearScreen();
+                    printBoardMega();
+                    position = scanner.nextInt();
+                }
+                updateBoard(boardChoice, position, turn);
+                if (checkWin(turn, boardChoice)) {
+                    clearScreen();
+                    markBoardAsWon(boardChoice, turn);
+                    printBoardMega();
+                    println(turn + " wins the board!");
+                    if (turn.equals(blueANSI + "X" + defaultANSI)) {
+                        xBoardsWon++;
+                    } else {
+                        oBoardsWon++;
+                    }
+                    if (xBoardsWon >= 5) {
+                        println(blueANSI + "X" + defaultANSI + " wins the game!");
+                        break;
+                    } else if (oBoardsWon >= 5) {
+                        println(redANSI + "O" + defaultANSI + " wins the game!");
+                        break;
+                    }
+                    println(turn + " gets another turn!");
+                    print("Enter " + turn + "'s board choice for extra move: ");
+                    boardChoice = scanner.nextInt();
+                    while (boardChoice < 1 || boardChoice > 9 || completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
+                        println(redANSI + "Invalid board choice. Choose another board." + defaultANSI);
+                        Thread.sleep(1000);
+                        clearScreen();
+                        printBoardMega();
+                        boardChoice = scanner.nextInt();
+                    }
+                    continue; // Allow the player to go again
+                }
+                boardChoice = position; // Determine the next board based on the position chosen
+                if (completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
+                    println(redANSI + "The chosen board is already completed. Choose any board." + defaultANSI);
+                    Thread.sleep(1000);
+                    clearScreen();
+                    printBoardMega();
+                    print("Enter " + turn + "'s board choice: ");
+                    boardChoice = scanner.nextInt();
+                    while (boardChoice < 1 || boardChoice > 9 || completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
+                        println(redANSI + "Invalid board choice. Choose another board." + defaultANSI);
+                        Thread.sleep(1000);
+                        clearScreen();
+                        printBoardMega();
+                        boardChoice = scanner.nextInt();
+                    }
+                }
+                if (checkMetaWin(turn)) {
+                    clearScreen();
+                    printBoardMega();
+                    println(turn + " wins the game!");
+                    break;
+                }
+                switch (turn) {
+                    case blueANSI + "X" + defaultANSI -> turn = redANSI + "O" + defaultANSI;
+                    case redANSI + "O" + defaultANSI -> turn = blueANSI + "X" + defaultANSI;
+                }
+            }
+        } catch (InputMismatchException e) {
+            println("Invalid input. Please enter a number.");
+            Thread.sleep(1000);
+            scanner.nextLine();
+            playGameMega();
+        }
+    }
+
+    public static boolean isValidMove(int boardChoice, int position) {
+        int row = (boardChoice - 1) / 3;
+        int col = (boardChoice - 1) % 3;
+        String[][] currentBoard = megaBoard[row][col];
+
+        switch (position) {
+            case 1 -> { return currentBoard[0][0].matches("\\d"); }
+            case 2 -> { return currentBoard[0][1].matches("\\d"); }
+            case 3 -> { return currentBoard[0][2].matches("\\d"); }
+            case 4 -> { return currentBoard[1][0].matches("\\d"); }
+            case 5 -> { return currentBoard[1][1].matches("\\d"); }
+            case 6 -> { return currentBoard[1][2].matches("\\d"); }
+            case 7 -> { return currentBoard[2][0].matches("\\d"); }
+            case 8 -> { return currentBoard[2][1].matches("\\d"); }
+            case 9 -> { return currentBoard[2][2].matches("\\d"); }
+            default -> { return false; }
+        }
+    }
+
+    public static void markBoardAsWon(int boardChoice, String turn) {
+        int row = (boardChoice - 1) / 3;
+        int col = (boardChoice - 1) % 3;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                megaBoard[row][col][i][j] = turn;
+            }
+        }
+        completedBoards[row][col] = true;
+    }
+
+    public static boolean checkWin(String turn, int boardChoice) {
+        int row = (boardChoice - 1) / 3;
+        int col = (boardChoice - 1) % 3;
+        String[][] currentBoard = megaBoard[row][col];
+
+        // Check for horizontal wins in current board
+        for (int i = 0; i < 3; i++) {
+            if (currentBoard[i][0].equals(turn) && currentBoard[i][1].equals(turn) && currentBoard[i][2].equals(turn)) {
+                return true;
+            }
+        }
+
+        // Check for vertical wins in current board
+        for (int i = 0; i < 3; i++) {
+            if (currentBoard[0][i].equals(turn) && currentBoard[1][i].equals(turn) && currentBoard[2][i].equals(turn)) {
+                return true;
+            }
+        }
+
+        // Check for diagonal wins in current board
+        if ((currentBoard[0][0].equals(turn) && currentBoard[1][1].equals(turn) && currentBoard[2][2].equals(turn)) ||
+            (currentBoard[0][2].equals(turn) && currentBoard[1][1].equals(turn) && currentBoard[2][0].equals(turn))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean checkMetaWin(String turn) {
+        // Check horizontal meta-wins
+        for (int i = 0; i < 3; i++) {
+            if (isBoardFullyWon(megaBoard[i][0], turn) && isBoardFullyWon(megaBoard[i][1], turn) && isBoardFullyWon(megaBoard[i][2], turn))
+                return true;
+        }
+
+        // Check vertical meta-wins
+        for (int i = 0; i < 3; i++) {
+            if (isBoardFullyWon(megaBoard[0][i], turn) && isBoardFullyWon(megaBoard[1][i], turn) && isBoardFullyWon(megaBoard[2][i], turn))
+                return true;
+        }
+
+        // Check diagonal meta-wins
+        if ((isBoardFullyWon(megaBoard[0][0], turn) && isBoardFullyWon(megaBoard[1][1], turn) && isBoardFullyWon(megaBoard[2][2], turn)) ||
+            (isBoardFullyWon(megaBoard[0][2], turn) && isBoardFullyWon(megaBoard[1][1], turn) && isBoardFullyWon(megaBoard[2][0], turn)))
+            return true;
+
+        return false;
+    }
+
+    public static boolean isBoardFullyWon(String[][] board, String turn) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!board[i][j].equals(turn)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

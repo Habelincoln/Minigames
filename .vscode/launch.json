@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Launch temp file",
             "request": "launch",
-            "mainClass": "connect4"
+            "mainClass": "megattt"
         },
         {
             "type": "java",
