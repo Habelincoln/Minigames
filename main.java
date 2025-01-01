@@ -2,7 +2,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
+//temp
+@SuppressWarnings({"java:S101", "java:S2925"})
 public class Main {
 
     static final String redANSI = "\u001B[31m";
