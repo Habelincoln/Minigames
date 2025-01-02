@@ -2639,15 +2639,18 @@ public class Main {
                             continue;
                         }
                     }
-                    continue; // Allow the player to go again
+                    continue; //  player goes again
                 }
-                boardChoice = position; // Determine the next board based on the position chosen
+                boardChoice = position; ///set the next board based on the position chosen by pervious turn
                 if (completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
-                    println(redANSI + "The chosen board is already completed. Choose any board." + defaultANSI);
-                    Thread.sleep(1000);
                     clearScreen();
                     printBoardMega();
-                    print("Enter " + turn + "'s board choice: ");
+                    println(greenANSI + "That board is already completed. Choose any board." + defaultANSI);
+                    if (turn.equals(redANSI + "O" + defaultANSI)) {
+                        print("Enter " + blueANSI + "X" + defaultANSI + "'s board choice: ");
+                    } else { print("Enter " + redANSI + "O" + defaultANSI + "'s board choice: "); 
+                }
+                    
                     boardChoice = scanner.nextInt();
                     if (boardChoice == 10 && !isFirstMove) {
                         undoLastMove();
@@ -2805,36 +2808,30 @@ public class Main {
     }
 
     public static boolean checkMetaWin(String turn) {
-        // Check horizontal meta-wins
-        for (int i = 0; i < 3; i++) {
-            if (isBoardCompletelyWon(megaBoard[i][0], turn) && isBoardCompletelyWon(megaBoard[i][1], turn) && isBoardCompletelyWon(megaBoard[i][2], turn))
+        // Check number of boards won by X and O
+        if (turn.equals(blueANSI + "X" + defaultANSI)) {
+            if (xBoardsWon >= 5) {
                 return true;
+            }
         }
-
-        // Check vertical meta-wins
-        for (int i = 0; i < 3; i++) {
-            if (isBoardCompletelyWon(megaBoard[0][i], turn) && isBoardCompletelyWon(megaBoard[1][i], turn) && isBoardCompletelyWon(megaBoard[2][i], turn))
+        else if (turn.equals(redANSI + "O" + defaultANSI)) {
+            if (oBoardsWon >= 5) {
                 return true;
+            }
         }
-
-        // Check diagonal meta-wins
-        if ((isBoardCompletelyWon(megaBoard[0][0], turn) && isBoardCompletelyWon(megaBoard[1][1], turn) && isBoardCompletelyWon(megaBoard[2][2], turn)) ||
-                (isBoardCompletelyWon(megaBoard[0][2], turn) && isBoardCompletelyWon(megaBoard[1][1], turn) && isBoardCompletelyWon(megaBoard[2][0], turn)))
-            return true;
-
         return false;
     }
 
-    public static boolean isBoardCompletelyWon(String[][] board, String turn) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (!board[i][j].equals(turn)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+    // public static boolean isBoardCompletelyWon(String[][] board, String turn) {
+    //     for (int i = 0; i < 3; i++) {
+    //         for (int j = 0; j < 3; j++) {
+    //             if (!board[i][j].equals(turn)) {
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
 }
 
 class gamePanel extends JPanel implements ActionListener {
