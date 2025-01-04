@@ -24,6 +24,7 @@ public class Main {
         println("");
         println("Game select:");
         println("");
+        println("Text-based games:");
         println("(1) Hangman");
         println("(2) MasterMind");
         println("(3) NumberGuesser");
@@ -32,12 +33,16 @@ public class Main {
         println("(6) Tic Tac Toe");
         println("(7) Connect 4");
         println("(8) Mega Tic Tac Toe");
+        println("");
+        println("Apps:");
+        println("");
         println("(9) Snake");
+        println("(10) Minesweeper");
         println("");
         print("Enter game number: ");
         try (Scanner input = new Scanner(System.in)) {
             int gameChoice = input.nextInt();
-            while (gameChoice < 1 || gameChoice > 9) {
+            while (gameChoice < 1 || gameChoice > 10) {
                 clearScreen();
                 println(redANSI + "Invalid game name." + defaultANSI);
                 Thread.sleep(1000);
@@ -55,6 +60,7 @@ public class Main {
                 println("(7) Connect 4");
                 println("(8) Mega Tic Tac Toe");
                 println("(9) Snake");
+                println("(10) Minesweeper");
                 println("");
                 print("Enter game number: ");
                 gameChoice = input.nextInt();
@@ -69,6 +75,7 @@ public class Main {
                 case 7 -> connect4();
                 case 8 -> megaTTT();
                 case 9 -> new snakeGameFrame();
+                case 10 -> minesweeper();
                 default -> println("Invalid game choice.");
             }
         }
@@ -2822,19 +2829,427 @@ public class Main {
         return false;
     }
 
-    // public static boolean isBoardCompletelyWon(String[][] board, String turn) {
-    //     for (int i = 0; i < 3; i++) {
-    //         for (int j = 0; j < 3; j++) {
-    //             if (!board[i][j].equals(turn)) {
-    //                 return false;
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
+    public static void minesweeper() throws InterruptedException{
+        try { clearScreen();
+        println("Welcome to Minesweeper!");
+        println("Enter the dimensions of the board.");
+        print("Rows: ");
+        int rows = scanner.nextInt();
+        print("Columns: ");
+        int cols = scanner.nextInt();
+        print("Enter the number of mines: ");
+        int mines = scanner.nextInt();
+        // Minesweeper game = new Minesweeper(rows, cols, mines);
+        // game.play(rows, cols, mines);
+        new MinesweeperFrame(rows, cols, mines);
+            } catch (InputMismatchException e) {
+                println(redANSI + "Invalid input. Please enter a number." + defaultANSI);
+                scanner.nextLine();
+                minesweeper();
+            }
+    }
 }
 
-class gamePanel extends JPanel implements ActionListener {
+// Panel class that handles the game board UI and logic
+class MinesweeperPanel extends JPanel implements ActionListener {
+    // Constants for screen dimensions and cell size
+    static final int screenWidth = 600;
+    static final int screenHeight = 600;
+    static final int unitSize = 40; // Size of each cell in pixels
+
+    // Game board properties
+    int boardWidth;  // Number of cells horizontally
+    int boardHeight; // Number of cells vertically
+    int mines;       // Number of mines in the game
+
+    // Arrays to track game state
+    boolean[][] revealed;  // Tracks which cells have been revealed
+    boolean[][] flagged;   // Tracks which cells have been flagged
+    int[][] minesInPos;   // Stores mine positions (1 = mine, 0 = empty)
+
+    // Game control variables
+    Timer timer;          // Timer for game updates
+    boolean running = false;  // Indicates if game is active
+    boolean gameWon = false; 
+    boolean gameLost = false;
+    
+    // Mouse tracking variables
+    private int mouseDownX = -1;
+    private int mouseDownY = -1;
+
+    // Constructor - initializes the game panel with specified dimensions
+    MinesweeperPanel(int width, int height, int mines) {
+        this.boardWidth = width;
+        this.boardHeight = height;
+        this.mines = mines;
+        
+        // Initialize arrays for game state tracking
+        this.revealed = new boolean[height][width];
+        this.flagged = new boolean[height][width];
+        this.minesInPos = new int[height][width];
+        
+        // Set up the panel properties
+        this.setPreferredSize(new Dimension(width * unitSize, height * unitSize));
+        this.setBackground(Color.gray);
+        this.setFocusable(true);
+
+        // Add mouse listeners to handle clicks with movement
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mouseDownX = e.getX() / unitSize;
+                mouseDownY = e.getY() / unitSize;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (!running) {
+                    startGame();
+                }
+
+                int releaseX = e.getX() / unitSize;
+                int releaseY = e.getY() / unitSize;
+
+                // Check if mouse was released in same cell or within 1 cell distance
+                if (mouseDownX >= 0 && mouseDownY >= 0 && 
+                    releaseX < width && releaseY < height &&
+                    Math.abs(releaseX - mouseDownX) <= 1 && 
+                    Math.abs(releaseY - mouseDownY) <= 1) {
+                    
+                    if (e.getButton() == MouseEvent.BUTTON1) {
+                        if (!flagged[mouseDownY][mouseDownX]) {
+                            revealed[mouseDownY][mouseDownX] = true;
+                            if (countNearbyMines(mouseDownY, mouseDownX) == 0) {
+                                floodFill(mouseDownY, mouseDownX);
+                            }
+                            checkWin(); // Check win/loss condition after revealing
+                        }
+                    } else if (e.getButton() == MouseEvent.BUTTON3) {
+                        if (!revealed[mouseDownY][mouseDownX]) {
+                            flagged[mouseDownY][mouseDownX] = !flagged[mouseDownY][mouseDownX];
+                        }
+                    }
+                }
+                mouseDownX = -1;
+                mouseDownY = -1;
+                repaint();
+            }
+        });
+        startGame();
+    }
+
+    // Count mines around a cell
+    private int countNearbyMines(int row, int col) {
+        int count = 0;
+        for (int di = -1; di <= 1; di++) {
+            for (int dj = -1; dj <= 1; dj++) {
+                if (di == 0 && dj == 0) continue;
+                int ni = row + di;
+                int nj = col + dj;
+                if (ni >= 0 && ni < boardHeight && nj >= 0 && nj < boardWidth) {
+                    if (minesInPos[ni][nj] == 1) count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    // Recursive flood fill for revealing connected empty cells
+    private void floodFill(int row, int col) {
+        // Check bounds and if already revealed/flagged
+        if (row < 0 || row >= boardHeight || col < 0 || col >= boardWidth || 
+            revealed[row][col] || flagged[row][col]) {
+            return;
+        }
+        
+        // Reveal current cell
+        revealed[row][col] = true;
+        
+        // If it's a 0, recursively reveal neighbors
+        if (countNearbyMines(row, col) == 0) {
+            // Check all 8 adjacent cells
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    // Skip the current cell
+                    if (i == 0 && j == 0) continue;
+                    
+                    int newRow = row + i;
+                    int newCol = col + j;
+                    
+                    // If neighbor is valid and not revealed, reveal it
+                    if (newRow >= 0 && newRow < boardHeight && 
+                        newCol >= 0 && newCol < boardWidth && 
+                        !revealed[newRow][newCol] && 
+                        !flagged[newRow][newCol]) {
+                        floodFill(newRow, newCol);
+                    }
+                }
+            }
+        }
+    }
+    
+    public void startGame() {
+        running = true;
+        
+        // Clear arrays
+        for (int i = 0; i < boardHeight; i++) {
+            for (int j = 0; j < boardWidth; j++) {
+                revealed[i][j] = false;
+                flagged[i][j] = false;
+                minesInPos[i][j] = 0;
+            }
+        }
+        
+        // Place mines randomly
+        int minesPlaced = 0;
+        while (minesPlaced < mines) {
+            int row = (int)(Math.random() * boardHeight);
+            int col = (int)(Math.random() * boardWidth);
+            if (minesInPos[row][col] != 1) {
+                minesInPos[row][col] = 1;
+                minesPlaced++;
+            }
+        }
+        
+        timer = new Timer(1, this);
+        timer.start();
+    }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        draw(g);
+        checkWin(); // Check win/loss condition after every paint
+    }
+    
+    
+    public void draw(Graphics g) {
+        if (running) {
+            // Draw grid
+            for (int i = 0; i < boardHeight; i++) {
+                for (int j = 0; j < boardWidth; j++) {
+                    // Draw cell background
+                    if (revealed[i][j]) {
+                        g.setColor(Color.LIGHT_GRAY);
+                    } else {
+                        g.setColor(Color.DARK_GRAY);
+                    }
+                    g.fillRect(j * unitSize, i * unitSize, unitSize, unitSize);
+                    
+                    // Draw cell content
+                    if (revealed[i][j]) {
+                        if (minesInPos[i][j] == 1) {
+                            g.setColor(Color.RED);
+                            g.fillOval(j * unitSize + 8, i * unitSize + 8, unitSize - 16, unitSize - 16);
+                                gameLost = true;
+                                running = false;
+                        } else {
+                            int nearbyMines = countNearbyMines(i, j);
+                            if (nearbyMines >= 0) {
+                                switch (nearbyMines) {
+                                    case 0 -> g.setColor(Color.BLACK);
+                                    case 1 -> g.setColor(Color.BLUE);
+                                    case 2 -> g.setColor(Color.GREEN);
+                                    case 3 -> g.setColor(Color.RED);
+                                    case 4 -> g.setColor(Color.MAGENTA);
+                                    case 5 -> g.setColor(Color.YELLOW);
+                                    case 6 -> g.setColor(Color.CYAN);
+                                    case 7 -> g.setColor(Color.PINK);
+                                    case 8 -> g.setColor(Color.ORANGE);
+                                }
+                                
+                                g.setFont(new Font("Arial", Font.BOLD, 20));
+                                g.drawString(String.valueOf(nearbyMines), 
+                                    j * unitSize + (unitSize/3), 
+                                    i * unitSize + (2*unitSize/3));
+                            }
+                        }
+                    } else if (flagged[i][j]) {
+                        g.setColor(Color.RED);
+                        g.fillRect(j * unitSize + (unitSize/3), i * unitSize + (unitSize/4), 4, unitSize/2);
+                        g.fillPolygon(
+                            new int[]{j * unitSize + (unitSize/3), j * unitSize + (2*unitSize/3), j * unitSize + (unitSize/3)},
+                            new int[]{i * unitSize + (unitSize/4), i * unitSize + (unitSize/3), i * unitSize + (unitSize/2)},
+                            3);
+                    }
+                    
+                    // Draw cell border
+                    g.setColor(Color.BLACK);
+                    g.drawRect(j * unitSize, i * unitSize, unitSize, unitSize);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (running) {
+            checkWin();
+        }
+        repaint();
+    }
+    
+    private void checkWin() {
+        int revealedCount = 0;
+        for (int i = 0; i < boardHeight; i++) {
+            for (int j = 0; j < boardWidth; j++) {
+                if (revealed[i][j] && minesInPos[i][j] != 1) {
+                    revealedCount++;
+                }
+            }
+        }
+        
+        if (revealedCount == (boardWidth * boardHeight) - mines) {
+            running = false;
+            gameWon = true;
+            
+        }
+        if (!running && gameWon) {
+            winMsg();
+        }
+        for (int i = 0; i < boardHeight; i++) {
+            for (int j = 0; j < boardWidth; j++) {
+                if (minesInPos[i][j] == 1 && revealed[i][j]) {
+                    running = false;
+                    loseMsg();
+
+                }
+            }
+        }
+
+        
+
+    }
+        private void winMsg() {
+            timer.stop();
+            JDialog winDialog = new JDialog((Frame)SwingUtilities.getWindowAncestor(this), "You Win!", true);
+            winDialog.setLayout(new BorderLayout());
+            
+            // Create main panel
+            JPanel mainPanel = new JPanel(new BorderLayout());
+            mainPanel.setBackground(Color.BLACK);
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            
+            // Add win message
+            JLabel winLabel = new JLabel("YOU WIN!");
+            winLabel.setFont(new Font("Arial", Font.BOLD, 48));
+            winLabel.setForeground(Color.GREEN);
+            winLabel.setHorizontalAlignment(JLabel.CENTER);
+            mainPanel.add(winLabel, BorderLayout.CENTER);
+            
+            // Add play again button
+            JButton playAgainButton = new JButton("Play Again");
+            playAgainButton.setFont(new Font("Arial", Font.BOLD, 24));
+            playAgainButton.setFocusable(false);
+            playAgainButton.addActionListener(e -> {
+                winDialog.dispose();
+                startGame();
+            });
+            mainPanel.add(playAgainButton, BorderLayout.SOUTH);
+            
+            // Add key listener for enter/space
+            winDialog.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
+                        winDialog.dispose();
+                        startGame();
+                    }
+                }
+            });
+            winDialog.setFocusable(true);
+            
+            winDialog.add(mainPanel);
+            winDialog.setSize(400, 300);
+            winDialog.setLocationRelativeTo(this);
+            winDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            winDialog.setVisible(true);
+        }
+        private void loseMsg() {
+            timer.stop();
+            JDialog loseDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Game Over!", true);
+            loseDialog.setLayout(new BorderLayout());
+            
+            // Create main panel
+            JPanel mainPanel = new JPanel(new BorderLayout());
+            mainPanel.setBackground(Color.BLACK);
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            
+            // Create panel for messages
+            JPanel messagePanel = new JPanel();
+            messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+            messagePanel.setBackground(Color.BLACK);
+            
+            // Add lose message
+            JLabel loseLabel = new JLabel("GAME OVER!");
+            loseLabel.setFont(new Font("Arial", Font.BOLD, 48));
+            loseLabel.setForeground(Color.RED);
+            loseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            messagePanel.add(loseLabel);
+            
+            // Count revealed safe tiles
+            int revealedCount = 0;
+            for (int i = 0; i < boardHeight; i++) {
+                for (int j = 0; j < boardWidth; j++) {
+                    if (revealed[i][j] && minesInPos[i][j] != 1) {
+                        revealedCount++;
+                    }
+                }
+            }
+            
+            // Add score message
+            JLabel scoreLabel = new JLabel("Safe tiles revealed: " + revealedCount);
+            scoreLabel.setFont(new Font("Arial", Font.BOLD, 24));
+            scoreLabel.setForeground(Color.WHITE);
+            scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            messagePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+            messagePanel.add(scoreLabel);
+            
+            mainPanel.add(messagePanel, BorderLayout.CENTER);
+            
+            // Add play again button
+            JButton playAgainButton = new JButton("Play Again");
+            playAgainButton.setFont(new Font("Arial", Font.BOLD, 24));
+            playAgainButton.setFocusable(false);
+            playAgainButton.addActionListener(e -> {
+                loseDialog.dispose();
+                startGame();
+            });
+            // Add key listener for enter/space
+            loseDialog.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
+                        loseDialog.dispose();
+                        startGame();
+                    }
+                }
+            });
+            loseDialog.setFocusable(true);
+            mainPanel.add(playAgainButton, BorderLayout.SOUTH);
+            
+            loseDialog.add(mainPanel);
+            loseDialog.setSize(400, 300); // Explicit size
+            loseDialog.setLocationRelativeTo(null); // Center on screen
+            loseDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            loseDialog.setVisible(true);
+            loseDialog.requestFocusInWindow(); // Ensure focus
+        }
+        
+}
+
+// Frame class that contains the game panel
+class MinesweeperFrame extends JFrame {
+    MinesweeperFrame(int width, int height, int mines) {
+        this.add(new MinesweeperPanel(width, height, mines));
+        this.setTitle("Minesweeper");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.pack();
+        this.setVisible(true);
+        this.setLocationRelativeTo(null); // Center window on screen
+    }
+}
+class snakePanel extends JPanel implements ActionListener {
 
     static final int screenWidth = 600;
     static final int screenHeight = 600;
@@ -2854,7 +3269,7 @@ class gamePanel extends JPanel implements ActionListener {
     boolean hasMoved = false;
     boolean startScreen = true;
 
-    gamePanel() {
+    snakePanel() {
         random = new Random();
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -3043,7 +3458,7 @@ class gamePanel extends JPanel implements ActionListener {
 
 class snakeGameFrame extends JFrame {
     snakeGameFrame(){
-        this.add(new gamePanel());
+        this.add(new snakePanel());
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
