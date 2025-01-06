@@ -2870,8 +2870,7 @@ class MinesweeperPanel extends JPanel implements ActionListener {
     // Game control variables
     Timer timer;          // Timer for game updates
     boolean running = false;  // Indicates if game is active
-    boolean gameWon = false; 
-    boolean gameLost = false;
+    boolean gameWon = false;
     
     // Mouse tracking variables
     private int mouseDownX = -1;
@@ -3023,7 +3022,7 @@ class MinesweeperPanel extends JPanel implements ActionListener {
     
     
     public void draw(Graphics g) {
-        if (running) {
+        
             // Draw grid
             for (int i = 0; i < boardHeight; i++) {
                 for (int j = 0; j < boardWidth; j++) {
@@ -3040,7 +3039,6 @@ class MinesweeperPanel extends JPanel implements ActionListener {
                         if (minesInPos[i][j] == 1) {
                             g.setColor(Color.RED);
                             g.fillOval(j * unitSize + 8, i * unitSize + 8, unitSize - 16, unitSize - 16);
-                                gameLost = true;
                                 running = false;
                         } else {
                             int nearbyMines = countNearbyMines(i, j);
@@ -3077,7 +3075,6 @@ class MinesweeperPanel extends JPanel implements ActionListener {
                     g.drawRect(j * unitSize, i * unitSize, unitSize, unitSize);
                 }
             }
-        }
     }
 
     @Override
@@ -3111,7 +3108,6 @@ class MinesweeperPanel extends JPanel implements ActionListener {
                 if (minesInPos[i][j] == 1 && revealed[i][j]) {
                     running = false;
                     loseMsg();
-
                 }
             }
         }
@@ -3197,7 +3193,7 @@ class MinesweeperPanel extends JPanel implements ActionListener {
             }
             
             // Add score message
-            JLabel scoreLabel = new JLabel("Safe tiles revealed: " + revealedCount);
+            JLabel scoreLabel = new JLabel("Score: " + revealedCount);
             scoreLabel.setFont(new Font("Arial", Font.BOLD, 24));
             scoreLabel.setForeground(Color.WHITE);
             scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -3253,9 +3249,9 @@ class snakePanel extends JPanel implements ActionListener {
 
     static final int screenWidth = 600;
     static final int screenHeight = 600;
-    static final int unitSize = 25;
+    static final int unitSize = 50;
     static final int gameUnits = (screenWidth * screenHeight) / unitSize;
-    static int delay = 100; //game speed
+    static int delay = 140; //game speed
     final int x[] = new int[gameUnits];
     final int y[] = new int[gameUnits];
     int bodyParts = 6;
@@ -3303,7 +3299,7 @@ class snakePanel extends JPanel implements ActionListener {
         applesEaten = 0;
         delay = 100;
         direction = 'R';
-        // Initialize snake position - centered vertically, 1/4 way from left edge
+        // Initialize snake centered vertically, 1/4 way from left edge
         int startY = (screenHeight / 2) / unitSize * unitSize;
         int startX = (screenWidth / 4) / unitSize * unitSize;
         for(int i = 0; i < bodyParts; i++) {
