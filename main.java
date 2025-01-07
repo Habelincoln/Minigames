@@ -1148,7 +1148,7 @@ public class Main {
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
-                println("You won in " + attempts + "guesses. The word was: " + word);
+                println("You won in " + attempts + " " + "guesses. The word was: " + word);
                 for (int i = 0; i < result.length; i++) {
                     for (int j = 0; j < result[i].length; j++) {
                         if (result[i][j] != null) {
