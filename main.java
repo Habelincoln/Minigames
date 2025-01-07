@@ -2837,13 +2837,24 @@ public class Main {
         int rows = scanner.nextInt();
         print("Columns: ");
         int cols = scanner.nextInt();
-        print("Enter the number of mines: ");
-        int mines = scanner.nextInt();
-        // Minesweeper game = new Minesweeper(rows, cols, mines);
-        // game.play(rows, cols, mines);
+        clearScreen();
+        print("Total board size: ");
+        printlni(cols * rows);
+        print("Enter percentage of mines: ");
+        int minesTemp = scanner.nextInt();
+            while (minesTemp >= 100 || minesTemp < 1) {
+                clearScreen();
+                println("Invalid percentage. Please type a percent between 1 and 100.");
+                print("Total board size: ");
+                printlni(cols * rows);
+                print("Enter percentage of mines: ");
+                minesTemp = scanner.nextInt();
+            }
+        int mines =  cols * rows * minesTemp / 100;
         new MinesweeperFrame(rows, cols, mines);
             } catch (InputMismatchException e) {
                 println(redANSI + "Invalid input. Please enter a number." + defaultANSI);
+                Thread.sleep(1000);
                 scanner.nextLine();
                 minesweeper();
             }
