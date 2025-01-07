@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.Timer;
-
+@SuppressWarnings("unused")
 public class Main {
 
     static final String redANSI = "\u001B[31m";
