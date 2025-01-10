@@ -679,10 +679,12 @@ public class Main {
                 }
                 for (int l = 0; l < bSize; l++) {
                     for (int b = 0; b < bSize; b++) {
+                        if (board[l][b] < cheatValue) {
                         board[l][b] = cheatValue;
                     }
                 }
             }
+        }
             if (direction.contains("m")) {
                 while (!endGame) {
                     try {
@@ -1194,7 +1196,7 @@ public class Main {
                     }
                     wordle();
                 }
-                else if (playAgainInput.equals("n") || playAgainInput.equals("no")) {
+                else if (!playAgainInput.equals("y")  && !playAgainInput.equals("yes")){
                     System.exit(0);
             }
             }
@@ -1227,14 +1229,14 @@ public class Main {
 
                     wordle();
                 }
-                else if (playAgainInput.equals("n") || playAgainInput.equals("no")) {
+                else if (!playAgainInput.equals("y")  && !playAgainInput.equals("yes")){
                     System.exit(0);
             }
             }
         }
         scanner.close();
     }
-    
+
     public static void displayAlphabet(Set<Character> exactMatches, Set<Character> nonExactMatches, Set<Character> incorrectGuesses) {
         StringBuilder alphabet = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
