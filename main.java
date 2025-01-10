@@ -1170,6 +1170,7 @@ public class Main {
                 println("Play again? (y/n)");
                 playAgainInput = scanner.nextLine().toLowerCase();
                 if (playAgainInput.equals("y")  || playAgainInput.equals("yes")){
+                    attempts = 0;
                     for (char fullWord: guessArray) {
                         fullWord = ' ';
                     }
@@ -1204,6 +1205,7 @@ public class Main {
                 println("Play again? (y/n)");
                 playAgainInput = scanner.nextLine().toLowerCase();
                 if (playAgainInput.equals("y")  || playAgainInput.equals("yes")){
+                    attempts = 0;
                     for (char fullWord: guessArray) {
                         fullWord = ' ';
                     }
@@ -1232,7 +1234,7 @@ public class Main {
         }
         scanner.close();
     }
-
+    
     public static void displayAlphabet(Set<Character> exactMatches, Set<Character> nonExactMatches, Set<Character> incorrectGuesses) {
         StringBuilder alphabet = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
