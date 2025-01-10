@@ -78,6 +78,9 @@ public class Main {
                 case 10 -> minesweeper();
                 default -> println("Invalid game choice.");
             }
+        } catch (InputMismatchException e) {
+            clearScreen();
+            print(redANSI + "Please enter a number!" + defaultANSI);
         }
     }
 
@@ -728,6 +731,9 @@ public class Main {
                                 board[i][j] = 0;
                             }
                         }
+                        score = 0;
+                        addRandomNumber(board);
+                        
                     default:
                         println("Invalid choice. Please enter a number between 0 and 4.");
                         break;
@@ -739,6 +745,7 @@ public class Main {
 
             printlni(score);
             printBoard(board);
+            originalBoard = cloneBoard(board);
             shiftArray(board, direction);
             merge(board, direction);
             shiftArray(board, direction);
@@ -1063,7 +1070,7 @@ public class Main {
         Set<Character> exactMatches = new HashSet<>();
         Set<Character> nonExactMatches = new HashSet<>();
         Set<Character> incorrectGuesses = new HashSet<>();
-
+        String playAgainInput;
         while (attempts > 0) {
             println("You have " + attempts + " attempts left.");
             for (int i = 0; i < result.length; i++) {
@@ -1144,7 +1151,7 @@ public class Main {
                     result[6 - attempts - 1][i] = grayANSI + guessArray[i] + defaultANSI;
                     incorrectGuesses.add(guessArray[i]);
                 }
-            }
+            }   
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
@@ -1159,11 +1166,68 @@ public class Main {
                     }
                     println(" ");
                 }
-                break;
+                println("");
+                println("Play again? (y/n)");
+                playAgainInput = scanner.nextLine().toLowerCase();
+                if (playAgainInput.equals("y")  || playAgainInput.equals("yes")){
+                    for (char fullWord: guessArray) {
+                        fullWord = ' ';
+                    }
+                    for (char fullWord : wordArray) {
+                        fullWord = ' ';
+                    }
+                    for (int i = 0; i < result.length; i++) {
+                        for (int j=0; j< result[i].length; j++) {
+                            result[i][j] = null;
+                        }
+                    }
+                    for (int i = 0; i < result.length; i++) {
+                        for (int j = 0; j < result[i].length; j++) {
+                            if (result[i][j] != null) {
+                                print(result[i][j]);
+                            } else {
+                                print(" ");
+                            }
+                        }
+                        println(" ");
+                    }
+                    wordle();
+                }
+                else if (playAgainInput.equals("n") || playAgainInput.equals("no")) {
+                    System.exit(0);
+            }
             }
 
             if (attempts == 0) {
                 println("You've run out of attempts. The word was: " + word);
+                println("");
+                println("Play again? (y/n)");
+                playAgainInput = scanner.nextLine().toLowerCase();
+                if (playAgainInput.equals("y")  || playAgainInput.equals("yes")){
+                    for (char fullWord: guessArray) {
+                        fullWord = ' ';
+                    }
+                    for (int i = 0; i < result.length; i++) {
+                        for (int j=0; j< result[i].length; j++) {
+                            result[i][j] = null;
+                        }
+                    }
+                    for (int i = 0; i < result.length; i++) {
+                        for (int j = 0; j < result[i].length; j++) {
+                            if (result[i][j] != null) {
+                                print(result[i][j]);
+                            } else {
+                                print(" ");
+                            }
+                        }
+                        println(" ");
+                    }
+
+                    wordle();
+                }
+                else if (playAgainInput.equals("n") || playAgainInput.equals("no")) {
+                    System.exit(0);
+            }
             }
         }
         scanner.close();

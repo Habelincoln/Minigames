@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Launch temp file",
             "request": "launch",
-            "mainClass": "megattt"
+            "mainClass": "frame2048"
         },
         {
             "type": "java",
