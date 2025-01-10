@@ -10,13 +10,13 @@ import javax.swing.Timer;
 @SuppressWarnings("unused")
 public class Main {
 
-    static final String redANSI = "\u001B[31m";
-    static final String greenANSI = "\u001B[32m";
-    static final String yellowANSI = "\u001B[33m";
-    static final String blueANSI = "\u001B[34m";
-    static final String whiteANSI = "\u001B[37m";
-    static final String grayANSI = "\u001B[90m";
-    static final String defaultANSI = "\u001B[0m";
+    static final String redansi = "\u001B[31m";
+    static final String greenansi = "\u001B[32m";
+    static final String yellowansi = "\u001B[33m";
+    static final String blueansi = "\u001B[34m";
+    static final String whiteansi = "\u001B[37m";
+    static final String grayansi = "\u001B[90m";
+    static final String defaultansi = "\u001B[0m";
 
     public static void main(String[] args) throws InterruptedException {
         clearScreen();
@@ -44,7 +44,7 @@ public class Main {
             int gameChoice = input.nextInt();
             while (gameChoice < 1 || gameChoice > 10) {
                 clearScreen();
-                println(redANSI + "Invalid game name." + defaultANSI);
+                println(redansi + "Invalid game name." + defaultansi);
                 Thread.sleep(1000);
                 clearScreen();
                 println("Welcome to the Game Hub!");
@@ -80,7 +80,7 @@ public class Main {
             }
         } catch (InputMismatchException e) {
             clearScreen();
-            print(redANSI + "Please enter a number!" + defaultANSI);
+            print(redansi + "Please enter a number!" + defaultansi);
         }
     }
 
@@ -92,7 +92,7 @@ public class Main {
             do {
                 print("\033[H\033[2J"); // clear console
                 if (word.matches(".*\\d.*")) {
-                    println(redANSI + "INVALID INPUT!!!" + defaultANSI);
+                    println(redansi + "INVALID INPUT!!!" + defaultansi);
                 }
                 println("Welcome to hangman!");
                 println("Enter Word:");
@@ -106,7 +106,7 @@ public class Main {
             do {
                 print("\033[H\033[2J"); // clear console
                 if (livesin.matches(".*[a-zA-Z].*")) {
-                    println(redANSI + "INVALID INPUT!!!" + defaultANSI);
+                    println(redansi + "INVALID INPUT!!!" + defaultansi);
                     Thread.sleep(1000);
                     clearScreen();
                 }
@@ -136,7 +136,7 @@ public class Main {
                 do {
                     if (letter.matches(".*\\d.*")) {
                         print("\033[H\033[2J");
-                        println(redANSI + "INVALID INPUT!!!" + defaultANSI);
+                        println(redansi + "INVALID INPUT!!!" + defaultansi);
                         println(retWord);
                         println("lives: " + livesLogo.repeat(lives));
                         println(returnLetters(wrongGuesses, correctGuesses));
@@ -155,19 +155,19 @@ public class Main {
 
                 if (letter.length() <= 1) {
                     if (letter.isEmpty()) {
-                        println(redANSI + "You didn't enter anything!" + defaultANSI);
+                        println(redansi + "You didn't enter anything!" + defaultansi);
                     } else {
                         if (!word.contains(letter) && !wrongGuesses.contains(letter)) {
                             wrongGuesses += letter;
                             lives--;
                         } else if (!word.contains(letter) && wrongGuesses.contains(letter)) {
-                            println(redANSI + "You've already guessed " + "\"" + letter + "\"" + "!" + defaultANSI);
+                            println(redansi + "You've already guessed " + "\"" + letter + "\"" + "!" + defaultansi);
                         }
 
                         if (!correctGuesses.contains(letter) && word.contains(letter)) {
                             correctGuesses += letter;
                         } else if (correctGuesses.contains(letter)) {
-                            println(greenANSI + "You've already correctly guessed " + "\"" + letter + "\"" + "!" + defaultANSI);
+                            println(greenansi + "You've already correctly guessed " + "\"" + letter + "\"" + "!" + defaultansi);
                         }
                     }
                 } else if (letter.length() > 1) {
@@ -175,7 +175,7 @@ public class Main {
                         lives--;
                         multiWrongGuesses.add(letter);
                     } else {
-                        println(redANSI + "You've already guessed " + "\"" + letter + "\"" + "!" + defaultANSI);
+                        println(redansi + "You've already guessed " + "\"" + letter + "\"" + "!" + defaultansi);
                     }
 
                     if (letter.equals(word)) {
@@ -223,15 +223,15 @@ public class Main {
     public static String returnLetters(String a, String correctGuesses) {
         StringBuilder r = new StringBuilder();
         for (char c : "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray())
-            r.append(correctGuesses.toUpperCase().indexOf(c) > -1 ? greenANSI + c : a.toUpperCase().indexOf(c) > -1 ? redANSI + c : c).append(defaultANSI);
+            r.append(correctGuesses.toUpperCase().indexOf(c) > -1 ? greenansi + c : a.toUpperCase().indexOf(c) > -1 ? redansi + c : c).append(defaultansi);
         return r.toString();
     }
 
     public static void mastermind() throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         clearScreen();
-        println(yellowANSI + "Welcome to Mastermind!" + defaultANSI);
-        String msg = "4 pegs. 6 possible colors: " + blueANSI + "Blue" + defaultANSI + "," + greenANSI + "Green" + defaultANSI + "," + yellowANSI + "Yellow" + defaultANSI + "," + redANSI + "Red" + defaultANSI + "," + grayANSI + "Gray" + defaultANSI + ", and " + whiteANSI + "White" + defaultANSI;
+        println(yellowansi + "Welcome to Mastermind!" + defaultansi);
+        String msg = "4 pegs. 6 possible colors: " + blueansi + "Blue" + defaultansi + "," + greenansi + "Green" + defaultansi + "," + yellowansi + "Yellow" + defaultansi + "," + redansi + "Red" + defaultansi + "," + grayansi + "Gray" + defaultansi + ", and " + whiteansi + "White" + defaultansi;
         List<String> allGuesses = new ArrayList<>();
         List<String> matchResults = new ArrayList<>();
         int lives = 0;
@@ -241,7 +241,7 @@ public class Main {
         String code1 = scanner.nextLine().toLowerCase();
         while (!checkCode1(code1)) {
             clearScreen();
-            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+            println(redansi + "Invalid input! Check for typos." + defaultansi);
             println(msg);
             print("Set peg 1: ");
             code1 = scanner.nextLine().toLowerCase();
@@ -252,7 +252,7 @@ public class Main {
         String code2 = scanner.nextLine().toLowerCase();
         while (!checkCode2(code2)) {
             clearScreen();
-            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+            println(redansi + "Invalid input! Check for typos." + defaultansi);
             println(msg);
             print("Set peg 2: ");
             code2 = scanner.nextLine().toLowerCase();
@@ -263,7 +263,7 @@ public class Main {
         String code3 = scanner.nextLine().toLowerCase();
         while (!checkCode3(code3)) {
             clearScreen();
-            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+            println(redansi + "Invalid input! Check for typos." + defaultansi);
             println(msg);
             print("Set peg 3: ");
             code3 = scanner.nextLine().toLowerCase();
@@ -274,7 +274,7 @@ public class Main {
         String code4 = scanner.nextLine().toLowerCase();
         while (!checkCode4(code4)) {
             clearScreen();
-            println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+            println(redansi + "Invalid input! Check for typos." + defaultansi);
             println(msg);
             println("Set peg 4: ");
             code4 = scanner.nextLine().toLowerCase();
@@ -296,7 +296,7 @@ public class Main {
             String guess1 = scanner.nextLine().toLowerCase();
             while (!checkGuess1(guess1)) {
                 clearScreen();
-                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                println(redansi + "Invalid input! Check for typos." + defaultansi);
                 Thread.sleep(1000);
                 clearScreen();
                 for (int i = 0; i < allGuesses.size(); i += 4) {
@@ -320,7 +320,7 @@ public class Main {
             String guess2 = scanner.nextLine().toLowerCase();
             while (!checkGuess2(guess2)) {
                 clearScreen();
-                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                println(redansi + "Invalid input! Check for typos." + defaultansi);
                 Thread.sleep(1000);
                 clearScreen();
                 for (int i = 0; i < allGuesses.size(); i += 4) {
@@ -346,7 +346,7 @@ public class Main {
             String guess3 = scanner.nextLine().toLowerCase();
             while (!checkGuess3(guess3)) {
                 clearScreen();
-                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                println(redansi + "Invalid input! Check for typos." + defaultansi);
                 Thread.sleep(1000);
                 clearScreen();
                 for (int i = 0; i < allGuesses.size(); i += 4) {
@@ -372,7 +372,7 @@ public class Main {
             String guess4 = scanner.nextLine().toLowerCase();
             while (!checkGuess4(guess4)) {
                 clearScreen();
-                println(redANSI + "Invalid input! Check for typos." + defaultANSI);
+                println(redansi + "Invalid input! Check for typos." + defaultansi);
                 Thread.sleep(1000);
                 clearScreen();
                 for (int i = 0; i < allGuesses.size(); i += 4) {
@@ -439,12 +439,12 @@ public class Main {
 
     public static String colorize(String color) {
         return switch (color) {
-            case "blue" -> blueANSI + color.toUpperCase() + defaultANSI;
-            case "green" -> greenANSI + color.toUpperCase() + defaultANSI;
-            case "yellow" -> yellowANSI + color.toUpperCase() + defaultANSI;
-            case "red" -> redANSI + color.toUpperCase() + defaultANSI;
-            case "gray" -> grayANSI + color.toUpperCase() + defaultANSI;
-            case "white" -> whiteANSI + color.toUpperCase() + defaultANSI;
+            case "blue" -> blueansi + color.toUpperCase() + defaultansi;
+            case "green" -> greenansi + color.toUpperCase() + defaultansi;
+            case "yellow" -> yellowansi + color.toUpperCase() + defaultansi;
+            case "red" -> redansi + color.toUpperCase() + defaultansi;
+            case "gray" -> grayansi + color.toUpperCase() + defaultansi;
+            case "white" -> whiteansi + color.toUpperCase() + defaultansi;
             default -> color.toUpperCase();
         };
     }
@@ -545,12 +545,12 @@ public class Main {
 
         do {
             clearScreen();
-            println(redANSI + lowerBound + defaultANSI + " - " + greenANSI + upperBound + defaultANSI);
+            println(redansi + lowerBound + defaultansi + " - " + greenansi + upperBound + defaultansi);
             print("Enter your guess: ");
             input = scanner.nextDouble();
             if (guesses.contains((int) input)) {
                 clearScreen();
-                println(redANSI + "You've already guessed that number!" + defaultANSI);
+                println(redansi + "You've already guessed that number!" + defaultansi);
                 Thread.sleep(1000);
                 continue;
             }
@@ -581,7 +581,7 @@ public class Main {
                 println("1...");
                 Thread.sleep(1000);
                 clearScreen();
-                println(redANSI + lowerBound + defaultANSI + " - " + greenANSI + upperBound + defaultANSI);
+                println(redansi + lowerBound + defaultansi + " - " + greenansi + upperBound + defaultansi);
                 print("Enter your guess: ");
             }
 
@@ -697,11 +697,11 @@ public class Main {
                         if (menuChoice >= 0 && menuChoice <= 4) {
                             break;
                         } else {
-                            println(redANSI + "Invalid Input. Please enter a number between 0 and 4." + defaultANSI);
+                            println(redansi + "Invalid Input. Please enter a number between 0 and 4." + defaultansi);
                             Thread.sleep(500);
                         }
                     } catch (NumberFormatException e) {
-                        println(redANSI + "Invalid Input. Please enter a valid number." + defaultANSI);
+                        println(redansi + "Invalid Input. Please enter a valid number." + defaultansi);
                         Thread.sleep(500);
                     }
                 }
@@ -846,7 +846,7 @@ public class Main {
         final int cellWidth = largestNumStr.length() * 2 + 1;
 
         String wallColor = "\033[48;2;188;174;161m";
-        String resetColor = defaultANSI;
+        String resetColor = defaultansi;
 
         String emptyCell = String.format("%" + cellWidth + "s", " ");
 
@@ -910,7 +910,7 @@ public class Main {
         } else if (number == 0) {
             print("\033[48;2;205;193;179m");
         } else {
-            print(defaultANSI);
+            print(defaultansi);
         }
     }
 
@@ -1117,7 +1117,7 @@ public class Main {
 
             if (!wordList.contains(guess) && !guess.equals("7187448310")) {
                 clearScreen();
-                println(redANSI + "The guessed word is not in the word list." + defaultANSI);
+                println(redansi + "The guessed word is not in the word list." + defaultansi);
                 invalid = true;
                 continue;
             }
@@ -1136,19 +1136,19 @@ public class Main {
                         if (i == j) {
                             exactMatchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = greenANSI + guessArray[i] + defaultANSI;
+                            result[6 - attempts - 1][i] = greenansi + guessArray[i] + defaultansi;
                             exactMatches.add(guessArray[i]);
                         } else {
                             matchedGuess[i] = true;
                             matchedWord[j] = true;
-                            result[6 - attempts - 1][i] = "\u001B[38;2;255;191;0m" + guessArray[i] + defaultANSI;
+                            result[6 - attempts - 1][i] = "\u001B[38;2;255;191;0m" + guessArray[i] + defaultansi;
                             nonExactMatches.add(guessArray[i]);
                         }
                         break;
                     }
                 }
                 if (!exactMatchedGuess[i] && !matchedGuess[i]) {
-                    result[6 - attempts - 1][i] = grayANSI + guessArray[i] + defaultANSI;
+                    result[6 - attempts - 1][i] = grayansi + guessArray[i] + defaultansi;
                     incorrectGuesses.add(guessArray[i]);
                 }
             }   
@@ -1237,13 +1237,13 @@ public class Main {
         StringBuilder alphabet = new StringBuilder();
         for (char c = 'a'; c <= 'z'; c++) {
             if (exactMatches.contains(c)) {
-                alphabet.append(greenANSI).append(c).append(defaultANSI);
+                alphabet.append(greenansi).append(c).append(defaultansi);
             } else if (nonExactMatches.contains(c)) {
-                alphabet.append(yellowANSI).append(c).append(defaultANSI);
+                alphabet.append(yellowansi).append(c).append(defaultansi);
             } else if (incorrectGuesses.contains(c)) {
-                alphabet.append("\033[1;30m").append(c).append(defaultANSI);
+                alphabet.append("\033[1;30m").append(c).append(defaultansi);
             } else {
-                alphabet.append("\033[1;37m").append(c).append(defaultANSI);
+                alphabet.append("\033[1;37m").append(c).append(defaultansi);
             }
         }
         println(alphabet.toString());
@@ -1265,8 +1265,8 @@ public class Main {
         System.out.println(a);
     }
 
-    private static final String xMark = blueANSI + "X" + defaultANSI;
-    private static final String oMark = redANSI + "O" + defaultANSI;
+    private static final String xMark = blueansi + "X" + defaultansi;
+    private static final String oMark = redansi + "O" + defaultansi;
 
     public static void ticTacToe() throws InterruptedException {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -1366,7 +1366,7 @@ public class Main {
                     default:
                         clearScreen();
                         printBoardTTT(board);
-                        print(redANSI + "Invalid input!" + defaultANSI);
+                        print(redansi + "Invalid input!" + defaultansi);
                         Thread.sleep(1000);
                         continue;
                 }
@@ -1438,14 +1438,14 @@ public class Main {
         while (difficulty < 1 || difficulty > 4) {
             clearScreen();
             if (aiFirst) {
-                println(redANSI + "Select difficulty level: (Reverse Mode)" + defaultANSI);
+                println(redansi + "Select difficulty level: (Reverse Mode)" + defaultansi);
             } else {
                 println("Select difficulty level:");
             }
             println("1. Normal");
             println("2. Hard");
             println("3. Impossible");
-            println("4. " + (aiFirst ? greenANSI + "Normal Mode" + defaultANSI : redANSI + "Reverse Mode (AI goes first)" + defaultANSI));
+            println("4. " + (aiFirst ? greenansi + "Normal Mode" + defaultansi : redansi + "Reverse Mode (AI goes first)" + defaultansi));
             print("Enter your choice (1-4): ");
             try {
                 difficulty = Integer.parseInt(scanner.nextLine());
@@ -1458,7 +1458,7 @@ public class Main {
                 difficulty = 0;
             }
             if (difficulty < 1 || difficulty > 4) {
-                println(redANSI + "Invalid input. Please enter a number between 1 and 4." + defaultANSI);
+                println(redansi + "Invalid input. Please enter a number between 1 and 4." + defaultansi);
                 Thread.sleep(1000);
             }
         }
@@ -2131,7 +2131,7 @@ public class Main {
     static boolean[] wins = new boolean[4];
     static int input = 0;
     static double codeInput;
-    static String turn = redANSI + "Red" + defaultANSI;
+    static String turn = redansi + "Red" + defaultansi;
     static int[] move = new int[2]; // for the checkwin functions to check the move that was just made
     static String connect4Cheat;
     static String[][] boardC4Backup = new String[6][7];
@@ -2208,7 +2208,7 @@ public class Main {
 
                             clearScreen();
                             printboardC4();
-                            println(redANSI + "Please Enter \"Red\" or \"Yellow\"." + defaultANSI);
+                            println(redansi + "Please Enter \"Red\" or \"Yellow\"." + defaultansi);
                             Thread.sleep(1000);
                             clearScreen();
                             printboardC4();
@@ -2217,14 +2217,14 @@ public class Main {
                         }
 
                         if (connect4Cheat.equals("red")) {
-                            turn = redANSI + "Red" + defaultANSI;
+                            turn = redansi + "Red" + defaultansi;
                         } else {
-                            turn = yellowANSI + "Yellow" + defaultANSI;
+                            turn = yellowansi + "Yellow" + defaultansi;
                         }
                     } else {
                         clearScreen();
                         printboardC4();
-                        println(redANSI + "Invalid code." + defaultANSI);
+                        println(redansi + "Invalid code." + defaultansi);
                         Thread.sleep(1000);
                         clearScreen();
                         printboardC4();
@@ -2248,7 +2248,7 @@ public class Main {
                 while (input < -1 || input >= 7) {
                     clearScreen();
                     printboardC4();
-                    println(redANSI + "Invalid move! That column doesn't exist." + defaultANSI);
+                    println(redansi + "Invalid move! That column doesn't exist." + defaultansi);
                     Thread.sleep(1000);
                     clearScreen();
                     printboardC4();
@@ -2273,10 +2273,10 @@ public class Main {
                 if (input != -1) { //play move
                     for (int i = 0; i < 6; i++) {
                         if (!turnComplete && boardC4[i][input].equals(" ")) {
-                            if (turn.equals(redANSI + "Red" + defaultANSI)) {
-                                boardC4[i][input] = redANSI + "R" + defaultANSI;
+                            if (turn.equals(redansi + "Red" + defaultansi)) {
+                                boardC4[i][input] = redansi + "R" + defaultansi;
                             } else {
-                                boardC4[i][input] = yellowANSI + "Y" + defaultANSI;
+                                boardC4[i][input] = yellowansi + "Y" + defaultansi;
                             }
                             turnComplete = true;
                             move[0] = i;
@@ -2288,7 +2288,7 @@ public class Main {
                 while (!turnComplete) {
                     clearScreen();
                     printboardC4();
-                    println(redANSI + "Invalid move! That column is full." + defaultANSI);
+                    println(redansi + "Invalid move! That column is full." + defaultansi);
                     Thread.sleep(1000);
                     clearScreen();
                     printboardC4();
@@ -2298,7 +2298,7 @@ public class Main {
                     while (input < -1 || input >= 7) {
                         clearScreen();
                         printboardC4();
-                        println(redANSI + "Invalid move! That column doesn't exist." + defaultANSI);
+                        println(redansi + "Invalid move! That column doesn't exist." + defaultansi);
                         Thread.sleep(1000);
                         clearScreen();
                         printboardC4();
@@ -2322,10 +2322,10 @@ public class Main {
                     if (input != -1) { //play move
                         for (int i = 0; i < 6; i++) {
                             if (!turnComplete && boardC4[i][input].equals(" ")) {
-                                if (turn.equals(redANSI + "Red" + defaultANSI)) {
-                                    boardC4[i][input] = redANSI + "R" + defaultANSI;
+                                if (turn.equals(redansi + "Red" + defaultansi)) {
+                                    boardC4[i][input] = redansi + "R" + defaultansi;
                                 } else {
-                                    boardC4[i][input] = yellowANSI + "Y" + defaultANSI;
+                                    boardC4[i][input] = yellowansi + "Y" + defaultansi;
                                 }
                                 turnComplete = true;
                                 move[0] = i;
@@ -2342,21 +2342,21 @@ public class Main {
                 if (checkWin()) {
                     clearScreen();
                     printboardC4();
-                    print(greenANSI + turn + " wins!" + defaultANSI);
+                    print(greenansi + turn + " wins!" + defaultansi);
                     break;
                 }
                 checkColumns();
                 if (checkWin()) {
                     clearScreen();
                     printboardC4();
-                    print(greenANSI + turn + " wins!" + defaultANSI);
+                    print(greenansi + turn + " wins!" + defaultansi);
                     break;
                 }
                 checkDiagonals();
                 if (checkWin()) {
                     clearScreen();
                     printboardC4();
-                    print(greenANSI + turn + " wins!" + defaultANSI);
+                    print(greenansi + turn + " wins!" + defaultansi);
                     break;
                 }
             }
@@ -2364,13 +2364,13 @@ public class Main {
                 clearScreen();
                 printboardC4();
                 switch (turn) {
-                    case redANSI + "Red" + defaultANSI -> turn = yellowANSI + "Yellow" + defaultANSI;
-                    case yellowANSI + "Yellow" + defaultANSI -> turn = redANSI + "Red" + defaultANSI;
+                    case redansi + "Red" + defaultansi -> turn = yellowansi + "Yellow" + defaultansi;
+                    case yellowansi + "Yellow" + defaultansi -> turn = redansi + "Red" + defaultansi;
                 }
             } catch (InputMismatchException e) {
                 clearScreen();
                 printboardC4();
-                println(redANSI + "Invalid input! Please enter a number 1 - 7." + defaultANSI);
+                println(redansi + "Invalid input! Please enter a number 1 - 7." + defaultansi);
                 Thread.sleep(1000);
                 scanner.nextLine();
             }
@@ -2390,8 +2390,8 @@ public class Main {
         justUndone = true;
         } else { 
             switch (turn) {
-            case redANSI + "Red" + defaultANSI -> turn = yellowANSI + "Yellow" + defaultANSI;
-            case yellowANSI + "Yellow" + defaultANSI -> turn = redANSI + "Red" + defaultANSI;
+            case redansi + "Red" + defaultansi -> turn = yellowansi + "Yellow" + defaultansi;
+            case yellowansi + "Yellow" + defaultansi -> turn = redansi + "Red" + defaultansi;
             }
         
           }
@@ -2623,7 +2623,7 @@ public class Main {
     public static void playGameMega() throws InterruptedException {
         int boardChoice = 5; // Start with the center board
         int position;
-        String turn = blueANSI + "X" + defaultANSI;
+        String turn = blueansi + "X" + defaultansi;
         try {
             while (true) {
                 clearScreen();
@@ -2640,7 +2640,7 @@ public class Main {
 
                 while (position < 1 || position > 9 || !isValidMove(boardChoice, position)) {
                     if (position == 10 && isFirstMove) {
-                        println(redANSI + "Cannot undo the first move." + defaultANSI);
+                        println(redansi + "Cannot undo the first move." + defaultansi);
                         Thread.sleep(1000);
                         clearScreen();
                         printBoardMega();
@@ -2649,7 +2649,7 @@ public class Main {
                         position = scanner.nextInt();
                         continue;
                     } else {
-                    println(redANSI + "Invalid move. Choose another position." + defaultANSI);
+                    println(redansi + "Invalid move. Choose another position." + defaultansi);
                     Thread.sleep(1000);
                     clearScreen();
                     printBoardMega();
@@ -2672,7 +2672,7 @@ public class Main {
                     markBoardAsWon(boardChoice, turn);
                     printBoardMega();
                     println(turn + " wins the board!");
-                    if (turn.equals(blueANSI + "X" + defaultANSI)) {
+                    if (turn.equals(blueansi + "X" + defaultansi)) {
                         xBoardsWon++;
                     } else {
                         oBoardsWon++;
@@ -2680,12 +2680,12 @@ public class Main {
                     if (xBoardsWon >= 5) {
                         clearScreen();
                         printBoardMega();
-                        println(blueANSI + "X" + defaultANSI + " wins the game!");
+                        println(blueansi + "X" + defaultansi + " wins the game!");
                         break;
                     } else if (oBoardsWon >= 5) {
                         clearScreen();
                         printBoardMega();
-                        println(redANSI + "O" + defaultANSI + " wins the game!");
+                        println(redansi + "O" + defaultansi + " wins the game!");
                         break;
                     }
                     println(turn + " gets another turn!");
@@ -2698,7 +2698,7 @@ public class Main {
                         continue;
                     }
                     while (boardChoice < 1 || boardChoice > 9 || completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
-                        println(redANSI + "Invalid board choice. Choose another board." + defaultANSI);
+                        println(redansi + "Invalid board choice. Choose another board." + defaultansi);
                         Thread.sleep(1000);
                         clearScreen();
                         printBoardMega();
@@ -2716,10 +2716,10 @@ public class Main {
                 if (completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
                     clearScreen();
                     printBoardMega();
-                    println(greenANSI + "That board is already completed. Choose any board." + defaultANSI);
-                    if (turn.equals(redANSI + "O" + defaultANSI)) {
-                        print("Enter " + blueANSI + "X" + defaultANSI + "'s board choice: ");
-                    } else { print("Enter " + redANSI + "O" + defaultANSI + "'s board choice: "); 
+                    println(greenansi + "That board is already completed. Choose any board." + defaultansi);
+                    if (turn.equals(redansi + "O" + defaultansi)) {
+                        print("Enter " + blueansi + "X" + defaultansi + "'s board choice: ");
+                    } else { print("Enter " + redansi + "O" + defaultansi + "'s board choice: "); 
                 }
                     
                     boardChoice = scanner.nextInt();
@@ -2730,7 +2730,7 @@ public class Main {
                         continue;
                     }
                     while (boardChoice < 1 || boardChoice > 9 || completedBoards[(boardChoice - 1) / 3][(boardChoice - 1) % 3]) {
-                        println(redANSI + "Invalid board choice. Choose another board." + defaultANSI);
+                        println(redansi + "Invalid board choice. Choose another board." + defaultansi);
                         Thread.sleep(1000);
                         clearScreen();
                         printBoardMega();
@@ -2750,12 +2750,12 @@ public class Main {
                     break;
                 }
                 switch (turn) {
-                    case blueANSI + "X" + defaultANSI -> turn = redANSI + "O" + defaultANSI;
-                    case redANSI + "O" + defaultANSI -> turn = blueANSI + "X" + defaultANSI;
+                    case blueansi + "X" + defaultansi -> turn = redansi + "O" + defaultansi;
+                    case redansi + "O" + defaultansi -> turn = blueansi + "X" + defaultansi;
                 }
             }
         } catch (InputMismatchException e) {
-            println(redANSI + "Invalid input. Please enter a number." + defaultANSI);
+            println(redansi + "Invalid input. Please enter a number." + defaultansi);
             Thread.sleep(1000);
             scanner.nextLine();
             playGameMega();
@@ -2792,7 +2792,7 @@ public class Main {
         int posRow = (lastPosition - 1) / 3;
         int posCol = (lastPosition - 1) % 3;
         megaBoard[row][col][posRow][posCol] = Integer.toString(lastPosition);
-        if (lastTurn.equals(blueANSI + "X" + defaultANSI)) {
+        if (lastTurn.equals(blueansi + "X" + defaultansi)) {
             xBoardsWon--;
         } else {
             oBoardsWon--;
@@ -2880,12 +2880,12 @@ public class Main {
 
     public static boolean checkMetaWin(String turn) {
         // Check number of boards won by X and O
-        if (turn.equals(blueANSI + "X" + defaultANSI)) {
+        if (turn.equals(blueansi + "X" + defaultansi)) {
             if (xBoardsWon >= 5) {
                 return true;
             }
         }
-        else if (turn.equals(redANSI + "O" + defaultANSI)) {
+        else if (turn.equals(redansi + "O" + defaultansi)) {
             if (oBoardsWon >= 5) {
                 return true;
             }
@@ -2917,7 +2917,7 @@ public class Main {
         int mines =  cols * rows * minesTemp / 100;
         new MinesweeperFrame(rows, cols, mines);
             } catch (InputMismatchException e) {
-                println(redANSI + "Invalid input. Please enter a number." + defaultANSI);
+                println(redansi + "Invalid input. Please enter a number." + defaultansi);
                 Thread.sleep(1000);
                 scanner.nextLine();
                 minesweeper();
