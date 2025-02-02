@@ -76,6 +76,7 @@ public class Main {
                 case 8 -> megaTTT();
                 case 9 -> new snakeGameFrame();
                 case 10 -> minesweeper();
+                
                 default -> println("Invalid game choice.");
             }
         } catch (InputMismatchException e) {
@@ -207,7 +208,7 @@ public class Main {
 
             if (retWord.equals(word)) {
                 println("You Win!!!");
-                println("The word was: " + word);
+                println("The word was: " + "\""+ blueansi + word + defaultansi + "\"");
                 if (lives == 1) {
                     println("You had " + lives + " life remaining");
                 } else if (lives > 1) {
@@ -215,7 +216,7 @@ public class Main {
                 }
             } else {
                 println("Game over. You lose.");
-                println("The word was: " + word);
+                println("The word was: " + "\"" + blueansi + word  + defaultansi+ "\"");
             }
         }
     }
@@ -1157,7 +1158,7 @@ public class Main {
 
             if (Arrays.equals(wordArray, guessArray)) {
                 clearScreen();
-                println("You won in " + attempts + " " + "guesses. The word was: " + word);
+                println("You won in " + attempts + " " + "guesses. The word was: " + "\"" + blueansi + word + defaultansi + "\"");
                 for (int i = 0; i < result.length; i++) {
                     for (int j = 0; j < result[i].length; j++) {
                         if (result[i][j] != null) {
@@ -1202,7 +1203,7 @@ public class Main {
             }
 
             if (attempts == 0) {
-                println("You've run out of attempts. The word was: " + word);
+                println("You've run out of attempts. The word was: " + "\"" + blueansi + word + defaultansi + "\"");
                 println("");
                 println("Play again? (y/n)");
                 playAgainInput = scanner.nextLine().toLowerCase();
@@ -3321,7 +3322,7 @@ class MinesweeperFrame extends JFrame {
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
-        this.setLocationRelativeTo(null); // Center window on screen
+        this.setLocationRelativeTo(null);
     }
 }
 class snakePanel extends JPanel implements ActionListener {
@@ -3354,10 +3355,8 @@ class snakePanel extends JPanel implements ActionListener {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (!running && !startScreen) {
+                    if (!running ) {
                         resetGame();
-                    } else if (!running) {
-                        startGame();
                     }
                 }
             }

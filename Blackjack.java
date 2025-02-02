@@ -1,0 +1,602 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.*;
+@SuppressWarnings("unused")
+public class Blackjack extends JPanel implements ActionListener {
+
+    static boolean menuIsOpen = false;
+    static boolean running = false;
+    static boolean won = false;
+    static boolean lost = false;
+    static boolean turn = false;
+    static boolean muted = false;
+    static boolean musicMuted = false;
+    static boolean isDarkMode = false;
+    private Map<String, ImageIcon> cardImages = new HashMap<>();
+    private List<String> deck = new ArrayList<>();
+
+
+    Blackjack() {
+        JFrame frame = new JFrame("Blackjack");
+        JPanel game = new JPanel();
+        JTextArea title = new JTextArea();
+        JTextArea dealer = new JTextArea();
+        JTextArea player = new JTextArea();
+        JPanel menu = new JPanel();
+
+        frame.setSize(800,600);
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        game.setSize(800,600);
+        game.setBackground(new Color(0,100,0));
+
+        menu.setSize(100,600);
+        menu.setBackground(Color.BLACK);
+        menu.setVisible(false);
+
+        JButton hit = new JButton("HIT");
+        JButton doubleDown = new JButton("Double");
+        JButton split = new JButton("SPLIT");
+        JButton stand = new JButton("STAND");
+        JButton settings = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\settings.png"));
+        JButton restart = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\restart.png"));
+        JButton undo = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\undo.png"));
+        JButton soundToggle = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\sound.png"));
+        JButton musicToggle = new JButton (new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
+        JButton darkMode = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
+
+        hit.setBackground(Color.GREEN);
+        hit.setForeground(Color.BLACK);
+        hit.setBorderPainted(false);
+        hit.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+        stand.setBackground(Color.RED);
+        stand.setForeground(Color.BLACK);
+        stand.setBorderPainted(false);
+        stand.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+        split.setBackground(Color.ORANGE);
+        split.setForeground(Color.BLACK);
+        split.setBorderPainted(false);
+        split.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+        doubleDown.setBackground(Color.BLUE);
+        doubleDown.setForeground(Color.BLACK);
+        doubleDown.setBorderPainted(false);
+        doubleDown.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+
+        JTextArea menuTitle = new JTextArea();
+        menuTitle.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+        menuTitle.setText("MENU");
+        menuTitle.setEditable(false);
+        menuTitle.setForeground(Color.WHITE);
+        menuTitle.setBackground(Color.BLACK);
+        menuTitle.setBounds(120,10,100,30);
+
+        menu.add(menuTitle);
+
+        restart.setBounds(60,55,60,60); //60 on left and right, buttons 60, 60 in between // for height, buttons are 240 (60x3 + gaps of 20), so 55 on each end.
+        menu.add(restart);
+
+        undo.setBounds(180, 55, 60, 60);
+        menu.add(undo);
+
+        soundToggle.setBounds(60, 135, 60, 60);
+        menu.add(soundToggle);
+
+        musicToggle.setBounds(180, 135, 60, 60);
+        menu.add(musicToggle);
+
+        darkMode.setBounds(60,215,60,60);
+        menu.add(darkMode);
+        
+
+        hit.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!menuIsOpen){
+                hit.setForeground(Color.WHITE);
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!menuIsOpen){
+                hit.setForeground(Color.BLACK);
+            }
+        }
+        });
+
+        stand.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!menuIsOpen){
+                stand.setForeground(Color.WHITE);
+            }
+        }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!menuIsOpen){
+                stand.setForeground(Color.BLACK);
+            }
+        }
+
+        });
+
+        split.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!menuIsOpen){
+                split.setForeground(Color.WHITE);
+            }
+        }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!menuIsOpen){
+                split.setForeground(Color.BLACK);
+            }
+        }
+
+        });
+
+        doubleDown.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!menuIsOpen){
+                doubleDown.setForeground(Color.WHITE);
+            }
+        }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!menuIsOpen){
+                doubleDown.setForeground(Color.BLACK);
+            }
+        }
+
+        });
+
+       settings.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("settings clicked.");
+                if (!menuIsOpen) {
+                    openMenu(frame, menu);
+
+            } else {
+                closeMenu(frame, menu);
+            }
+            }
+
+            
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                settings.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\settingsDark.png"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                settings.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\settings.png"));
+            }
+
+        });
+
+        restart.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("restart clicked.");
+                restartGame();
+            }
+
+            
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                restart.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\restartDark.png"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                restart.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\restart.png"));
+            }
+
+        });
+
+        undo.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("undo clicked.");
+                undo();
+            }
+
+            
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                undo.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\undoDark.png"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                undo.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\undo.png"));
+            }
+
+        });
+
+        soundToggle.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("sound toggle clicked.");
+                
+                if (!muted) {
+                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\muteDark.png"));
+                } else {
+                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\soundDark.png"));
+                }
+                soundToggle();
+            }
+
+            
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!muted) {
+                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\soundDark.png"));
+                } else {
+                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\muteDark.png"));
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!muted) {
+                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\sound.png"));
+                } else {
+                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\mute.png"));
+                }
+            }
+
+        });
+
+        musicToggle.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("music toggle clicked.");
+                
+                if (!musicMuted) {
+                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicMutedDark.png"));
+                } else {
+                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicDark.png"));
+                }
+                musicToggle();
+            }
+
+            
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (!musicMuted) {
+                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicDark.png"));
+                } else {
+                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicMutedDark.png"));
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!musicMuted) {
+                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
+                } else {
+                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicMuted.png"));
+                }
+            }
+
+        });
+        
+        darkMode.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("dark mode clicked.");
+                if (isDarkMode) {
+                    darkMode.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
+                    isDarkMode = false;
+                } else {
+                    darkMode.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOn.png"));
+                    isDarkMode = true;
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+
+        });
+
+
+        menu.setLayout(null);
+        game.setLayout(null); //disable managers to do it manually
+        hit.setBounds(150, 400, 100, 125);
+        doubleDown.setBounds(40, 400, 100, 125);
+        stand.setBounds(540, 400, 100, 125);
+        split.setBounds(650, 400, 100, 125);
+        settings.setBounds(10,10,60,60);
+        
+        game.add(hit);
+        game.add(stand);
+        game.add(doubleDown);
+        game.add(split);
+        game.add(settings);
+
+        game.setFocusable(true);
+        game.requestFocusInWindow();
+
+        menu.setFocusable(true);
+        menu.requestFocusInWindow();
+
+        frame.setFocusable(true);
+        frame.requestFocusInWindow();
+        frame.setLayout(null);
+        
+        menu.setBounds(250,100,300,350);
+
+        frame.add(menu);
+        frame.add(game);
+        frame.revalidate();  
+        frame.repaint();
+        dealCard(game, 300, 300);
+        
+    }
+
+    public void openMenu(JFrame frame, JPanel menu) {
+        running = false;
+        menu.setVisible(true);
+        frame.revalidate();  
+        frame.repaint();
+        menuIsOpen = true;
+        System.out.println("opening menu");
+
+    }
+
+    public void closeMenu(JFrame frame, JPanel menu) {
+        running = true;
+        menu.setVisible(false);
+        frame.revalidate();  
+        frame.repaint();
+        menuIsOpen = false;
+        System.out.println("closing menu");
+    }
+
+    public void startGame(){
+        if (!running){
+            initDeck();
+            running = true;
+        }
+    }
+
+    public void drawCard() {
+
+    }
+
+    public void drawDealerCard() {
+
+    }
+
+    public void checkWin() {
+        if (!running) {
+            if (won) {
+
+            } else if (lost) {
+
+            }
+        }
+    }
+
+    public void restartGame() {
+
+    }
+
+    public void undo(){
+
+    }
+
+    public void soundToggle() {
+        if (muted){
+            sound();
+        } else if (!muted) {
+            mute();
+        }
+    }
+
+    public void mute() {
+        muted = true;
+    }
+
+    public void sound() {
+        muted = false;
+
+    }
+
+    public void musicToggle() {
+        if (musicMuted){
+            music();
+        } else if (!musicMuted) {
+            musicMute();
+        }
+    }
+
+    public void musicMute() {
+        musicMuted = true;
+    }
+
+    public void music() {
+        musicMuted = false;
+
+    }
+
+    
+    
+    public void initDeck() {
+        
+        // Load card images into the map
+        loadCardImages();
+        
+        // Set up your deck of cards
+        setupDeck();
+    }
+    
+    private void loadCardImages() {
+        // Load images into the HashMap (assuming images are in a folder named "cards")
+        String[] suits = {"S", "D", "H", "C"}; // Spades, Diamonds, Hearts, Clubs
+        String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+
+        for (String suit : suits) {
+            for (String value : values) {
+                String card = value + suit;
+                // Path to your images, e.g., "cards/2S.png"
+                String imagePath = "C:\\GitHub\\Minigames\\blackjackFiles\\Playing Cards\\" + card + ".png";
+                ImageIcon cardImage = new ImageIcon(imagePath);
+                cardImages.put(card, cardImage);
+            }
+        }
+    }
+    
+    private void setupDeck() {
+        // Create a deck with all the cards
+        String[] suits = {"S", "D", "H", "C"};
+        String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+        
+        for (String suit : suits) {
+            for (String value : values) {
+                deck.add(value + suit);  
+            }
+        }
+        
+        
+        Collections.shuffle(deck);
+    }
+
+    public void dealCard(JPanel game, int x, int y) {
+        if (!deck.isEmpty()) {
+            String card = deck.remove(0);
+            ImageIcon cardImage = cardImages.get(card);
+
+            
+            JLabel cardLabel = new JLabel(cardImage);
+            cardLabel.setBounds(x, y, 100, 145);
+            game.add(cardLabel);
+            
+            game.revalidate();
+            game.repaint();
+        }
+    }
+    
+    
+    
+    
+    
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    }
+
+
+
+    public static void main(String[] args) {
+        new Blackjack();
+    }
+}

@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Launch temp file",
             "request": "launch",
-            "mainClass": "frame2048"
+            "mainClass": "Blackjack"
         },
         {
             "type": "java",
