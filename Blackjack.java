@@ -17,6 +17,14 @@ public class Blackjack extends JPanel implements ActionListener {
     static boolean muted = false;
     static boolean musicMuted = false;
     static boolean isDarkMode = false;
+    static boolean dealersTurn = true;
+    static int dealerCardCount = 0;
+    static int playerCardCount = 0;
+    static int dealerHand = 0;
+    static int playerHand = 0;
+    static int bet = 0;
+    static int chips = 0;
+    
     private Map<String, ImageIcon> cardImages = new HashMap<>();
     private List<String> deck = new ArrayList<>();
 
@@ -112,7 +120,7 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                
+                hit(game);
             }
 
             @Override
@@ -465,7 +473,6 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.revalidate();  
         frame.repaint();
         setupDeck();
-        dealCard(game, 300, 300);
         
     }
 
@@ -578,19 +585,40 @@ public class Blackjack extends JPanel implements ActionListener {
         Collections.shuffle(deck);
     }
 
-    public void dealCard(JPanel game, int x, int y) {
-        System.out.println("dealing card...");
+    public void hit(JPanel game) {
+        
         if (!deck.isEmpty()) {
+            System.out.println("dealing card...");
             String card = deck.remove(0);
-            System.out.print(card);
+            System.out.print(card);//for debug
             ImageIcon cardImage = cardImages.get(card);
             
             JLabel cardLabel = new JLabel(cardImage);
-            cardLabel.setBounds(x, y, 100, 145);
+            if (dealersTurn) {
+                switch (dealerCardCount) {
+                    case 0 -> cardLabel.setBounds(200,30 , 100, 145);
+                    case 1 -> cardLabel.setBounds(240,30 , 100, 145);
+                    case 2 -> cardLabel.setBounds(280,200 , 100, 145);
+                    case 3 -> cardLabel.setBounds(320,200 , 100, 145);
+                    case 4 -> cardLabel.setBounds(360,200 , 100, 145);
+                    case 5 -> cardLabel.setBounds(400,200 , 100, 145);
+                    case 6 -> cardLabel.setBounds(440,200 , 100, 145);
+                    case 7 -> cardLabel.setBounds(480,200 , 100, 145);
+                    case 8 -> cardLabel.setBounds(520,200 , 100, 145);
+                    case 9 -> cardLabel.setBounds(560,200 , 100, 145);
+                    case 10 -> cardLabel.setBounds(600,200 , 100, 145);
+                    case 11 -> cardLabel.setBounds(640,200 , 100, 145);
+                    case 12 -> cardLabel.setBounds(680,200 , 100, 145);
+
+                }
+            }
             game.add(cardLabel);
+            dealerCardCount++;
             
             game.revalidate();
             game.repaint();
+        } else { 
+            System.out.println("Deck empty");
         }
     }
     
