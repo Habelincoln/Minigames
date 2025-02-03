@@ -52,6 +52,7 @@ public class Blackjack extends JPanel implements ActionListener {
         JButton soundToggle = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\sound.png"));
         JButton musicToggle = new JButton (new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
         JButton darkMode = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
+        JButton hint = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMark.png"));
 
         hit.setBackground(Color.GREEN);
         hit.setForeground(Color.BLACK);
@@ -97,6 +98,9 @@ public class Blackjack extends JPanel implements ActionListener {
 
         darkMode.setBounds(60,215,60,60);
         menu.add(darkMode);
+
+        hint.setBounds(180, 215, 60,60);
+        menu.add(hint);
         
 
         hit.addMouseListener(new MouseListener () {
@@ -405,6 +409,30 @@ public class Blackjack extends JPanel implements ActionListener {
 
         });
 
+        hint.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("hint clicked.");
+                hint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                hint.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMarkDark.png"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                hint.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMark.png"));
+            }
+
+        });
 
         menu.setLayout(null);
         game.setLayout(null); //disable managers to do it manually
@@ -436,6 +464,7 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.add(game);
         frame.revalidate();  
         frame.repaint();
+        setupDeck();
         dealCard(game, 300, 300);
         
     }
@@ -461,7 +490,7 @@ public class Blackjack extends JPanel implements ActionListener {
 
     public void startGame(){
         if (!running){
-            initDeck();
+            setupDeck();
             running = true;
         }
     }
@@ -488,7 +517,11 @@ public class Blackjack extends JPanel implements ActionListener {
 
     }
 
-    public void undo(){
+    public void undo() {
+
+    }
+
+    public void hint() {
 
     }
 
@@ -525,33 +558,6 @@ public class Blackjack extends JPanel implements ActionListener {
         musicMuted = false;
 
     }
-
-    
-    
-    public void initDeck() {
-        
-        // Load card images into the map
-        loadCardImages();
-        
-        // Set up your deck of cards
-        setupDeck();
-    }
-    
-    private void loadCardImages() {
-        // Load images into the HashMap (assuming images are in a folder named "cards")
-        String[] suits = {"S", "D", "H", "C"}; // Spades, Diamonds, Hearts, Clubs
-        String[] values = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
-
-        for (String suit : suits) {
-            for (String value : values) {
-                String card = value + suit;
-                // Path to your images, e.g., "cards/2S.png"
-                String imagePath = "C:\\GitHub\\Minigames\\blackjackFiles\\Playing Cards\\" + card + ".png";
-                ImageIcon cardImage = new ImageIcon(imagePath);
-                cardImages.put(card, cardImage);
-            }
-        }
-    }
     
     private void setupDeck() {
         // Create a deck with all the cards
@@ -560,7 +566,11 @@ public class Blackjack extends JPanel implements ActionListener {
         
         for (String suit : suits) {
             for (String value : values) {
-                deck.add(value + suit);  
+                deck.add(value + suit);
+                String card = value + suit; //make hashmap with images
+                String imagePath = "C:\\GitHub\\Minigames\\blackjackFiles\\Playing Cards\\" + card + ".png";
+                ImageIcon cardImage = new ImageIcon(imagePath);
+                cardImages.put(card, cardImage);      
             }
         }
         
@@ -569,10 +579,11 @@ public class Blackjack extends JPanel implements ActionListener {
     }
 
     public void dealCard(JPanel game, int x, int y) {
+        System.out.println("dealing card...");
         if (!deck.isEmpty()) {
             String card = deck.remove(0);
+            System.out.print(card);
             ImageIcon cardImage = cardImages.get(card);
-
             
             JLabel cardLabel = new JLabel(cardImage);
             cardLabel.setBounds(x, y, 100, 145);
@@ -582,10 +593,6 @@ public class Blackjack extends JPanel implements ActionListener {
             game.repaint();
         }
     }
-    
-    
-    
-    
     
     
     @Override

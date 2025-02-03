@@ -14,7 +14,7 @@
             "type": "java",
             "request": "launch",
             "name": "Launch Java App",
-            "mainClass": "Main"
+            "mainClass": "main"
         }
     ]
 }

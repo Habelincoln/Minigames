@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.Timer;
 @SuppressWarnings("unused")
-public class Main {
+public class main {
 
     static final String redansi = "\u001B[31m";
     static final String greenansi = "\u001B[32m";
@@ -2943,9 +2943,11 @@ class MinesweeperPanel extends JPanel implements ActionListener {
     int mines;       // Number of mines in the game
 
     // Arrays to track game state
-    boolean[][] revealed;  // Tracks which cells have been revealed
-    boolean[][] flagged;   // Tracks which cells have been flagged
-    int[][] minesInPos;   // Stores mine positions (1 = mine, 0 = empty)
+    static boolean[][] revealed;  // Tracks which cells have been revealed
+    static boolean[][] flagged;   // Tracks which cells have been flagged
+    static int[][] minesInPos;
+    static int[][]checkedCells;   // Stores mine positions (1 = mine, 0 = empty)
+
 
     // Game control variables
     Timer timer;          // Timer for game updates
@@ -2966,6 +2968,7 @@ class MinesweeperPanel extends JPanel implements ActionListener {
         this.revealed = new boolean[height][width];
         this.flagged = new boolean[height][width];
         this.minesInPos = new int[height][width];
+        this.checkedCells = new int [height][width];
         
         // Set up the panel properties
         this.setPreferredSize(new Dimension(width * unitSize, height * unitSize));
@@ -2999,6 +3002,12 @@ class MinesweeperPanel extends JPanel implements ActionListener {
                         if (!flagged[mouseDownY][mouseDownX]) {
                             revealed[mouseDownY][mouseDownX] = true;
                             if (countNearbyMines(mouseDownY, mouseDownX) == 0) {
+                                for (int i=0;i<width;i++){
+                                    for (int j=0;j<height;j++){
+                                        checkedCells[i][j] = 0;
+                                    }
+                                }
+                                
                                 floodFill(mouseDownY, mouseDownX);
                             }
                             checkWin(); // Check win/loss condition after revealing
@@ -3033,41 +3042,29 @@ class MinesweeperPanel extends JPanel implements ActionListener {
         return count;
     }
 
-    // Recursive flood fill for revealing connected empty cells
+    
     private void floodFill(int row, int col) {
-        // Check bounds and if already revealed/flagged
-        if (row < 0 || row >= boardHeight || col < 0 || col >= boardWidth || 
-            revealed[row][col] || flagged[row][col]) {
-            return;
-        }
-        
-        // Reveal current cell
-        revealed[row][col] = true;
-        
-        // If it's a 0, recursively reveal neighbors
-        if (countNearbyMines(row, col) == 0) {
-            // Check all 8 adjacent cells
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    // Skip the current cell
-                    if (i == 0 && j == 0) continue;
-                    
-                    int newRow = row + i;
-                    int newCol = col + j;
-                    
-                    // If neighbor is valid and not revealed, reveal it
-                    if (newRow >= 0 && newRow < boardHeight && 
-                        newCol >= 0 && newCol < boardWidth && 
-                        !revealed[newRow][newCol] && 
-                        !flagged[newRow][newCol]) {
-                        floodFill(newRow, newCol);
-                    }
+
+        if (row < boardHeight && row >= 0 && col < boardWidth && col >= 0) {
+            revealed[row][col] = true;
+            
+                if (countNearbyMines(row, col) == 0 && checkedCells[row][col] == 0) {
+                    checkedCells[row][col] = 1;
+                    floodFill(row+1,col);
+                    floodFill(row,col+1);
+                    floodFill(row-1,col);
+                    floodFill(row,col-1);
+                    floodFill(row+1,col+1);
+                    floodFill(row-1,col-1);
+                    floodFill(row+1,col-1);
+                    floodFill(row-1,col+1);
                 }
+            
             }
-        }
     }
     
     public void startGame() {
+        int[][] board = new int[boardHeight][boardWidth];
         running = true;
         
         // Clear arrays
@@ -3089,6 +3086,9 @@ class MinesweeperPanel extends JPanel implements ActionListener {
                 minesPlaced++;
             }
         }
+
+        
+        
         
         timer = new Timer(1, this);
         timer.start();
@@ -3136,9 +3136,11 @@ class MinesweeperPanel extends JPanel implements ActionListener {
                                 }
                                 
                                 g.setFont(new Font("Arial", Font.BOLD, 20));
+                                if (nearbyMines > 0) {
                                 g.drawString(String.valueOf(nearbyMines), 
                                     j * unitSize + (unitSize/3), 
                                     i * unitSize + (2*unitSize/3));
+                                }
                             }
                         }
                     } else if (flagged[i][j]) {
