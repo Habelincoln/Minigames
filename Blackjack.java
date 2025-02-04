@@ -20,10 +20,11 @@ public class Blackjack extends JPanel implements ActionListener {
     static boolean dealersTurn = true;
     static int dealerCardCount = 0;
     static int playerCardCount = 0;
-    static int dealerHand = 0;
-    static int playerHand = 0;
-    static int bet = 0;
-    static int chips = 500;
+    static volatile int dealerHand = 0;
+    static volatile int playerHand = 0;
+    static volatile int bet = 0;
+    static volatile int chips = 1000;
+    static volatile JPanel betPanel = new JPanel();
     
     private Map<String, ImageIcon> cardImages = new HashMap<>();
     private List<String> deck = new ArrayList<>();
@@ -36,6 +37,11 @@ public class Blackjack extends JPanel implements ActionListener {
         JTextArea dealer = new JTextArea();
         JTextArea player = new JTextArea();
         JPanel menu = new JPanel();
+
+        betPanel.setBounds(275,225,250,150);
+        betPanel.setBackground(new Color(90,116,0));
+        
+        game.add(betPanel);
 
         frame.setSize(800,600);
         frame.setVisible(true);
@@ -495,6 +501,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 10;
                 bet += 10;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.remove(betLabel);
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -904,7 +916,7 @@ public class Blackjack extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+        
     }
 
 
