@@ -44,7 +44,7 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         game.setSize(800,600);
-        game.setBackground(new Color(0,100,0));
+        game.setBackground(new Color(3,116,0));
 
         menu.setSize(100,600);
         menu.setBackground(Color.BLACK);
@@ -61,16 +61,25 @@ public class Blackjack extends JPanel implements ActionListener {
         JButton musicToggle = new JButton (new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
         JButton darkMode = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
         JButton hint = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMark.png"));
-        JButton black = new JButton(new ImageIcon(""));
-        JButton blue = new JButton(new ImageIcon(""));
-        JButton green = new JButton(new ImageIcon(""));
-        JButton teal = new JButton(new ImageIcon(""));
-        JButton pink = new JButton(new ImageIcon(""));
-        JButton red = new JButton(new ImageIcon(""));
-        JButton white = new JButton(new ImageIcon(""));
-        JButton yellow = new JButton(new ImageIcon(""));
-        JButton confirmBet = new JButton(new ImageIcon(""));
-        JButton resetBet = new JButton(new ImageIcon(""));
+        JButton black = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipBlack.png"));
+        JButton blue = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipBlue.png"));
+        JButton green = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipGreen.png"));
+        JButton teal = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipTeal.png"));
+        JButton pink = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipPink.png"));
+        JButton red = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipRed.png"));
+        JButton white = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipWhite.png"));
+        JButton yellow = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipYellow.png"));
+        JButton confirmBet = new JButton("Confirm");
+        JButton resetBet = new JButton("Reset");
+
+        JTextArea menuTitle = new JTextArea();
+        menuTitle.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+        menuTitle.setText("MENU");
+        menuTitle.setEditable(false);
+        menuTitle.setForeground(Color.WHITE);
+        menuTitle.setBackground(Color.BLACK);
+        menuTitle.setBounds(120,10,100,30);
+        menu.add(menuTitle);
 
         hit.setBackground(Color.GREEN);
         hit.setForeground(Color.BLACK);
@@ -92,15 +101,36 @@ public class Blackjack extends JPanel implements ActionListener {
         doubleDown.setBorderPainted(false);
         doubleDown.setFont(new Font("Times New Roman", Font.PLAIN, 20));
 
-        JTextArea menuTitle = new JTextArea();
-        menuTitle.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-        menuTitle.setText("MENU");
-        menuTitle.setEditable(false);
-        menuTitle.setForeground(Color.WHITE);
-        menuTitle.setBackground(Color.BLACK);
-        menuTitle.setBounds(120,10,100,30);
+        confirmBet.setBackground(Color.ORANGE);
+        confirmBet.setForeground(Color.black);
+        confirmBet.setBounds(225,450,150,100);
+        game.add(confirmBet);
+        confirmBet.setVisible(false);
 
-        menu.add(menuTitle);
+        resetBet.setBackground(Color.red);
+        resetBet.setForeground(Color.black);
+        resetBet.setBounds(425,450,150,100);
+        game.add(resetBet);
+        resetBet.setVisible(false);
+
+        black.setBounds(630,230,60,60);
+        blue.setBounds(630,90,60,60);
+        green.setBounds(700,160,60,60);
+        teal.setBounds(700,230,60,60);
+        pink.setBounds(630,160,60,60);
+        red.setBounds(700,90,60,60);
+        white.setBounds(630,20,60,60);
+        yellow.setBounds(700,20,60,60);
+        
+
+        game.add(black);
+        game.add(blue);
+        game.add(green);
+        game.add(teal);
+        game.add(pink);
+        game.add(red);
+        game.add(white);
+        game.add(yellow);
 
         restart.setBounds(60,55,60,60); //60 on left and right, buttons 60, 60 in between // for height, buttons are 240 (60x3 + gaps of 20), so 55 on each end.
         menu.add(restart);
@@ -452,6 +482,204 @@ public class Blackjack extends JPanel implements ActionListener {
 
         });
 
+        
+        
+        white.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 10;
+                bet += 10;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+        
+        blue.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 50;
+                bet += 50;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+        
+        pink.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 100;
+                bet += 100;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+        black.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 500;
+                bet += 500;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+        
+       yellow.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 1000;
+                bet += 1000;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+       red.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 2500;
+                bet += 2500;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+        green.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 5000;
+                bet += 5000;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+       teal.addMouseListener(new MouseListener () {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips -= 10000;
+                bet += 10000;
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+        
+        
         menu.setLayout(null);
         game.setLayout(null); //disable managers to do it manually
         hit.setBounds(150, 400, 100, 125);
@@ -485,8 +713,15 @@ public class Blackjack extends JPanel implements ActionListener {
         startGame();
     //     while(running){
     //         try {
-    //             //init game
+    //             hit.setVisible(false);
+    //             doubleDown.setVisible(false);
+    //             stand.setVisible(false);
+    //             split.setVisible(false);
                 
+    //             confirmBet.setVisible(true);
+    //             resetBet.setVisible(true);
+
+
 
 
 
