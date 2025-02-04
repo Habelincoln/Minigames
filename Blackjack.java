@@ -713,6 +713,7 @@ public class Blackjack extends JPanel implements ActionListener {
         startGame();
     //     while(running){
     //         try {
+    //              setupDeck();
     //             hit.setVisible(false);
     //             doubleDown.setVisible(false);
     //             stand.setVisible(false);
