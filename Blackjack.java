@@ -23,7 +23,7 @@ public class Blackjack extends JPanel implements ActionListener {
     static int dealerHand = 0;
     static int playerHand = 0;
     static int bet = 0;
-    static int chips = 0;
+    static int chips = 500;
     
     private Map<String, ImageIcon> cardImages = new HashMap<>();
     private List<String> deck = new ArrayList<>();
@@ -61,6 +61,16 @@ public class Blackjack extends JPanel implements ActionListener {
         JButton musicToggle = new JButton (new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
         JButton darkMode = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
         JButton hint = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMark.png"));
+        JButton black = new JButton(new ImageIcon(""));
+        JButton blue = new JButton(new ImageIcon(""));
+        JButton green = new JButton(new ImageIcon(""));
+        JButton teal = new JButton(new ImageIcon(""));
+        JButton pink = new JButton(new ImageIcon(""));
+        JButton red = new JButton(new ImageIcon(""));
+        JButton white = new JButton(new ImageIcon(""));
+        JButton yellow = new JButton(new ImageIcon(""));
+        JButton confirmBet = new JButton(new ImageIcon(""));
+        JButton resetBet = new JButton(new ImageIcon(""));
 
         hit.setBackground(Color.GREEN);
         hit.setForeground(Color.BLACK);
@@ -472,8 +482,40 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.add(game);
         frame.revalidate();  
         frame.repaint();
-        setupDeck();
-        
+        startGame();
+    //     while(running){
+    //         try {
+    //             //init game
+                
+
+
+
+
+    //         hit(game);
+    //         Thread.sleep(1000);
+    //         dealersTurn = false;
+    //         hit(game);
+    //         Thread.sleep(1000);
+
+    //         dealersTurn = true;
+    //         hit(game);
+    //         Thread.sleep(1000);
+
+    //         dealersTurn = false;
+    //         hit(game);
+    //         Thread.sleep(1000);
+
+    //         //end init game
+
+
+
+
+
+
+    //     } catch (InterruptedException e){
+    //         e.printStackTrace(System.err);
+    //     }
+    // }
     }
 
     public void openMenu(JFrame frame, JPanel menu) {
@@ -590,25 +632,25 @@ public class Blackjack extends JPanel implements ActionListener {
         if (!deck.isEmpty()) {
             System.out.println("dealing card...");
             String card = deck.remove(0);
-            System.out.print(card);//for debug
+            System.out.println(card);//for debug
             ImageIcon cardImage = cardImages.get(card);
             
             JLabel cardLabel = new JLabel(cardImage);
             if (dealersTurn) {
                 switch (dealerCardCount) {
-                    case 0 -> cardLabel.setBounds(200,30 , 100, 145);
-                    case 1 -> cardLabel.setBounds(240,30 , 100, 145);
-                    case 2 -> cardLabel.setBounds(280,200 , 100, 145);
-                    case 3 -> cardLabel.setBounds(320,200 , 100, 145);
-                    case 4 -> cardLabel.setBounds(360,200 , 100, 145);
-                    case 5 -> cardLabel.setBounds(400,200 , 100, 145);
-                    case 6 -> cardLabel.setBounds(440,200 , 100, 145);
-                    case 7 -> cardLabel.setBounds(480,200 , 100, 145);
-                    case 8 -> cardLabel.setBounds(520,200 , 100, 145);
-                    case 9 -> cardLabel.setBounds(560,200 , 100, 145);
-                    case 10 -> cardLabel.setBounds(600,200 , 100, 145);
-                    case 11 -> cardLabel.setBounds(640,200 , 100, 145);
-                    case 12 -> cardLabel.setBounds(680,200 , 100, 145);
+                    case 0 -> cardLabel.setBounds(150,30 , 100, 145);
+                    case 1 -> cardLabel.setBounds(180,30 , 100, 145);
+                    case 2 -> cardLabel.setBounds(210,30 , 100, 145);
+                    case 3 -> cardLabel.setBounds(240,30 , 100, 145);
+                    case 4 -> cardLabel.setBounds(270,30 , 100, 145);
+                    case 5 -> cardLabel.setBounds(300,30 , 100, 145);
+                    case 6 -> cardLabel.setBounds(330,30 , 100, 145);
+                    case 7 -> cardLabel.setBounds(360,30 , 100, 145);
+                    case 8 -> cardLabel.setBounds(390,30 , 100, 145);
+                    case 9 -> cardLabel.setBounds(420,30 , 100, 145);
+                    case 10 -> cardLabel.setBounds(450,30 , 100, 145);
+                    case 11 -> cardLabel.setBounds(480,30 , 100, 145);
+                    case 12 -> cardLabel.setBounds(510,30 , 100, 145);
 
                 }
             }
