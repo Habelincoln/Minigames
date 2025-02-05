@@ -10,7 +10,6 @@ import javax.swing.*;
 public class Blackjack extends JPanel implements ActionListener {
 
     static boolean menuIsOpen = false;
-
     static boolean won = false;
     static boolean lost = false;
     static boolean turn = false;
@@ -29,6 +28,7 @@ public class Blackjack extends JPanel implements ActionListener {
     static volatile JPanel dealerHandPanel = new JPanel();
     static volatile int dealerAces = 0;
     static volatile int playerAces = 0;
+    private final ButtonWaiter buttonWaiter = new ButtonWaiter();
 
     
     private Map<String, ImageIcon> cardImages = new HashMap<>();
@@ -357,7 +357,8 @@ public class Blackjack extends JPanel implements ActionListener {
             @Override
             public void mouseReleased(MouseEvent e) {
                 System.out.println("restart clicked.");
-                restartGame();
+restartGame(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
+
             }
 
             
@@ -807,9 +808,8 @@ public class Blackjack extends JPanel implements ActionListener {
                 split.setVisible(true);
                 game.revalidate();
                 game.repaint();
-
-                initialDeal(game);
-
+                buttonWaiter.buttonReleased();
+                
             }
 
             @Override
@@ -916,9 +916,31 @@ public class Blackjack extends JPanel implements ActionListener {
 
                 setupDeck();
                 
-                //wait for confirm bet
+                System.out.println("Waiting for confirmBet...");
+            buttonWaiter.waitForButton();
+            System.out.println("Bet confirmed! Proceeding with game.");
 
-            
+                initialDeal(game);
+
+                while (!won && !lost) {
+                if (playerHand >= 21) {
+                bust(game, "p");
+                lost = true;
+                checkWin();
+                restartGame(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
+                
+                }
+
+                if (dealerHand >= 21) {
+                    bust(game, "d");
+                    won = true;
+                    checkWin();
+                    restartGame(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
+                    
+                }
+            }
+
+                
 
 
 
@@ -985,14 +1007,70 @@ public class Blackjack extends JPanel implements ActionListener {
 
     public void checkWin() {
             if (won) {
+                chips += bet * 2;
+                bet = 0;
 
             } else if (lost) {
-
+                bet = 0;
             }
     }
 
-    public void restartGame() {
+    public void restartGame(JPanel game, JPanel menu, JButton settings, JButton hint, JButton restart, JButton soundToggle, JButton musicToggle, JButton darkMode, JButton undo, JButton confirmBet, JButton resetBet, JButton hit, JButton stand, JButton doubleDown, JButton split, JButton white, JButton black, JButton pink, JButton yellow, JButton green, JButton blue, JButton teal, JButton red) {
+        game.removeAll();
 
+        game.add(hit);
+        game.add(stand);
+        game.add(doubleDown);
+        game.add(split);
+        game.add(white);
+        game.add(black);
+        game.add(pink);
+        game.add(yellow);
+        game.add(green);
+        game.add(blue);
+        game.add(red);
+        game.add(teal);
+        game.add(confirmBet);
+        game.add(resetBet);
+        game.add(dealerHandPanel);
+        game.add(playerHandPanel);
+        game.add(betPanel);
+        game.add(settings);
+        game.add(menu);
+        menu.add(hint);
+        menu.add(undo);
+        menu.add(restart);
+        menu.add(darkMode);
+        menu.add(soundToggle);
+        menu.add(musicToggle);
+        
+
+        hit.setVisible(false);
+        stand.setVisible(false);
+        doubleDown.setVisible(false);
+        split.setVisible(false);
+
+        white.setVisible(true);
+        black.setVisible(true);
+        pink.setVisible(true);
+        yellow.setVisible(true);
+        green.setVisible(true);
+        blue.setVisible(true);
+        red.setVisible(true);
+        teal.setVisible(true);
+        confirmBet.setVisible(true);
+        resetBet.setVisible(true);
+
+        playerHand = 0;
+        dealerHand = 0;
+        playerAces = 0;
+        dealerAces = 0;
+        won = false;
+        lost = false;
+        setupDeck();
+
+        game.revalidate();
+        game.repaint();
     }
 
     public void undo() {
@@ -1009,6 +1087,39 @@ public class Blackjack extends JPanel implements ActionListener {
         } else if (!muted) {
             mute();
         }
+    }
+
+    public void bust(JPanel game, String pd) {
+        if (pd.equals("p")) {
+        JLabel bustMsg = new JLabel("BUST");
+        bustMsg.setFont(new Font("Arial",Font.PLAIN,60));
+        bustMsg.setBackground(new Color(3,116,0));
+        bustMsg.setForeground(Color.red);
+        bustMsg.setBounds(400,300,200,150);
+        game.add(bustMsg);
+        
+            try{
+                Thread.sleep(2000);
+                game.remove(bustMsg);
+            } catch (InterruptedException e) {
+            e.printStackTrace(System.err);
+            }
+        } else if (pd.equals("d")) {
+            JLabel bustMsg = new JLabel("DEALER BUST");
+            bustMsg.setFont(new Font("Arial",Font.PLAIN,60));
+            bustMsg.setBackground(new Color(3,116,0));
+            bustMsg.setForeground(Color.green);
+            bustMsg.setBounds(400,300,200,150);
+            game.add(bustMsg);
+        
+            try{
+                Thread.sleep(2000);
+                game.remove(bustMsg);
+            } catch (InterruptedException e) {
+            e.printStackTrace(System.err);
+            }
+        }
+
     }
 
     public void mute() {
@@ -1198,5 +1309,25 @@ public class Blackjack extends JPanel implements ActionListener {
 
     public static void main(String[] args) {
         new Blackjack();
+    }
+}
+class ButtonWaiter {
+    private final Object lock = new Object();
+    private boolean buttonReleased = false;
+
+    public void waitForButton() throws InterruptedException {
+        synchronized (lock) {
+            while (!buttonReleased) {
+                lock.wait(); 
+            }
+            buttonReleased = false; 
+        }
+    }
+
+    public void buttonReleased() {
+        synchronized (lock) {
+            buttonReleased = true;
+            lock.notify();
+        }
     }
 }
