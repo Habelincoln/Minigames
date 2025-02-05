@@ -39,7 +39,7 @@ public class Blackjack extends JPanel implements ActionListener {
         JPanel menu = new JPanel();
 
         betPanel.setBounds(275,225,250,150);
-        betPanel.setBackground(new Color(90,116,0));
+        betPanel.setBackground(new Color(3,116,0));
         
         game.add(betPanel);
 
@@ -109,12 +109,14 @@ public class Blackjack extends JPanel implements ActionListener {
 
         confirmBet.setBackground(Color.ORANGE);
         confirmBet.setForeground(Color.black);
+        confirmBet.setBorderPainted(false);
         confirmBet.setBounds(225,450,150,100);
         game.add(confirmBet);
         confirmBet.setVisible(false);
 
         resetBet.setBackground(Color.red);
         resetBet.setForeground(Color.black);
+        resetBet.setBorderPainted(false);
         resetBet.setBounds(425,450,150,100);
         game.add(resetBet);
         resetBet.setVisible(false);
@@ -505,7 +507,7 @@ public class Blackjack extends JPanel implements ActionListener {
                 JLabel betLabel = new JLabel(Integer.toString(bet));
                 betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
                 betLabel.setForeground(Color.WHITE);
-                betPanel.remove(betLabel);
+                betPanel.removeAll();
                 betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
@@ -532,6 +534,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 50;
                 bet += 50;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -557,6 +565,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 100;
                 bet += 100;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -581,6 +595,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 500;
                 bet += 500;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -606,6 +626,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 1000;
                 bet += 1000;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -630,6 +656,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 2500;
                 bet += 2500;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -654,6 +686,12 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 5000;
                 bet += 5000;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
@@ -667,7 +705,7 @@ public class Blackjack extends JPanel implements ActionListener {
 
         });
         
-       teal.addMouseListener(new MouseListener () {
+       teal.addMouseListener(new MouseListener () { 
             @Override
             public void mouseClicked(MouseEvent e) {}
 
@@ -678,6 +716,63 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 chips -= 10000;
                 bet += 10000;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
+                game.revalidate();
+                game.repaint();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+
+       confirmBet.addMouseListener(new MouseListener () { 
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //logic to start dealing
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        
+
+        });
+
+        resetBet.addMouseListener(new MouseListener () { 
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                chips += bet;
+                bet = 0;
+                System.out.println("Bet: " + bet + ", chips : " + chips);
+                JLabel betLabel = new JLabel(Integer.toString(bet));
+                betLabel.setFont(new Font("Arial", Font.PLAIN, 50));
+                betLabel.setForeground(Color.WHITE);
+                betPanel.removeAll();
+                betPanel.add(betLabel);
                 game.revalidate();
                 game.repaint();
             }
