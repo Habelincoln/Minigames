@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Blackjack extends JPanel implements ActionListener {
 
     static boolean menuIsOpen = false;
-    static boolean running = false;
+
     static boolean won = false;
     static boolean lost = false;
     static boolean turn = false;
@@ -27,6 +27,8 @@ public class Blackjack extends JPanel implements ActionListener {
     static volatile JPanel betPanel = new JPanel();
     static volatile JPanel playerHandPanel = new JPanel();
     static volatile JPanel dealerHandPanel = new JPanel();
+    static volatile int dealerAces = 0;
+    static volatile int playerAces = 0;
 
     
     private Map<String, ImageIcon> cardImages = new HashMap<>();
@@ -56,11 +58,11 @@ public class Blackjack extends JPanel implements ActionListener {
                 dealerHandPanel.revalidate();
                 dealerHandPanel.repaint();
 
-                // Sleep for a short time before updating again
+                
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 ex.printStackTrace(System.err);
-                break; // Exit the loop if the thread is interrupted
+                break; 
             }
         }
     }).start();
@@ -787,7 +789,27 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //logic to start dealing
+                white.setVisible(false);
+                black.setVisible(false);
+                pink.setVisible(false);
+                yellow.setVisible(false);
+                green.setVisible(false);
+                teal.setVisible(false);
+                pink.setVisible(false);
+                red.setVisible(false);
+                blue.setVisible(false);
+                confirmBet.setVisible(false);
+                resetBet.setVisible(false);
+
+                hit.setVisible(true);
+                stand.setVisible(true);
+                doubleDown.setVisible(true);
+                split.setVisible(true);
+                game.revalidate();
+                game.repaint();
+
+                initialDeal(game);
+
             }
 
             @Override
@@ -860,51 +882,80 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.add(game);
         frame.revalidate();  
         frame.repaint();
-        startGame();
-        // while(running){
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
             try {
                  
-    //             hit.setVisible(false);
-    //             doubleDown.setVisible(false);
-    //             stand.setVisible(false);
-    //             split.setVisible(false);
+                hit.setVisible(false);
+                doubleDown.setVisible(false);
+                stand.setVisible(false);
+                split.setVisible(false);
                 
-    //             confirmBet.setVisible(true);
-    //             resetBet.setVisible(true);
+                confirmBet.setVisible(true);
+                resetBet.setVisible(true);
 
+                setupDeck();
+                
+                //wait for confirm bet
 
-
-
-
-            setupDeck();
-
-            dealHouse(game, true);
-            Thread.sleep(1000);
-
-            hit(game);
-            Thread.sleep(1000);
-
-            dealHouse(game, false);
-            Thread.sleep(1000);
-
-            hit(game);
-            Thread.sleep(1000);
-
-            //end init game
+            
 
 
 
 
 
 
-        } catch (InterruptedException e){
+
+        } catch (Exception e){
             e.printStackTrace(System.err);
         }
-    // }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void openMenu(JFrame frame, JPanel menu) {
-        running = false;
+        
+        dealerHandPanel.setVisible(false);
+        playerHandPanel.setVisible(false);
         menu.setVisible(true);
         frame.revalidate();  
         frame.repaint();
@@ -914,19 +965,14 @@ public class Blackjack extends JPanel implements ActionListener {
     }
 
     public void closeMenu(JFrame frame, JPanel menu) {
-        running = true;
+        
+        dealerHandPanel.setVisible(true);
+        playerHandPanel.setVisible(true);
         menu.setVisible(false);
         frame.revalidate();  
         frame.repaint();
         menuIsOpen = false;
         System.out.println("closing menu");
-    }
-
-    public void startGame(){
-        if (!running){
-            setupDeck();
-            running = true;
-        }
     }
 
     public void drawCard() {
@@ -938,13 +984,11 @@ public class Blackjack extends JPanel implements ActionListener {
     }
 
     public void checkWin() {
-        if (!running) {
             if (won) {
 
             } else if (lost) {
 
             }
-        }
     }
 
     public void restartGame() {
@@ -1030,23 +1074,30 @@ public class Blackjack extends JPanel implements ActionListener {
                 case 4 -> cardLabel.setBounds(375,400,100,145);
                 case 5 -> cardLabel.setBounds(405,400,100,145);
                 case 6 -> cardLabel.setBounds(435,400,100,145);
-
-
-
             }
             game.add(cardLabel);
             playerCardCount++;
             int temp = 0;
     
-    if (card.contains("J") || card.contains("Q") || card.contains("K")){
+    if (card.contains("J") || card.contains("Q") || card.contains("K") || card.contains("10")){
         temp = 10;
-    } else if (card.contains("A")){
-
+    } else if (card.contains("A")) {
+        if (playerHand + 11 > 21) {
+            temp = 1;
+        } else {
+            temp = 11;
+        }
+        playerAces++;
     } else {
         temp = Integer.parseInt(card.substring(0,1));
     }
 
     playerHand += temp;
+    if (dealerHand > 21 && dealerAces == 1) {
+        dealerHand -= 10;
+    } else if (dealerHand > 21 && dealerAces == 2){
+        dealerHand -= 20;
+    }
             game.revalidate();
             game.repaint();
             
@@ -1078,7 +1129,6 @@ public class Blackjack extends JPanel implements ActionListener {
             case 4 -> cardLabel.setBounds(375,30 , 100, 145);
             case 5 -> cardLabel.setBounds(405,30 , 100, 145);
             case 6 -> cardLabel.setBounds(435,30 , 100, 145);
-
         }
     
     game.add(cardLabel);
@@ -1086,15 +1136,27 @@ public class Blackjack extends JPanel implements ActionListener {
         
     int temp = 0;
     if (!firstCard) {
-    if (card.contains("J") || card.contains("Q") || card.contains("K")){
+    if (card.contains("J") || card.contains("Q") || card.contains("K") || card.contains("10")){
         temp = 10;
-    } else if (card.contains("A")){
+    } else if (card.contains("A")) {
+        
+        if (dealerHand + 11 > 21) {
+            temp = 1;
+        } else {
+            temp = 11;
+        }
+        dealerAces++;
 
     } else {
         temp = Integer.parseInt(card.substring(0,1));
     }
 }
     dealerHand += temp;
+    if (dealerHand > 21 && dealerAces == 1) {
+        dealerHand -= 10;
+    } else if (dealerHand > 21 && dealerAces == 2){
+        dealerHand -= 20;
+    }
     
     
     game.revalidate();
@@ -1104,7 +1166,28 @@ public class Blackjack extends JPanel implements ActionListener {
         }
     }
     
-    
+    public void initialDeal(JPanel game) {
+            
+            dealHouse(game, true);
+            
+            game.revalidate();
+            game.repaint();
+
+            hit(game);
+            
+            game.revalidate();
+            game.repaint();
+
+            dealHouse(game, false);
+            
+            game.revalidate();
+            game.repaint();
+            hit(game);
+            
+            game.revalidate();
+            game.repaint();
+           
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
