@@ -25,12 +25,46 @@ public class Blackjack extends JPanel implements ActionListener {
     static volatile int bet = 0;
     static volatile int chips = 1000;
     static volatile JPanel betPanel = new JPanel();
+    static volatile JPanel playerHandPanel = new JPanel();
+    static volatile JPanel dealerHandPanel = new JPanel();
+
     
     private Map<String, ImageIcon> cardImages = new HashMap<>();
     private List<String> deck = new ArrayList<>();
 
 
     Blackjack() {
+        
+    new Thread(() -> {
+        while (true) {
+            try {
+                
+                playerHandPanel.removeAll();
+                dealerHandPanel.removeAll();
+
+                JLabel temp1 = new JLabel(Integer.toString(playerHand));
+                temp1.setFont(new Font("Arial", Font.PLAIN, 40));
+                playerHandPanel.add(temp1);
+                
+                JLabel temp2 = new JLabel(Integer.toString(dealerHand));
+                temp2.setFont(new Font("Arial", Font.PLAIN, 40));
+                dealerHandPanel.add(temp2);
+
+                
+                playerHandPanel.revalidate();
+                playerHandPanel.repaint();
+                dealerHandPanel.revalidate();
+                dealerHandPanel.repaint();
+
+                // Sleep for a short time before updating again
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace(System.err);
+                break; // Exit the loop if the thread is interrupted
+            }
+        }
+    }).start();
+
         JFrame frame = new JFrame("Blackjack");
         JPanel game = new JPanel();
         JTextArea title = new JTextArea();
@@ -38,6 +72,15 @@ public class Blackjack extends JPanel implements ActionListener {
         JTextArea player = new JTextArea();
         JPanel menu = new JPanel();
 
+        playerHandPanel.setBounds(350, 325, 100, 50);
+        playerHandPanel.setBackground(new Color(3,116,0));
+        game.add(playerHandPanel);
+
+        dealerHandPanel.setBounds(350, 175, 100, 50);
+        dealerHandPanel.setBackground(new Color(3,116,0));
+        game.add(dealerHandPanel);
+        
+        
         betPanel.setBounds(275,225,250,150);
         betPanel.setBackground(new Color(3,116,0));
         
@@ -195,7 +238,7 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                
+                dealersTurn = true;
             }
 
             @Override
@@ -818,9 +861,9 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.revalidate();  
         frame.repaint();
         startGame();
-    //     while(running){
-    //         try {
-    //              setupDeck();
+        // while(running){
+            try {
+                 
     //             hit.setVisible(false);
     //             doubleDown.setVisible(false);
     //             stand.setVisible(false);
@@ -833,31 +876,30 @@ public class Blackjack extends JPanel implements ActionListener {
 
 
 
+            setupDeck();
 
-    //         hit(game);
-    //         Thread.sleep(1000);
-    //         dealersTurn = false;
-    //         hit(game);
-    //         Thread.sleep(1000);
+            dealHouse(game, true);
+            Thread.sleep(1000);
 
-    //         dealersTurn = true;
-    //         hit(game);
-    //         Thread.sleep(1000);
+            hit(game);
+            Thread.sleep(1000);
 
-    //         dealersTurn = false;
-    //         hit(game);
-    //         Thread.sleep(1000);
+            dealHouse(game, false);
+            Thread.sleep(1000);
 
-    //         //end init game
+            hit(game);
+            Thread.sleep(1000);
 
+            //end init game
 
 
 
 
 
-    //     } catch (InterruptedException e){
-    //         e.printStackTrace(System.err);
-    //     }
+
+        } catch (InterruptedException e){
+            e.printStackTrace(System.err);
+        }
     // }
     }
 
@@ -979,31 +1021,86 @@ public class Blackjack extends JPanel implements ActionListener {
             ImageIcon cardImage = cardImages.get(card);
             
             JLabel cardLabel = new JLabel(cardImage);
-            if (dealersTurn) {
-                switch (dealerCardCount) {
-                    case 0 -> cardLabel.setBounds(150,30 , 100, 145);
-                    case 1 -> cardLabel.setBounds(180,30 , 100, 145);
-                    case 2 -> cardLabel.setBounds(210,30 , 100, 145);
-                    case 3 -> cardLabel.setBounds(240,30 , 100, 145);
-                    case 4 -> cardLabel.setBounds(270,30 , 100, 145);
-                    case 5 -> cardLabel.setBounds(300,30 , 100, 145);
-                    case 6 -> cardLabel.setBounds(330,30 , 100, 145);
-                    case 7 -> cardLabel.setBounds(360,30 , 100, 145);
-                    case 8 -> cardLabel.setBounds(390,30 , 100, 145);
-                    case 9 -> cardLabel.setBounds(420,30 , 100, 145);
-                    case 10 -> cardLabel.setBounds(450,30 , 100, 145);
-                    case 11 -> cardLabel.setBounds(480,30 , 100, 145);
-                    case 12 -> cardLabel.setBounds(510,30 , 100, 145);
 
-                }
+            switch (playerCardCount) {
+                case 0 -> cardLabel.setBounds(255,400,100,145);
+                case 1 -> cardLabel.setBounds(285,400,100,145);
+                case 2 -> cardLabel.setBounds(315,400,100,145);
+                case 3 -> cardLabel.setBounds(345,400,100,145);
+                case 4 -> cardLabel.setBounds(375,400,100,145);
+                case 5 -> cardLabel.setBounds(405,400,100,145);
+                case 6 -> cardLabel.setBounds(435,400,100,145);
+
+
+
             }
             game.add(cardLabel);
-            dealerCardCount++;
-            
+            playerCardCount++;
+            int temp = 0;
+    
+    if (card.contains("J") || card.contains("Q") || card.contains("K")){
+        temp = 10;
+    } else if (card.contains("A")){
+
+    } else {
+        temp = Integer.parseInt(card.substring(0,1));
+    }
+
+    playerHand += temp;
             game.revalidate();
             game.repaint();
+            
+        
+                
         } else { 
             System.out.println("Deck empty");
+        }
+    }
+
+    public void dealHouse(JPanel game, boolean firstCard) {
+        if (!deck.isEmpty()) {
+        System.out.println("dealing card to dealer...");
+            String card = deck.remove(0);
+            System.out.println(card);//for debug
+            ImageIcon cardImage;
+            if (!firstCard) {
+            cardImage = cardImages.get(card);
+            } else {
+                cardImage = new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Playing Cards\\back.png"); //show back
+            }
+            
+            JLabel cardLabel = new JLabel(cardImage);
+        switch (dealerCardCount) {
+            case 0 -> cardLabel.setBounds(255,30 , 100, 145);
+            case 1 -> cardLabel.setBounds(285,30 , 100, 145);
+            case 2 -> cardLabel.setBounds(315,30 , 100, 145);
+            case 3 -> cardLabel.setBounds(345,30 , 100, 145);
+            case 4 -> cardLabel.setBounds(375,30 , 100, 145);
+            case 5 -> cardLabel.setBounds(405,30 , 100, 145);
+            case 6 -> cardLabel.setBounds(435,30 , 100, 145);
+
+        }
+    
+    game.add(cardLabel);
+    dealerCardCount++;
+        
+    int temp = 0;
+    if (!firstCard) {
+    if (card.contains("J") || card.contains("Q") || card.contains("K")){
+        temp = 10;
+    } else if (card.contains("A")){
+
+    } else {
+        temp = Integer.parseInt(card.substring(0,1));
+    }
+}
+    dealerHand += temp;
+    
+    
+    game.revalidate();
+    game.repaint();
+        } else {
+            System.out.print("deck empty");
         }
     }
     
