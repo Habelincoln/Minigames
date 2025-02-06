@@ -26,44 +26,50 @@ public class Blackjack extends JPanel implements ActionListener {
     static volatile int dealerAces = 0;
     static volatile int playerAces = 0;
     static volatile boolean stood = false;
+    static volatile boolean shouldUpdate = true;
     private final ButtonWaiter buttonWaiter = new ButtonWaiter();
 
     
     private Map<String, ImageIcon> cardImages = new HashMap<>();
     private List<String> deck = new ArrayList<>();
 
-
-    Blackjack() throws InterruptedException {
-        
-    new Thread(() -> {
-        while (true) {
+    private static Thread scoreUpdater = new Thread(() -> {
+        while (shouldUpdate) {
             try {
                 
                 playerHandPanel.removeAll();
                 dealerHandPanel.removeAll();
+    
 
                 JLabel temp1 = new JLabel(Integer.toString(playerHand));
                 temp1.setFont(new Font("Arial", Font.PLAIN, 40));
                 playerHandPanel.add(temp1);
+    
                 
                 JLabel temp2 = new JLabel(Integer.toString(dealerHand));
                 temp2.setFont(new Font("Arial", Font.PLAIN, 40));
                 dealerHandPanel.add(temp2);
-
+    
                 
                 playerHandPanel.revalidate();
                 playerHandPanel.repaint();
                 dealerHandPanel.revalidate();
                 dealerHandPanel.repaint();
-
-                
+    
+               
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 ex.printStackTrace(System.err);
-                break; 
+                break;
             }
         }
-    }).start();
+    });
+
+    Blackjack() throws InterruptedException {
+        
+        scoreUpdater.setName("ScoreUpdater");
+        scoreUpdater.start();
+        
 
         JFrame frame = new JFrame("Blackjack");
         JPanel game = new JPanel();
@@ -1069,6 +1075,8 @@ public class Blackjack extends JPanel implements ActionListener {
                 playerHandPanel.revalidate();
                 playerHandPanel.repaint();
                 game.repaint();
+                System.out.println("player blackjack");
+                shouldUpdate = false;
                 
                     try {
                         Thread.sleep(2000);
@@ -1076,6 +1084,7 @@ public class Blackjack extends JPanel implements ActionListener {
                         
                         e.printStackTrace(System.err);
                     }
+                    shouldUpdate = true;
         } else if (pd.equals("d")) {
                 dealerHandPanel.removeAll();
                 JLabel temp2 = new JLabel("BLACKJACK");
@@ -1088,12 +1097,15 @@ public class Blackjack extends JPanel implements ActionListener {
                 dealerHandPanel.revalidate();
                 dealerHandPanel.repaint();
                 game.repaint();
+                System.out.println("dealer blackjack");
+                shouldUpdate = false;
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     
                     e.printStackTrace(System.err);
                 }
+                shouldUpdate = true;
         }
 
     }
@@ -1127,7 +1139,7 @@ public class Blackjack extends JPanel implements ActionListener {
     }
 
     public void soundToggle() {
-        if (muted){
+        if (muted) {
             sound();
         } else if (!muted) {
             mute();
@@ -1144,10 +1156,13 @@ public class Blackjack extends JPanel implements ActionListener {
                 temp1.setOpaque(true);
                 playerHandPanel.add(temp1);
                 playerHandPanel.setOpaque(true);
-                playerHandPanel.revalidate();
-                playerHandPanel.repaint();
+                // playerHandPanel.revalidate();
+                // playerHandPanel.repaint();
                 game.repaint();
+                System.out.println("Player busted");
+                shouldUpdate = false;
                 Thread.sleep(2000);
+                shouldUpdate = true;
                 
         } else if (pd.equals("d")) {
             dealerHandPanel.removeAll();
@@ -1158,11 +1173,14 @@ public class Blackjack extends JPanel implements ActionListener {
                 temp2.setOpaque(true);
                 dealerHandPanel.add(temp2);
                 dealerHandPanel.setOpaque(true);
-                dealerHandPanel.revalidate();
-                dealerHandPanel.repaint();
+                // dealerHandPanel.revalidate();
+                // dealerHandPanel.repaint();
                 game.repaint();
+                System.out.println("dealer busted");
+                shouldUpdate = false;
                 Thread.sleep(2000);
-        }
+                shouldUpdate = true;
+            }   
 
     }
 
