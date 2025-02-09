@@ -2683,6 +2683,15 @@ public class main {
                         oBoardsWon++;
                     }
                     if (xBoardsWon >= 5) {
+                        for (int i = 0; i < 3; i++) {
+                            for (int j = 0; j < 3; j++) {
+                                for (int k = 0; k < 3; k++) {
+                                    for (int l = 0; l < 3; l++) {
+                                        megaBoard[i][j][k][l] = blueansi + "X" + defaultansi;
+                                    }
+                                }
+                            }
+                        }
                         clearScreen();
                         printBoardMega();
                         println(blueansi + "X" + defaultansi + " wins the game!");
@@ -2960,9 +2969,15 @@ class MinesweeperPanel extends JPanel implements ActionListener {
 
     // Constructor - initializes the game panel with specified dimensions
     MinesweeperPanel(int width, int height, int mines) {
+        
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+        
+        
         this.boardWidth = width;
         this.boardHeight = height;
         this.mines = mines;
+        
         
         // Initialize arrays for game state tracking
         this.revealed = new boolean[height][width];
@@ -3325,6 +3340,8 @@ class MinesweeperFrame extends JFrame {
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
 }
 class snakePanel extends JPanel implements ActionListener {

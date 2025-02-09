@@ -900,42 +900,28 @@ public class Blackjack extends JPanel implements ActionListener {
         frame.repaint();
         
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-                 
-                hit.setVisible(false);
-                doubleDown.setVisible(false);
-                stand.setVisible(false);
-                split.setVisible(false);
-                
-                confirmBet.setVisible(true);
-                resetBet.setVisible(true);
+                 //game loop
+                 while (true) {
+                restartGame(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
 
                 setupDeck();
                 
                 System.out.println("Waiting for confirmBet...");
             buttonWaiter.waitForButton();
-            System.out.println("Bet confirmed! Proceeding with game.");
+            System.out.println("confirmed.");
 
                 initialDeal(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
+
+                buttonWaiter.waitForButton();
+                while (!stood) {
+                    buttonWaiter.waitForButton();
+                }
+
+                dealHouse(game, false, true, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
+
+                checkWin(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
+                
+                }
     }
 
     public void openMenu(JFrame frame, JPanel menu) {
@@ -960,15 +946,6 @@ public class Blackjack extends JPanel implements ActionListener {
         menuIsOpen = false;
         System.out.println("closing menu");
     }
-
-    public void drawCard() {
-
-    }
-
-    public void drawDealerCard() {
-
-    }
-
     public void checkWin(JPanel game, JPanel menu, JButton settings, JButton hint, JButton restart, JButton soundToggle, JButton musicToggle, JButton darkMode, JButton undo, JButton confirmBet, JButton resetBet, JButton hit, JButton stand, JButton doubleDown, JButton split, JButton white, JButton black, JButton pink, JButton yellow, JButton green, JButton blue, JButton teal, JButton red) throws InterruptedException{
         if (playerHand > 21 && dealerHand < 21) {
             bust(game, "p");
@@ -1131,7 +1108,7 @@ public class Blackjack extends JPanel implements ActionListener {
     }
 
     public void undo() {
-
+        
     }
 
     public void hint() {
@@ -1156,8 +1133,8 @@ public class Blackjack extends JPanel implements ActionListener {
                 temp1.setOpaque(true);
                 playerHandPanel.add(temp1);
                 playerHandPanel.setOpaque(true);
-                // playerHandPanel.revalidate();
-                // playerHandPanel.repaint();
+                playerHandPanel.revalidate();
+                playerHandPanel.repaint();
                 game.repaint();
                 System.out.println("Player busted");
                 shouldUpdate = false;
@@ -1173,8 +1150,8 @@ public class Blackjack extends JPanel implements ActionListener {
                 temp2.setOpaque(true);
                 dealerHandPanel.add(temp2);
                 dealerHandPanel.setOpaque(true);
-                // dealerHandPanel.revalidate();
-                // dealerHandPanel.repaint();
+                dealerHandPanel.revalidate();
+                dealerHandPanel.repaint();
                 game.repaint();
                 System.out.println("dealer busted");
                 shouldUpdate = false;
@@ -1305,6 +1282,8 @@ public class Blackjack extends JPanel implements ActionListener {
         }
     
     game.add(cardLabel);
+    game.revalidate();
+    game.repaint();
     dealerCardCount++;
         
     int temp = 0;
@@ -1325,6 +1304,8 @@ public class Blackjack extends JPanel implements ActionListener {
     }
 }
     dealerHand += temp;
+    game.revalidate();
+    game.repaint();
     if (dealerHand > 21 && dealerAces == 1) {
         dealerHand -= 10;
     } else if (dealerHand > 21 && dealerAces == 2){
