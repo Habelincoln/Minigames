@@ -26,7 +26,7 @@ public class Blackjack extends JPanel implements ActionListener {
     static volatile int dealerAces = 0;
     static volatile int playerAces = 0;
     static volatile boolean stood = false;
-    static volatile boolean shouldUpdate = true;
+    static volatile JPanel tempPanel = new JPanel();
     private final ButtonWaiter buttonWaiter = new ButtonWaiter();
 
     
@@ -34,7 +34,7 @@ public class Blackjack extends JPanel implements ActionListener {
     private List<String> deck = new ArrayList<>();
 
     private static Thread scoreUpdater = new Thread(() -> {
-        while (shouldUpdate) {
+        while (true) {
             try {
                 
                 playerHandPanel.removeAll();
@@ -49,7 +49,6 @@ public class Blackjack extends JPanel implements ActionListener {
                 JLabel temp2 = new JLabel(Integer.toString(dealerHand));
                 temp2.setFont(new Font("Arial", Font.PLAIN, 40));
                 dealerHandPanel.add(temp2);
-    
                 
                 playerHandPanel.revalidate();
                 playerHandPanel.repaint();
@@ -65,10 +64,36 @@ public class Blackjack extends JPanel implements ActionListener {
         }
     });
 
+    private static Thread chipsUpdater = new Thread(() -> {
+        while (true) {
+            try {
+                tempPanel.removeAll();
+                JLabel temp1 = new JLabel(Integer.toString(chips));
+                temp1.setFont(new Font("Arial", Font.PLAIN, 40));
+                
+                tempPanel.setBackground(new Color(3,116,0));
+                tempPanel.add(temp1);
+                tempPanel.setBounds(650, 400, 200, 100);
+                tempPanel.setOpaque(true);
+                tempPanel.revalidate();
+                tempPanel.repaint();
+                
+               
+                Thread.sleep(100);
+                
+            } catch (InterruptedException ex) {
+                ex.printStackTrace(System.err);
+                break;
+            }
+        }
+    });
+
     Blackjack() throws InterruptedException {
         
         scoreUpdater.setName("ScoreUpdater");
         scoreUpdater.start();
+        chipsUpdater.setName("chipsUpdater");
+        chipsUpdater.start();
         
 
         JFrame frame = new JFrame("Blackjack");
@@ -77,6 +102,8 @@ public class Blackjack extends JPanel implements ActionListener {
         JTextArea dealer = new JTextArea();
         JTextArea player = new JTextArea();
         JPanel menu = new JPanel();
+        game.add(tempPanel);
+
 
         playerHandPanel.setBounds(350, 325, 100, 50);
         playerHandPanel.setBackground(new Color(3,116,0));
@@ -867,7 +894,6 @@ public class Blackjack extends JPanel implements ActionListener {
 
         });
         
-        
         menu.setLayout(null);
         game.setLayout(null); //disable managers to do it manually
         hit.setBounds(150, 400, 100, 125);
@@ -947,15 +973,13 @@ public class Blackjack extends JPanel implements ActionListener {
         System.out.println("closing menu");
     }
     public void checkWin(JPanel game, JPanel menu, JButton settings, JButton hint, JButton restart, JButton soundToggle, JButton musicToggle, JButton darkMode, JButton undo, JButton confirmBet, JButton resetBet, JButton hit, JButton stand, JButton doubleDown, JButton split, JButton white, JButton black, JButton pink, JButton yellow, JButton green, JButton blue, JButton teal, JButton red) throws InterruptedException{
-        if (playerHand > 21 && dealerHand < 21) {
+        if (playerHand > 21) {
             bust(game, "p");
-            
-            
             restartGame(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
             
             }
 
-            if (dealerHand > 21 && playerHand < 21) {
+            if (dealerHand > 21) {
                 bust(game, "d");
                 restartGame(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
                 
@@ -970,7 +994,7 @@ public class Blackjack extends JPanel implements ActionListener {
                 wonbj(game, "d");
                 
             }
-            if (stood && dealerHand >= 16) {
+            if (stood && dealerHand >= 16 && dealerHand != 21 && playerHand != 21) {
                 if (playerHand > dealerHand) {
                     won(game, menu, settings, hint, restart, soundToggle, musicToggle, darkMode, undo, confirmBet, resetBet, hit, stand, doubleDown, split, white, black, pink, yellow, green, blue, teal, red);
                 } else if (playerHand < dealerHand) {
@@ -1034,55 +1058,62 @@ public class Blackjack extends JPanel implements ActionListener {
         playerAces = 0;
         dealerAces = 0;
         stood = false;
-        setupDeck();
+         dealerCardCount = 0;
+         playerCardCount = 0;
+         bet = 0;
 
         game.revalidate();
         game.repaint();
     }
-    public void wonbj(JPanel game, String pd){
-        if (pd.equals("p")){
-            playerHandPanel.removeAll();
+    public void wonbj(JPanel game, String pd) {
+        if (pd.equals("p")) {
+                JPanel tempP1 = new JPanel();
+                tempP1.setBackground(new Color(3,116,0));
+                tempP1.setBounds(350, 500, 200, 100);
                 JLabel temp1 = new JLabel("BLACKJACK");
                 temp1.setBackground(Color.BLUE);
                 temp1.setForeground(Color.white);
                 temp1.setFont(new Font("Arial", Font.PLAIN, 40));
                 temp1.setOpaque(true);
-                playerHandPanel.add(temp1);
-                playerHandPanel.setOpaque(true);
-                playerHandPanel.revalidate();
-                playerHandPanel.repaint();
+                tempP1.add(temp1);
+                tempP1.setOpaque(true);
+                game.add(tempP1);
+                tempP1.revalidate();
+                tempP1.repaint();
                 game.repaint();
                 System.out.println("player blackjack");
-                shouldUpdate = false;
-                
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        
-                        e.printStackTrace(System.err);
-                    }
-                    shouldUpdate = true;
-        } else if (pd.equals("d")) {
-                dealerHandPanel.removeAll();
-                JLabel temp2 = new JLabel("BLACKJACK");
-                temp2.setBackground(Color.red);
-                temp2.setForeground(Color.white);
-                temp2.setFont(new Font("Arial", Font.PLAIN, 40));
-                temp2.setOpaque(true);
-                dealerHandPanel.add(temp2);
-                dealerHandPanel.setOpaque(true);
-                dealerHandPanel.revalidate();
-                dealerHandPanel.repaint();
-                game.repaint();
-                System.out.println("dealer blackjack");
-                shouldUpdate = false;
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     
                     e.printStackTrace(System.err);
                 }
-                shouldUpdate = true;
+                game.remove(tempP1);
+                    
+        } else if (pd.equals("d")) {
+            JPanel tempP1 = new JPanel();
+            tempP1.setBackground(new Color(3,116,0));
+            tempP1.setBounds(350, 200, 200, 100);
+            JLabel temp1 = new JLabel("BLACKJACK");
+            temp1.setBackground(Color.BLUE);
+            temp1.setForeground(Color.white);
+            temp1.setFont(new Font("Arial", Font.PLAIN, 40));
+            temp1.setOpaque(true);
+            tempP1.add(temp1);
+            tempP1.setOpaque(true);
+            game.add(tempP1);
+            tempP1.revalidate();
+            tempP1.repaint();
+            game.repaint();
+            System.out.println("dealer blackjack");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                
+                e.printStackTrace(System.err);
+            }
+            game.remove(tempP1);
+                
         }
 
     }
@@ -1123,42 +1154,56 @@ public class Blackjack extends JPanel implements ActionListener {
         }
     }
 
-    public void bust(JPanel game, String pd) throws InterruptedException{
+    public void bust(JPanel game, String pd) {
         if (pd.equals("p")) {
-                playerHandPanel.removeAll();
-                JLabel temp1 = new JLabel("BUST");
-                temp1.setBackground(Color.red);
+            JPanel tempP1 = new JPanel();
+                tempP1.setBackground(new Color(3,116,0));
+                tempP1.setBounds(350, 500, 200, 100);
+                JLabel temp1 = new JLabel("BLACKJACK");
+                temp1.setBackground(Color.BLUE);
                 temp1.setForeground(Color.white);
                 temp1.setFont(new Font("Arial", Font.PLAIN, 40));
                 temp1.setOpaque(true);
-                playerHandPanel.add(temp1);
-                playerHandPanel.setOpaque(true);
-                playerHandPanel.revalidate();
-                playerHandPanel.repaint();
+                tempP1.add(temp1);
+                tempP1.setOpaque(true);
+                game.add(tempP1);
+                tempP1.revalidate();
+                tempP1.repaint();
                 game.repaint();
-                System.out.println("Player busted");
-                shouldUpdate = false;
-                Thread.sleep(2000);
-                shouldUpdate = true;
-                
+                System.out.println("player bust");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    
+                    e.printStackTrace(System.err);
+                }
+                game.remove(tempP1);
+    
+            
         } else if (pd.equals("d")) {
-            dealerHandPanel.removeAll();
-                JLabel temp2 = new JLabel("BUST");
-                temp2.setBackground(Color.red);
-                temp2.setForeground(Color.white);
-                temp2.setFont(new Font("Arial", Font.PLAIN, 40));
-                temp2.setOpaque(true);
-                dealerHandPanel.add(temp2);
-                dealerHandPanel.setOpaque(true);
-                dealerHandPanel.revalidate();
-                dealerHandPanel.repaint();
-                game.repaint();
-                System.out.println("dealer busted");
-                shouldUpdate = false;
+            JPanel tempP1 = new JPanel();
+            tempP1.setBackground(new Color(3,116,0));
+            tempP1.setBounds(350, 200, 200, 100);
+            JLabel temp1 = new JLabel("BLACKJACK");
+            temp1.setBackground(Color.BLUE);
+            temp1.setForeground(Color.white);
+            temp1.setFont(new Font("Arial", Font.PLAIN, 40));
+            temp1.setOpaque(true);
+            tempP1.add(temp1);
+            tempP1.setOpaque(true);
+            game.add(tempP1);
+            tempP1.revalidate();
+            tempP1.repaint();
+            game.repaint();
+            System.out.println("dealer bust");
+            try {
                 Thread.sleep(2000);
-                shouldUpdate = true;
-            }   
-
+            } catch (InterruptedException e) {
+                
+                e.printStackTrace(System.err);
+            }
+            game.remove(tempP1);
+        }
     }
 
     public void mute() {
