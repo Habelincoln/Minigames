@@ -30,7 +30,6 @@ public class Blackjack extends JPanel implements ActionListener {
     static volatile JPanel chipsPanel = new JPanel();
     private final ButtonWaiter buttonWaiter = new ButtonWaiter();
 
-    
     private final Map<String, ImageIcon> cardImages = new HashMap<>();
     private List<String> deck = new ArrayList<>();
 
@@ -100,21 +99,21 @@ public class Blackjack extends JPanel implements ActionListener {
         JButton doubleDown = new JButton("Double");
         JButton split = new JButton("SPLIT");
         JButton stand = new JButton("STAND");
-        JButton settings = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\settings.png"));
-        JButton restart = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\restart.png"));
-        JButton undo = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\undo.png"));
-        JButton soundToggle = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\sound.png"));
-        JButton musicToggle = new JButton (new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
-        JButton darkMode = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
-        JButton hint = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMark.png"));
-        JButton black = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipBlack.png"));
-        JButton blue = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipBlue.png"));
-        JButton green = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipGreen.png"));
-        JButton teal = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipTeal.png"));
-        JButton pink = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipPink.png"));
-        JButton red = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipRed.png"));
-        JButton white = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipWhite.png"));
-        JButton yellow = new JButton(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Chips\\chipYellow.png"));
+        JButton settings = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\settings.png"));
+        JButton restart = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\restart.png"));
+        JButton undo = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\undo.png"));
+        JButton soundToggle = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\sound.png"));
+        JButton musicToggle = new JButton (new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\music.png"));
+        JButton darkMode = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\darkModeOff.png"));
+        JButton hint = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\qMark.png"));
+        JButton black = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipBlack.png"));
+        JButton blue = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipBlue.png"));
+        JButton green = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipGreen.png"));
+        JButton teal = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipTeal.png"));
+        JButton pink = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipPink.png"));
+        JButton red = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipRed.png"));
+        JButton white = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipWhite.png"));
+        JButton yellow = new JButton(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Chips\\chipYellow.png"));
         JButton confirmBet = new JButton("Confirm");
         JButton resetBet = new JButton("Reset");
         JButton nextRound = new JButton("Next Round");
@@ -350,12 +349,12 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                settings.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\settingsDark.png"));
+                settings.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\settingsDark.png"));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                settings.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\settings.png"));
+                settings.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\settings.png"));
             }
 
         });
@@ -378,12 +377,12 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                restart.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\restartDark.png"));
+                restart.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\restartDark.png"));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                restart.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\restart.png"));
+                restart.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\restart.png"));
             }
 
         });
@@ -405,12 +404,12 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                undo.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\undoDark.png"));
+                undo.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\undoDark.png"));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                undo.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\undo.png"));
+                undo.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\undo.png"));
             }
 
         });
@@ -427,9 +426,9 @@ public class Blackjack extends JPanel implements ActionListener {
                 System.out.println("sound toggle clicked.");
                 
                 if (!muted) {
-                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\muteDark.png"));
+                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\muteDark.png"));
                 } else {
-                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\soundDark.png"));
+                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\soundDark.png"));
                 }
                 soundToggle();
             }
@@ -439,18 +438,18 @@ public class Blackjack extends JPanel implements ActionListener {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (!muted) {
-                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\soundDark.png"));
+                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\soundDark.png"));
                 } else {
-                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\muteDark.png"));
+                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\muteDark.png"));
                 }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 if (!muted) {
-                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\sound.png"));
+                soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\sound.png"));
                 } else {
-                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\mute.png"));
+                    soundToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\mute.png"));
                 }
             }
 
@@ -468,9 +467,9 @@ public class Blackjack extends JPanel implements ActionListener {
                 System.out.println("music toggle clicked.");
                 
                 if (!musicMuted) {
-                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicMutedDark.png"));
+                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\musicMutedDark.png"));
                 } else {
-                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicDark.png"));
+                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\musicDark.png"));
                 }
                 musicToggle();
             }
@@ -480,18 +479,18 @@ public class Blackjack extends JPanel implements ActionListener {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (!musicMuted) {
-                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicDark.png"));
+                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\musicDark.png"));
                 } else {
-                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicMutedDark.png"));
+                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\musicMutedDark.png"));
                 }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 if (!musicMuted) {
-                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\music.png"));
+                musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\music.png"));
                 } else {
-                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\musicMuted.png"));
+                    musicToggle.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\musicMuted.png"));
                 }
             }
 
@@ -508,10 +507,10 @@ public class Blackjack extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 System.out.println("dark mode clicked.");
                 if (isDarkMode) {
-                    darkMode.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOff.png"));
+                    darkMode.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\darkModeOff.png"));
                     isDarkMode = false;
                 } else {
-                    darkMode.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\darkModeOn.png"));
+                    darkMode.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\darkModeOn.png"));
                     isDarkMode = true;
                 }
             }
@@ -539,12 +538,12 @@ public class Blackjack extends JPanel implements ActionListener {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                hint.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMarkDark.png"));
+                hint.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\qMarkDark.png"));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                hint.setIcon(new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Buttons\\qMark.png"));
+                hint.setIcon(new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Buttons\\qMark.png"));
             }
 
         });
@@ -1058,7 +1057,7 @@ public class Blackjack extends JPanel implements ActionListener {
                 
             }
             //if no blackjack or bust, display winner
-            if (dealerHand >= 16 && dealerHand < 21 && playerHand < 21) {
+            if (dealerHand >= 17 && dealerHand < 21 && playerHand < 21) {
                 if (playerHand > dealerHand) {
                     updateScores(game, "WON", Integer.toString(dealerHand));
                     winner = 0;
@@ -1365,7 +1364,7 @@ public class Blackjack extends JPanel implements ActionListener {
             for (String value : values) {
                 deck.add(value + suit);
                 String card = value + suit; //make hashmap with images
-                String imagePath = "C:\\GitHub\\Minigames\\blackjackFiles\\Playing Cards\\" + card + ".png";
+                String imagePath = "C:\\GitHub\\Blackjack\\blackjackFiles\\Playing Cards\\" + card + ".png";
                 ImageIcon cardImage = new ImageIcon(imagePath);
                 cardImages.put(card, cardImage);      
             }
@@ -1426,7 +1425,7 @@ public class Blackjack extends JPanel implements ActionListener {
         }
     }
 
-    public void dealHouse(JPanel game, boolean firstCard, boolean till16, JPanel menu, JButton settings, JButton hint, JButton restart, JButton soundToggle, JButton musicToggle, JButton darkMode, JButton undo, JButton confirmBet, JButton resetBet, JButton hit, JButton stand, JButton doubleDown, JButton split, JButton white, JButton black, JButton pink, JButton yellow, JButton green, JButton blue, JButton teal, JButton red, JButton nextRound) {
+    public void dealHouse(JPanel game, boolean firstCard, boolean till17, JPanel menu, JButton settings, JButton hint, JButton restart, JButton soundToggle, JButton musicToggle, JButton darkMode, JButton undo, JButton confirmBet, JButton resetBet, JButton hit, JButton stand, JButton doubleDown, JButton split, JButton white, JButton black, JButton pink, JButton yellow, JButton green, JButton blue, JButton teal, JButton red, JButton nextRound) {
        
        if (winner !=3) {
         return;
@@ -1441,7 +1440,7 @@ public class Blackjack extends JPanel implements ActionListener {
             if (!firstCard) {
             cardImage = cardImages.get(card);
             } else {
-                cardImage = new ImageIcon("C:\\GitHub\\Minigames\\blackjackFiles\\Playing Cards\\back.png"); //show back
+                cardImage = new ImageIcon("C:\\GitHub\\Blackjack\\blackjackFiles\\Playing Cards\\back.png"); //show back
             }
             
             JLabel cardLabel = new JLabel(cardImage);
@@ -1489,9 +1488,9 @@ public class Blackjack extends JPanel implements ActionListener {
         } else {
             System.out.print("deck empty");
         }
-        if (till16 && winner == 3) {
+        if (till17 && winner == 3) {
 
-            if (dealerHand < 16) {
+            if (dealerHand < 17) {
                 Timer timer = new Timer(1000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
