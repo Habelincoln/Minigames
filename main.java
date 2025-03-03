@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.Timer;
 @SuppressWarnings("unused")
-public class main {
+public class Main {
 
     static final String redansi = "\u001B[31m";
     static final String greenansi = "\u001B[32m";
@@ -38,11 +38,12 @@ public class main {
         println("");
         println("(9) Snake");
         println("(10) Minesweeper");
+        println("(11) Blackjack");
         println("");
         print("Enter game number: ");
         try (Scanner input = new Scanner(System.in)) {
             int gameChoice = input.nextInt();
-            while (gameChoice < 1 || gameChoice > 10) {
+            while (gameChoice < 1 || gameChoice > 11) {
                 clearScreen();
                 println(redansi + "Invalid game name." + defaultansi);
                 Thread.sleep(1000);
@@ -61,6 +62,7 @@ public class main {
                 println("(8) Mega Tic Tac Toe");
                 println("(9) Snake");
                 println("(10) Minesweeper");
+                println("(11) Blackjack");
                 println("");
                 print("Enter game number: ");
                 gameChoice = input.nextInt();
@@ -76,6 +78,7 @@ public class main {
                 case 8 -> megaTTT();
                 case 9 -> new snakeGameFrame();
                 case 10 -> minesweeper();
+                case 11 -> new Blackjack();
                 
                 default -> println("Invalid game choice.");
             }
