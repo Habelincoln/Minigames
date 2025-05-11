@@ -38,7 +38,7 @@ public class Main {
         println("");
         println("(9) Snake");
         println("(10) Minesweeper");
-        println("(11) Blackjack");
+        println("(11) Blackjack (Unfinished)");
         println("");
         print("Enter game number: ");
         try (Scanner input = new Scanner(System.in)) {
